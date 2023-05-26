@@ -8,6 +8,8 @@
   --color-primary: 0, 154, 75;
   --color-yellow-logo: 253, 208, 50;
   --color-red-logo: 234, 30, 46;
+  --color-background: 248, 250, 251;
+
 
   --bg-primary: 0, 154, 75;
   --bg-primary-50: #edfff5;
@@ -59,8 +61,37 @@
 }
 
 @layer components {
+
+  .header {
+    @apply h-20 fixed left-72 right-0 bg-main z-20;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border-radius: 40%;
+    top: 0;
+    left: 0;
+    box-shadow: -13px -13px rgb(var(--color-primary));
+  }
+
+  .container-content::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border-radius: 30%;
+    bottom: 0px;
+    left: 0px;
+    box-shadow: -13px 13px rgb(var(--color-primary));
+  }
+
   .btn-toolbar {
-    @apply h-8 w-8 flex items-center justify-center rounded-full bg-white cursor-pointer;
+    @apply h-10 w-10 flex items-center justify-center rounded-full bg-white cursor-pointer;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, 
                 rgba(0, 0, 0, 0.3) 0px 4px 13px -3px, 
                 rgb(38 38 38 / 15%) 0px -3px 0px inset
@@ -70,4 +101,110 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, 
                 rgba(0, 0, 0, 0.3) 0px 4px 13px -3px
   }
+
+  .side-menu {
+    @apply flex flex-col w-full mt-2;
+  }
+
+  .side-menu li {
+    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-4;
+  }
+
+  .side-menu li.active {
+    @apply relative bg-main;
+  }
+
+  .side-menu li.active::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+    top: -40px;
+    right: 0;
+    box-shadow: 20px 20px 0 rgb(var(--color-background));
+    z-index: -1;
+    background: var(--color-primary)
+  }
+
+  .side-menu li.active::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+    bottom: -40px;
+    right: 0;
+    box-shadow: 20px -20px 0 rgb(var(--color-background));
+    z-index: -1;
+    background: var(--color-primary)
+  }
+
+ .side-menu li.active a {
+    background: rgb(248,250,251);
+ }
+
+  .side-menu li a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    color: #fff;
+    background: var(--color-primary);
+  }
+
+  .side-menu li a:hover {
+    @apply text-primary;
+  }
+
+
+  .side-menu li a .menu-icon svg {
+    @apply text-2xl mr-4;
+  }
+
+  .side-menu li.active a {
+    @apply text-primary font-semibold
+  }
+
+  /* nav menu {
+    background: transparent;
+    margin: 4px 0 4px 6px;
+    border-radius: 48px;
+    padding: 4px;
+  }
+
+  nav menu div {
+    background: red;
+    width: 100%;
+    
+  }
+
+  .active {
+    background: rgb(248,250,251);
+    position: relative;
+  }
+
+  .active::before {
+    content: '';
+    @apply bg-white;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    top: -40px;
+    right: 0;
+  } */
+
+  /* .active::after {
+    content: '';
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 40px;
+    right: 0px;
+    z-index: 10;
+    border-radius: 50%;
+    @apply bg-red-200
+  } */
 }

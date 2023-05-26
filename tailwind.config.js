@@ -14,6 +14,7 @@ module.exports = {
       },
       colors: {
         primary: 'rgb(var(--color-primary))',
+        main: 'rgb(var(--color-background))',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
       },
