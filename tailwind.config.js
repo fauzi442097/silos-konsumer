@@ -16,7 +16,7 @@ module.exports = {
         primary: 'rgb(var(--color-primary))',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
-      }
+      },
     },
   },
   plugins: [],

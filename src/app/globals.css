@@ -2,10 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 :root {
   --color-primary: 0, 154, 75;
   --color-yellow-logo: 253, 208, 50;
   --color-red-logo: 234, 30, 46;
+
+  --bg-primary: 0, 154, 75;
+  --bg-primary-50: #edfff5;
+  --bg-primary-100: #d6ffea;
+  --bg-primary-200: #afffd6;
+  --bg-primary-300: #71ffb8;
+  --bg-primary-400: #2dfb92;
+  --bg-primary-500: #02e573;
+  --bg-primary-600: #00bf5b;
+  --bg-primary-800: #06753e;
+  --bg-primary-900: #085f35;
+  --bg-primary-950: #00361c;
+ 
+  --bg-yellow-logo: 253, 208, 50;
+  --bg-red-log: 243, 30, 46;
+
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -21,6 +39,22 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer base {
+  * {
+    font-size: 1rem;
+  }
+
+  html, body {
+    font-size: 13px;
+  }
+
+  .light-green {
+    /* background: #e6f9ea; */
+    /* background: #f3fff6; */
+    /* bg-[rgb(248,250,251)] */
   }
 }
 

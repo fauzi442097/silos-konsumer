@@ -1,40 +1,44 @@
 import Sidebar from '../../components/layout/sidebar'
 import Header from '../../components/layout/header'
 import Image from 'next/image'
-import { AiOutlineDashboard } from 'react-icons/ai'
+import { MdWindow } from 'react-icons/md'
 import { RxCaretDown, RxHamburgerMenu } from 'react-icons/rx'
 import { BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { GrInProgress } from 'react-icons/gr'
+import { VscThreeBars } from 'react-icons/vsc'
+import { TiThLarge } from 'react-icons/ti'
+import { FaUserCheck, FaUserClock } from 'react-icons/fa'
 
 export default function Home() {
   return (
     <div className='flex h-screen overflow-auto bg-[rgb(248,250,251)]'>
-      <sidebar className='fixed left-0 bottom-0 top-0 w-72'>  
+      <sidebar className='fixed left-0 bottom-0 top-0 w-72 bg-white shadow-md'>  
             <div className='mb-4 py-8'> 
               <Image 
                 src={'/logo_bank_kalteng.png'} 
                 alt='logo bank kalteng' 
                 className='m-auto'
-                width={200}
-                height={200}/>
+                width={160}
+                height={160}/>
           </div>
-          <nav className=' mx-8 flex flex-col gap-2 '>
-            <menu className='flex items-center px-4 py-2'>
+          <nav className='flex flex-col gap-2 '>
+            <menu className='flex items-center px-10 py-2 cursor-pointer'>
               <div className='flex gap-4 items-center'>   
-                  <span className='text-lg'> <AiOutlineDashboard /> </span>
+                  <TiThLarge className='text-2xl'/>
                   <span> Dashboard </span>
               </div> 
             </menu>
-            <menu className='flex items-center px-4 py-2'>
+            <menu className='flex items-center px-10 py-2 text-primary font-semibold cursor-pointer relative'>
+              <span className='absolute top-0 left-0 bottom-0 bg-primary w-[5px]'> </span>
               <div className='flex gap-4 items-center'>   
-                  <span className='text-lg'> <GrInProgress /> </span>
+                  <FaUserClock className='text-2xl'/>
                   <span> Dalam Proses </span>
               </div> 
             </menu>
-            <menu className='flex items-center px-4 py-2'>
+            <menu className='flex items-center px-10 py-2 cursor-pointer'>
               <div className='flex gap-4 items-center'>   
-                  <span className='text-lg'> <AiOutlineDashboard /> </span>
+                  <FaUserCheck className='text-2xl' />
                   <span> Sudah Cair </span>
               </div> 
             </menu>
@@ -46,7 +50,7 @@ export default function Home() {
         <div className='pl-4 pr-8 py-8 flex justify-between'>
           <div className='flex flex-row gap-2'> 
               <div className='btn-toolbar'> 
-                <RxHamburgerMenu/>
+                <VscThreeBars/>
               </div>
               <div className='btn-toolbar'> 
                 <BsFillSunFill className='text-yellow-logo'/>
