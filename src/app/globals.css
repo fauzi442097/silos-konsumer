@@ -8,7 +8,9 @@
   --color-primary: 0, 154, 75;
   --color-yellow-logo: 253, 208, 50;
   --color-red-logo: 234, 30, 46;
+
   --color-background: 248, 250, 251;
+  --color-background-depth1: #edf0f1;
 
 
   --bg-primary: 0, 154, 75;
@@ -84,10 +86,10 @@
     width: 40px;
     height: 40px;
     background: transparent;
-    border-radius: 30%;
+    border-radius: 45%;
     bottom: 0px;
     left: 0px;
-    box-shadow: -13px 13px rgb(var(--color-primary));
+    box-shadow: -15px 15px rgb(var(--color-primary));
   }
 
   .btn-toolbar {
@@ -103,18 +105,18 @@
   }
 
   .side-menu {
-    @apply flex flex-col w-full mt-2;
+    @apply flex flex-col w-full mt-2 gap-2;
   }
 
-  .side-menu li {
-    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-4;
+  .side-menu li.menu-item {
+    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-8 transition duration-300;
   }
 
-  .side-menu li.active {
+  .side-menu li.menu-item.active {
     @apply relative bg-main;
   }
 
-  .side-menu li.active::before {
+  .side-menu li.menu-item.active::before {
     content: '';
     position: absolute;
     width: 40px;
@@ -127,7 +129,7 @@
     background: var(--color-primary)
   }
 
-  .side-menu li.active::after {
+  .side-menu li.menu-item.active::after {
     content: '';
     position: absolute;
     width: 40px;
@@ -140,71 +142,60 @@
     background: var(--color-primary)
   }
 
- .side-menu li.active a {
-    background: rgb(248,250,251);
- }
+  .side-menu li.menu-item.active > a {
+      background: rgb(248,250,251);
+  }
 
-  .side-menu li a {
+  .side-menu li.menu-item a {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     border-radius: 16px;
-    color: #fff;
+    color: #fff; 
     background: var(--color-primary);
   }
 
-  .side-menu li a:hover {
-    @apply text-primary;
+  .side-menu li.menu-item .menu-item-name {
+    @apply transition duration-300
   }
 
+  .side-menu li.menu-item:hover:not(.active) .menu-item-name {
+    @apply translate-x-4
+  }
+  
 
-  .side-menu li a .menu-icon svg {
+  .side-menu li.menu-item a .menu-icon svg {
     @apply text-2xl mr-4;
   }
 
-  .side-menu li.active a {
-    @apply text-primary font-semibold
+  .side-menu li.menu-item.active > a {
+    @apply text-primary font-semibold;
   }
 
-  /* nav menu {
-    background: transparent;
-    margin: 4px 0 4px 6px;
-    border-radius: 48px;
-    padding: 4px;
+  .side-menu ul.sub-menu {
+    @apply rounded-xl;
   }
 
-  nav menu div {
-    background: red;
-    width: 100%;
-    
+  .side-menu li.sub-menu-item {
+    @apply p-2 my-1 rounded-md transition-all duration-300;
   }
 
-  .active {
-    background: rgb(248,250,251);
-    position: relative;
+  .side-menu li.sub-menu-item:hover {
+    background: var(--color-background-depth1)
   }
 
-  .active::before {
-    content: '';
-    @apply bg-white;
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    border-radius: 50%;
-    top: -40px;
-    right: 0;
-  } */
+  .side-menu li.sub-menu-item.active {
+    background: var(--color-background-depth1);
+    @apply text-primary font-semibold;
+  }
 
-  /* .active::after {
-    content: '';
-    height: 40px;
-    width: 40px;
-    position: absolute;
-    top: 40px;
-    right: 0px;
-    z-index: 10;
-    border-radius: 50%;
-    @apply bg-red-200
-  } */
+  .side-menu li.sub-menu-item a {
+    @apply rounded-none text-primary ;
+  }
+
+  .side-menu li.sub-menu-item a .submenu-icon {
+    @apply mr-4;
+  }
+
 }

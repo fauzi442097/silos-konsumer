@@ -9,12 +9,13 @@ import { GrInProgress } from 'react-icons/gr'
 import { VscThreeBars } from 'react-icons/vsc'
 import { TiThLarge } from 'react-icons/ti'
 import { FaUserCheck, FaUserClock } from 'react-icons/fa'
+import { TbPointFilled } from 'react-icons/tb'
 
 export default function Home() {
   return (
     <div className='flex h-screen overflow-auto bg-main'>
       <sidebar className='fixed left-0 bottom-0 top-0 w-72 bg-primary'>  
-            <div className='mb-4 py-8'> 
+            <div className='mb-10 p-4 app-brand bg-main mt-4 m-auto w-52 rounded-xl'> 
               <Image 
                 src={'/logo_bank_kalteng.png'} 
                 alt='logo bank kalteng' 
@@ -23,22 +24,58 @@ export default function Home() {
                 height={160}/>
           </div>
           <ul className='side-menu'>
-            <li className='active'>
+            <li className='menu-item'>
               <a hre="#">
                 <span className='menu-icon'> <TiThLarge /> </span>
-                <span> Dashboard </span>
+                <span className='menu-item-name'> Dashboard </span>
               </a>
             </li>
-            <li>
+
+            <li className='active menu-item'>
               <a href="#">
                 <span className='menu-icon'> <FaUserClock /> </span>
-                <span> Dalam Proses </span>
+                <span className='menu-item-name'> Dalam Proses </span>
+                <span className='menu-icon absolute right-0'> <RxCaretDown /> </span>
               </a>
-            </li>
-            <li>
+
+              <ul className='sub-menu mt-4 p-0'>
+                  <li className='sub-menu-item'>
+                    <a hre="#">
+                      <span className='submenu-icon'> <TbPointFilled /> </span>
+                      <span> New Entry </span>
+                    </a>
+                  </li>
+                  <li className='sub-menu-item'>
+                    <a hre="#">
+                      <span className='submenu-icon'> <TbPointFilled /> </span>
+                      <span> Monitoring SIP Cabang </span>
+                    </a>
+                  </li>
+                  <li className='sub-menu-item'>
+                    <a hre="#">
+                      <span className='submenu-icon'> <TbPointFilled /> </span>
+                      <span> Prospek Baru </span>
+                    </a>
+                  </li>
+                  <li className='sub-menu-item active'>
+                    <a hre="#">
+                      <span className='submenu-icon'> <TbPointFilled /> </span>
+                      <span> Calon Nasabah </span>
+                    </a>
+                  </li>
+                  <li className='sub-menu-item'>
+                    <a hre="#">
+                      <span className='submenu-icon'> <TbPointFilled /> </span>
+                      <span> Topup Pinjaman </span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <li className='menu-item'>
               <a href="#">
                 <span className='menu-icon'> <FaUserCheck /> </span>
-                <span> Sudah Cair </span>
+                <span className='menu-item-name'> Sudah Cair </span>
+                <span className='menu-icon absolute right-0'> <RxCaretDown /> </span>
               </a>
             </li>
           </ul>
@@ -90,6 +127,7 @@ export default function Home() {
             </div>
           </div>
         </main>
+
       </div>
     </div>
   )
