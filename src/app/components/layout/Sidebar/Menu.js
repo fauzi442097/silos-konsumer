@@ -3,34 +3,41 @@ import { RxCaretDown, RxHamburgerMenu } from "react-icons/rx";
 import { TiThLarge } from "react-icons/ti";
 import { FaUserCheck, FaUserClock } from "react-icons/fa";
 import { TbPointFilled } from "react-icons/tb";
+import { useSidebar } from '@/app/hooks/SidebarContext';
 
 const Menu = () => {
+
+   const { openSidebar } = useSidebar();
+   const hiddenElement = !openSidebar ? 'hidden duration-300' : '';
+
+   
+   
   return (
    <ul className="side-menu">
-      <li className="menu-item">
+      <li className="menu-item active">
          <a hre="#">
             <span className="menu-icon">
                {" "}
                <TiThLarge />{" "}
             </span>
-            <span className="menu-item-name"> Dashboard </span>
+            <span className={`menu-item-name ${hiddenElement}`}> Dashboard </span>
          </a>
       </li>
 
-      <li className="active menu-item">
+      <li className="menu-item">
          <a href="#">
             <span className="menu-icon">
                {" "}
                <FaUserClock />{" "}
             </span>
-            <span className="menu-item-name"> Dalam Proses </span>
-            <span className="menu-icon absolute right-0">
+            <span className={`menu-item-name ${hiddenElement}`}> Dalam Proses </span>
+            <span className={`menu-icon absolute right-0 ${hiddenElement}`}>
                {" "}
                <RxCaretDown />{" "}
             </span>
          </a>
 
-         <ul className="sub-menu mt-4 p-0">
+         <ul className="sub-menu mt-4 p-0 hidden">
             <li className="sub-menu-item">
                <a hre="#">
                   <span className="submenu-icon">
@@ -58,7 +65,7 @@ const Menu = () => {
                   <span> Prospek Baru </span>
                </a>
             </li>
-            <li className="sub-menu-item active">
+            <li className="sub-menu-item">
                <a hre="#">
                   <span className="submenu-icon">
                      {" "}
@@ -85,8 +92,8 @@ const Menu = () => {
                {" "}
                <FaUserCheck />{" "}
             </span>
-            <span className="menu-item-name"> Sudah Cair </span>
-            <span className="menu-icon absolute right-0">
+            <span className={`menu-item-name ${hiddenElement}`}> Sudah Cair </span>
+            <span className={`menu-icon absolute right-0 ${hiddenElement}`}>
                {" "}
                <RxCaretDown />{" "}
             </span>

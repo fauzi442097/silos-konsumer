@@ -9,42 +9,29 @@
   --color-yellow-logo: 253, 208, 50;
   --color-red-logo: 234, 30, 46;
 
+  --color-primary-50: #edfff5;
+  --color-primary-100: #d6ffea;
+  --color-primary-200: #afffd6;
+  --color-primary-300: #71ffb8;
+  --color-primary-400: #2dfb92;
+  --color-primary-500: #02e573;
+  --color-primary-600: #00bf5b;
+  --color-primary-800: #06753e;
+  --color-primary-900: #085f35;
+  --color-primary-950: #00361c;
+ 
+
   --color-background: 248, 250, 251;
   --color-background-depth1: #edf0f1;
 
 
-  --bg-primary: 0, 154, 75;
-  --bg-primary-50: #edfff5;
-  --bg-primary-100: #d6ffea;
-  --bg-primary-200: #afffd6;
-  --bg-primary-300: #71ffb8;
-  --bg-primary-400: #2dfb92;
-  --bg-primary-500: #02e573;
-  --bg-primary-600: #00bf5b;
-  --bg-primary-800: #06753e;
-  --bg-primary-900: #085f35;
-  --bg-primary-950: #00361c;
- 
-  --bg-yellow-logo: 253, 208, 50;
-  --bg-red-log: 243, 30, 46;
+  --color-dark-main: 6, 11, 15;
+  --color-dark-depth1: 33,35,39;
 
+  --color-text-dark: 228,228,228;
 
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-primary: 0, 154, 75;
-    --color-yellow-logo: 253, 208, 50;
-    --color-red-logo: 234, 30, 46;
-
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
 
 @layer base {
   * {
@@ -65,7 +52,7 @@
 @layer components {
 
   .header {
-    @apply h-20 fixed left-72 right-0 bg-main z-20;
+    @apply h-20 fixed right-0 z-20;
   }
 
   .header::before {
@@ -77,7 +64,7 @@
     border-radius: 40%;
     top: 0;
     left: 0;
-    box-shadow: -13px -13px rgb(var(--color-primary));
+    box-shadow: -13px -13px #D5EBE1;
   }
 
   .container-content::after {
@@ -196,6 +183,10 @@
 
   .side-menu li.sub-menu-item a .submenu-icon {
     @apply mr-4;
+  }
+
+  .card {
+    @apply rounded-2xl p-8 my-4 z-50
   }
 
 }

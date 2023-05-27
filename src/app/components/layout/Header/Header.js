@@ -1,19 +1,27 @@
+"use client"
+
+import { useSidebar } from '@/app/hooks/SidebarContext'
+import { useTheme } from '@/app/hooks/ThemeContext'
 import React from 'react'
 import { BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { VscThreeBars } from 'react-icons/vsc'
 
 const Header = () => {
+
+   const {theme, setTheme} = useTheme();
+   const { openSidebar, toggleSidebar } = useSidebar();
+
   return (
-   <header className='header'>
+   <header className={`header  ${openSidebar ? 'left-72' : 'left-28'} bg-main dark:bg-dark-main transition-all duration-300`}>
       <div className='pl-4 pr-8 py-8 flex justify-between mx-5'>
       <div className='flex flex-row gap-3'> 
-            <div className='btn-toolbar'> 
-            <VscThreeBars className='text-xl'/>
-            </div>
-            <div className='btn-toolbar'> 
+         <div className='btn-toolbar' onClick={() => toggleSidebar()}> 
+          <VscThreeBars className='text-xl'/>
+         </div>
+         <div className='btn-toolbar' onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}>  
             <BsFillSunFill className='text-yellow-logo text-xl'/>
-            </div>
+         </div>
       </div>
       <div className='flex flex-row gap-4 items-center'> 
          <div className='btn-toolbar'> 

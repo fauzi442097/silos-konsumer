@@ -3,7 +3,7 @@ import React from 'react'
 
 const Logo = () => {
   return (
-   <div className="mb-10 p-4 app-brand bg-main mt-4 m-auto w-52 rounded-xl">
+   <div className="mb-12 py-8 app-brand bg-[#D5EBE1] w-full m-auto">
       <Image
          src={"/logo_bank_kalteng.png"}
          alt="logo bank kalteng"
