@@ -19,6 +19,8 @@
   --color-primary-800: #06753e;
   --color-primary-900: #085f35;
   --color-primary-950: #00361c;
+
+  --color-light-primary: #D5EBE1;
  
 
   --color-background: 248, 250, 251;
@@ -96,7 +98,7 @@
   }
 
   .side-menu li.menu-item {
-    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-8 transition duration-300;
+    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-4 transition duration-300;
   }
 
   .side-menu li.menu-item.active {
@@ -137,7 +139,7 @@
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: center;    
     border-radius: 16px;
     color: #fff; 
     background: var(--color-primary);
@@ -151,13 +153,16 @@
     @apply translate-x-4
   }
   
-
   .side-menu li.menu-item a .menu-icon svg {
     @apply text-2xl mr-4;
   }
 
   .side-menu li.menu-item.active > a {
     @apply text-primary font-semibold;
+  }
+
+  .side-menu li.menu-item.active .sub-menu-item a {
+    @apply text-primary;
   }
 
   .side-menu ul.sub-menu {
@@ -178,7 +183,17 @@
   }
 
   .side-menu li.sub-menu-item a {
-    @apply rounded-none text-primary ;
+    @apply rounded-none text-white;
+  }
+
+  .side-menu li.sub-menu-item:not(.active):hover,
+  .side-menu li.sub-menu-item.active {
+    @apply bg-light-primary;
+  }
+
+  .side-menu li.sub-menu-item:not(.active):hover a,
+  .side-menu li.sub-menu-item.active a {
+    @apply text-primary;
   }
 
   .side-menu li.sub-menu-item a .submenu-icon {

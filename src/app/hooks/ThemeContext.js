@@ -1,7 +1,9 @@
-import React, { useContext, useState} from 'react'
+'use client'
+
+import React, { useContext} from 'react'
 import { useLocalStorage } from './useStorage';
 
-const ThemeContext = React.createContext();
+const ThemeContext = React.createContext({});
 
 export const useTheme = () => {
    return useContext(ThemeContext)

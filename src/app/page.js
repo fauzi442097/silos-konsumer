@@ -5,10 +5,6 @@ import { ThemeProvider, useTheme } from './hooks/ThemeContext'
 
 export default function Home() {
   return (
-    <ThemeProvider>
-      <SidebarProvider>
-        <Layout/>
-      </SidebarProvider>
-    </ThemeProvider>
+    <p> Home </p>
   )
 }

@@ -10,13 +10,18 @@ import { VscThreeBars } from 'react-icons/vsc'
 const Header = () => {
 
    const {theme, setTheme} = useTheme();
-   const { openSidebar, toggleSidebar } = useSidebar();
+   const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu } = useSidebar();
+
+   const setToggleSidebar = () => {
+      toggleSidebar();
+      if (openSidebar) setOpenSideMenu(-1)
+   }
 
   return (
    <header className={`header  ${openSidebar ? 'left-72' : 'left-28'} bg-main dark:bg-dark-main transition-all duration-300`}>
       <div className='pl-4 pr-8 py-8 flex justify-between mx-5'>
       <div className='flex flex-row gap-3'> 
-         <div className='btn-toolbar' onClick={() => toggleSidebar()}> 
+         <div className='btn-toolbar' onClick={() => setToggleSidebar()}> 
           <VscThreeBars className='text-xl'/>
          </div>
          <div className='btn-toolbar' onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}>  

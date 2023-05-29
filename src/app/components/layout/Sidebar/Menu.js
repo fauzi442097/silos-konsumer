@@ -1,105 +1,154 @@
-import React from 'react'
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { RxCaretDown, RxHamburgerMenu } from "react-icons/rx";
 import { TiThLarge } from "react-icons/ti";
 import { FaUserCheck, FaUserClock } from "react-icons/fa";
 import { TbPointFilled } from "react-icons/tb";
 import { useSidebar } from '@/app/hooks/SidebarContext';
+import Link from 'next/link'
+import menus from './Menu.json';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence } from "framer-motion"
+
+
+const CheckMenuActive = (url, submenu) => {
+
+   const pathname = usePathname();  
+   const activeMenu = pathname.startsWith(url);
+
+   if ( submenu ) {
+      const i = submenu.findIndex(item => pathname.startsWith(item.url));
+      return i > -1;      
+   }
+
+   return activeMenu;
+}
+
+const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
+
+   const pathname = usePathname();   
+   const activeMenu = CheckMenuActive(url, subMenu)
+   const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu } = useSidebar();
+   const [ subMenuOpen, setSubMenuOpen ]= useState(false);
+   const hiddenElement = !openSidebar ? 'hidden duration-300' : '';   
+   const sideMenuActive = openSideMenu === id;
+
+   const toggleSubMenu = (id) => {
+      setOpenSideMenu(id);
+      if ( !openSidebar ) toggleSidebar();
+   };
+
+   return (
+      <li className={`menu-item ${className || ''} ${activeMenu ? 'active': ''}`}>
+         {
+            !subMenu ? 
+            (<Link href={url} id={id} onClick={() => setOpenSideMenu(-1)}>
+               <span className="menu-icon">
+                  {" "}
+                  {icon}{" "}
+               </span>
+               <span className={`menu-item-name ${hiddenElement}`}> {name} </span>
+            </Link>
+            ) : (
+               <>
+                  <a id={id} onClick={() => toggleSubMenu(id)}>
+                     <span className="menu-icon">
+                        {" "}
+                        {icon}{" "}
+                     </span>
+                     <span className={`menu-item-name ${hiddenElement}`}> {name} </span>
+                     {subMenu && <span className={`menu-icon absolute right-2 ${hiddenElement}`}><RxCaretDown className={`transition-all duration-300 ${sideMenuActive? 'rotate-180' : 'rotate-0'} `} /></span>}            
+                  </a>
+                  <AnimatePresence> { (sideMenuActive) && <SubMenu items={subMenu} />} </AnimatePresence>
+               </>
+            )
+         }
+         
+         
+      </li>
+   )
+}
+
+const SubMenu = ({ items }) => {
+
+   const menuAnimation = {
+      hidden: {
+         opacity: 0,
+         height: 0,
+         padding: 0,
+         transition: { 
+            duration: 0.4, 
+            when: "afterChildren" 
+         },
+      },
+      show: {
+         opacity: 1,
+         height: "auto",
+         transition: {
+            duration: 0.4,
+            when: "beforeChildren",
+         },
+      },
+   };
+
+   const menuItemAnimation = {
+      hidden: (i) => ({
+         padding: 0,
+         x: "-1000%",
+         transition: {
+            duration: (i + 1) * 0.1,
+         },
+      }),
+      show: (i) => ({
+         x: 0,
+         transition: {
+            duration: (i + 1) * 0.1,
+         },
+      }),
+   };
+
+   const pathname = usePathname();   
+   return (
+      <motion.ul 
+         variants={menuAnimation}
+         initial="hidden"
+         animate="show"
+         exit="hidden"
+         className={`sub-menu mt-4 p-0`}>
+         {items.map((item, index) => {
+            return (<motion.div variants={menuItemAnimation} key={index} custom={index}> 
+                     <li className={`sub-menu-item ${pathname.startsWith(item.url) ? 'active': ''}`} key={item.id}>
+                        <Link href={item.url}>
+                           <span className="submenu-icon">
+                              <TbPointFilled />
+                           </span>
+                           <span> {item.name} </span>
+                        </Link>
+                     </li>
+                  </motion.div>
+                  )
+         })}
+      </motion.ul>      
+   )
+}
 
 const Menu = () => {
-
-   const { openSidebar } = useSidebar();
-   const hiddenElement = !openSidebar ? 'hidden duration-300' : '';
-
-   
-   
   return (
    <ul className="side-menu">
-      <li className="menu-item active">
-         <a hre="#">
-            <span className="menu-icon">
-               {" "}
-               <TiThLarge />{" "}
-            </span>
-            <span className={`menu-item-name ${hiddenElement}`}> Dashboard </span>
-         </a>
-      </li>
-
-      <li className="menu-item">
-         <a href="#">
-            <span className="menu-icon">
-               {" "}
-               <FaUserClock />{" "}
-            </span>
-            <span className={`menu-item-name ${hiddenElement}`}> Dalam Proses </span>
-            <span className={`menu-icon absolute right-0 ${hiddenElement}`}>
-               {" "}
-               <RxCaretDown />{" "}
-            </span>
-         </a>
-
-         <ul className="sub-menu mt-4 p-0 hidden">
-            <li className="sub-menu-item">
-               <a hre="#">
-                  <span className="submenu-icon">
-                     {" "}
-                     <TbPointFilled />{" "}
-                  </span>
-                  <span> New Entry </span>
-               </a>
-            </li>
-            <li className="sub-menu-item">
-               <a hre="#">
-                  <span className="submenu-icon">
-                     {" "}
-                     <TbPointFilled />{" "}
-                  </span>
-                  <span> Monitoring SIP Cabang </span>
-               </a>
-            </li>
-            <li className="sub-menu-item">
-               <a hre="#">
-                  <span className="submenu-icon">
-                     {" "}
-                     <TbPointFilled />{" "}
-                  </span>
-                  <span> Prospek Baru </span>
-               </a>
-            </li>
-            <li className="sub-menu-item">
-               <a hre="#">
-                  <span className="submenu-icon">
-                     {" "}
-                     <TbPointFilled />{" "}
-                  </span>
-                  <span> Calon Nasabah </span>
-               </a>
-            </li>
-            <li className="sub-menu-item">
-               <a hre="#">
-                  <span className="submenu-icon">
-                     {" "}
-                     <TbPointFilled />{" "}
-                  </span>
-                  <span> Topup Pinjaman </span>
-               </a>
-            </li>
-         </ul>
-      </li>
-      
-      <li className="menu-item">
-         <a href="#">
-            <span className="menu-icon">
-               {" "}
-               <FaUserCheck />{" "}
-            </span>
-            <span className={`menu-item-name ${hiddenElement}`}> Sudah Cair </span>
-            <span className={`menu-icon absolute right-0 ${hiddenElement}`}>
-               {" "}
-               <RxCaretDown />{" "}
-            </span>
-         </a>
-      </li>
-
+      {
+         menus.map((item, i) => {
+            return <MenuItem 
+               key={item.id}
+               id={item.id}
+               name={item.name}
+               icon={<TiThLarge />}
+               url={item.url}
+               subMenu={item.subMenu}
+            />
+         })
+      }
    </ul>
   )
 }
