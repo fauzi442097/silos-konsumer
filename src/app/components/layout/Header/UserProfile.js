@@ -14,7 +14,6 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
     }, divRef);
   
      return (
-
         <>
             <motion.div 
             initial={{ opacity: 0 }}
@@ -24,7 +23,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                     default: { ease: "linear"},
                     duration: 2
                 }}
-                className='top-24 left-0 right-0 bottom-0 fixed overflow-hidden backdrop-blur-sm z-30 bg-[#f8fafb52]'>
+                className='top-24 left-0 right-0 bottom-0 fixed overflow-hidden backdrop-header bg-[#f8fafb52] dark:bg-[#060e075c]'>
             </motion.div>
 
             <motion.div 
@@ -39,7 +38,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                 style={{ 
                     'boxShadow': 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
                  }}
-                className={`bg-white w-[275px] absolute rounded-2xl top-24 right-14 py-6 px-3 flex flex-col z-50 ${className || ''}`} {...props}>
+                className={`bg-white w-[275px] dark:bg-dark-depth1 dark:text-grey absolute rounded-2xl top-24 right-14 py-6 px-3 flex flex-col z-50 ${className || ''}`} {...props}>
             <div className='px-3'> 
                 <div className='flex items-center gap-4 px-3 py-3'> 
                     <div className='h-9 w-9 sm:h-11 sm:w-11 rounded-md flex-none overflow-hidden'>
@@ -71,7 +70,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
   
   const ItemUserProfileMenu = ({ children }) => {
      return (
-        <li className='flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-light-primary hover:text-primary hover:cursor-pointer transition group'> 
+        <li className='flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-light-primary hover:text-primary hover:cursor-pointer dark:hover:bg-dark-depth2 dark:hover:text-primary transition group'> 
            {children}
         </li>
      )

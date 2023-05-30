@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 :root {
   --color-primary: 0, 154, 75;
   --color-yellow-logo: 253, 208, 50;
@@ -19,6 +17,9 @@
   --color-primary-800: #06753e;
   --color-primary-900: #085f35;
   --color-primary-950: #00361c;
+
+  --color-border-light: #F4F4F4;
+  --color-border-dark: #2B2B40;  
 
   --color-light-primary: #D5EBE1;
  
@@ -80,10 +81,11 @@
     bottom: 0px;
     left: 0px;
     box-shadow: -15px 15px rgb(var(--color-primary));
+    @apply dark:shadow-[-15px_15px_0_rgb(33,35,39)];
   }
 
   .btn-toolbar {
-    @apply h-10 w-10 flex items-center justify-center rounded-full bg-white cursor-pointer;
+    @apply h-10 w-10 flex items-center justify-center rounded-full bg-white dark:bg-dark-depth2 cursor-pointer dark:text-grey;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, 
                 rgba(0, 0, 0, 0.3) 0px 4px 13px -3px, 
                 rgb(38 38 38 / 15%) 0px -3px 0px inset
@@ -107,7 +109,7 @@
   }
 
   .side-menu li.menu-item.active {
-    @apply relative bg-main;
+    @apply relative bg-main dark:bg-dark-main;
   }
 
   .side-menu li.menu-item.active::before {
@@ -120,7 +122,8 @@
     right: 0;
     box-shadow: 20px 20px 0 rgb(var(--color-background));
     z-index: -1;
-    background: var(--color-primary)
+    background: var(--color-primary);
+    @apply dark:shadow-[20px_20px_0_rgb(6,11,15)];
   }
 
   .side-menu li.menu-item.active::after {
@@ -133,11 +136,13 @@
     right: 0;
     box-shadow: 20px -20px 0 rgb(var(--color-background));
     z-index: -1;
-    background: var(--color-primary)
+    background: var(--color-primary);
+    @apply dark:shadow-[20px_-20px_0_rgb(6,11,15)];
   }
 
   .side-menu li.menu-item.active > a {
-      background: rgb(248,250,251);
+    @apply dark:bg-dark-main;
+    background: rgb(248,250,251);
   }
 
   .side-menu li.menu-item a {
@@ -167,7 +172,11 @@
   }
 
   .side-menu li.menu-item.active .sub-menu-item a {
-    @apply text-primary;
+    @apply text-primary dark:text-grey;
+  }
+
+  .side-menu li.menu-item.active .sub-menu-item.active a {
+    @apply dark:text-primary;
   }
 
   .side-menu ul.sub-menu {
@@ -179,7 +188,7 @@
   }
 
   .side-menu li.sub-menu-item:hover {
-    background: var(--color-background-depth1)
+    background: var(--color-background-depth1);
   }
 
   .side-menu li.sub-menu-item.active {
@@ -193,7 +202,7 @@
 
   .side-menu li.sub-menu-item:not(.active):hover,
   .side-menu li.sub-menu-item.active {
-    @apply bg-light-primary;
+    @apply bg-light-primary dark:bg-dark-depth2;
   }
 
   .side-menu li.sub-menu-item:not(.active):hover a,
@@ -208,6 +217,31 @@
   .card {
     @apply rounded-2xl p-8 my-4 z-50
   }
+
+  .btn {
+    @apply px-4 py-2.5 outline-none border rounded-lg text-white dark:text-grey transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-70;
+  }
+
+  .btn-primary {
+    @apply bg-primary border-primary enabled:hover:bg-primary-800 enabled:hover:border-primary-800 dark:bg-primary-800 dark:border-primary-800 dark:enabled:hover:bg-primary-900 dark:enabled:hover:border-primary-900;
+  }
+
+  .btn-light-primary {
+    @apply bg-primary-100 border-primary-100 text-primary enabled:hover:bg-primary enabled:hover:border-primary enabled:hover:text-white
+    dark:enabled:bg-light-primary dark:enabled:text-primary-800 dark:enabled:border-light-primary dark:enabled:hover:bg-primary-800 dark:enabled:hover:border-primary-800 dark:enabled:hover:text-grey;
+  }
+
+}
+
+@layer utilities {
+  .backdrop-header {
+    @apply backdrop-blur-sm z-30 bg-[#f8fafb52] dark:bg-[#060e075c];
+  }
+
+
+	.separator {
+		@apply block border-b border-b-border-light dark:border-b-border-dark h-0;
+	}
 
 }
 
