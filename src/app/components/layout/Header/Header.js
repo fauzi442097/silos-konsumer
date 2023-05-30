@@ -6,15 +6,49 @@ import React from 'react'
 import { BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { VscThreeBars } from 'react-icons/vsc'
+import Notification from './Notification'
+
+// export const useClickOutside = (handler, btnRef) => {
+//    const domNode = useRef();
+//    useEffect(() => {
+//       let handleClick = (e) => {
+//          if ( !domNode.current.contains(e.target) && !btnRef.current.contains(e.target)) {
+//             handler();
+//          }
+//       }
+//       document.addEventListener('click', handleClick);
+//       return () => { document.removeEventListener('click', handleClick);}
+//    });
+
+//    return domNode;
+// }
+
 
 const Header = () => {
 
    const {theme, setTheme} = useTheme();
-   const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu } = useSidebar();
+   const { openSidebar, toggleSidebar, setOpenSideMenu } = useSidebar();
+   // const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({
+   //    notification: false,
+   //    userAccount: false
+   // });
 
    const setToggleSidebar = () => {
       toggleSidebar();
       if (openSidebar) setOpenSideMenu(-1)
+   }
+
+   const toggleDropdownTopbar = (clicked) => {
+      const newObject = Object.keys(showDropdownTopbar)
+            .filter((key) => !key.includes(clicked))
+            .reduce((obj, key) => {
+                return Object.assign(obj, {
+                    [key]: false
+                });
+        }, {});
+  
+      newObject[clicked] = !showDropdownTopbar[clicked];
+      setShowDropdownTopbar(newObject);
    }
 
   return (
@@ -29,9 +63,12 @@ const Header = () => {
          </div>
       </div>
       <div className='flex flex-row gap-4 items-center'> 
-         <div className='btn-toolbar'> 
+         <div className='btn-toolbar relative'> 
             <IoMdNotificationsOutline className='text-xl'/>
+            {/* <Notification/> */}
          </div>
+
+
          <div className="flex gap-3">
             <img 
                src={'/man-avatar.png'} 

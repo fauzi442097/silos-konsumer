@@ -36,7 +36,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
    const sideMenuActive = openSideMenu === id;
 
    const toggleSubMenu = (id) => {
-      setOpenSideMenu(id);
+      setOpenSideMenu(prev => prev === id ? -1 : id);
       if ( !openSidebar ) toggleSidebar();
    };
 
