@@ -93,6 +93,10 @@
                 rgba(0, 0, 0, 0.3) 0px 4px 13px -3px
   }
 
+  .btn-toolbar.active {
+    @apply bg-primary text-white;
+  }
+
   .side-menu {
     @apply flex flex-col w-full mt-2 gap-2;
   }
@@ -205,3 +209,4 @@
   }
 
 }
+

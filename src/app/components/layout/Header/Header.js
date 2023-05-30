@@ -1,42 +1,31 @@
 "use client"
 
+import React, { useState, useRef} from 'react'
 import { useSidebar } from '@/app/hooks/SidebarContext'
 import { useTheme } from '@/app/hooks/ThemeContext'
-import React from 'react'
-import { BsFillSunFill } from 'react-icons/bs'
+import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { VscThreeBars } from 'react-icons/vsc'
 import Notification from './Notification'
-
-// export const useClickOutside = (handler, btnRef) => {
-//    const domNode = useRef();
-//    useEffect(() => {
-//       let handleClick = (e) => {
-//          if ( !domNode.current.contains(e.target) && !btnRef.current.contains(e.target)) {
-//             handler();
-//          }
-//       }
-//       document.addEventListener('click', handleClick);
-//       return () => { document.removeEventListener('click', handleClick);}
-//    });
-
-//    return domNode;
-// }
-
+import { motion, AnimatePresence } from "framer-motion"
+import UserProfile from './UserProfile'
 
 const Header = () => {
 
    const {theme, setTheme} = useTheme();
    const { openSidebar, toggleSidebar, setOpenSideMenu } = useSidebar();
-   // const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({
-   //    notification: false,
-   //    userAccount: false
-   // });
+   const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({
+      notification: false,
+      userAccount: false
+   });
 
    const setToggleSidebar = () => {
       toggleSidebar();
       if (openSidebar) setOpenSideMenu(-1)
    }
+
+   const notifRef = useRef('');
+   const userProfileRef = useRef('');
 
    const toggleDropdownTopbar = (clicked) => {
       const newObject = Object.keys(showDropdownTopbar)
@@ -59,17 +48,28 @@ const Header = () => {
           <VscThreeBars className='text-xl'/>
          </div>
          <div className='btn-toolbar' onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}>  
-            <BsFillSunFill className='text-yellow-logo text-xl'/>
+            {
+               theme == 'light' ? (
+                  <BsFillSunFill className='text-yellow-logo text-xl'/>
+               ) : (
+                  <BsFillMoonFill className='text-yellow-logo text-xl'/>
+               )
+            }
+            
          </div>
       </div>
       <div className='flex flex-row gap-4 items-center'> 
-         <div className='btn-toolbar relative'> 
-            <IoMdNotificationsOutline className='text-xl'/>
-            {/* <Notification/> */}
+         <div className='relative'>
+            <div ref={notifRef} className={`btn-toolbar ${showDropdownTopbar.notification ? 'active' : ''}`} onClick={() => toggleDropdownTopbar('notification')}> 
+               <IoMdNotificationsOutline className='text-xl'/>
+            </div>
+            <AnimatePresence>
+               { showDropdownTopbar.notification && <Notification setShowDropdownTopbar={setShowDropdownTopbar} btnRef={notifRef}/>}
+            </AnimatePresence>
          </div>
+         
 
-
-         <div className="flex gap-3">
+         <div className="flex gap-3 cursor-pointer px-4 py-2 rounded-lg " ref={userProfileRef} onClick={() => toggleDropdownTopbar('userAccount')}>
             <img 
                src={'/man-avatar.png'} 
                className='w-12 h-12 bg-white rounded-full object-contain' 
@@ -84,7 +84,11 @@ const Header = () => {
                   <span className='text-primary text-sm'> Admin </span>
                </div>
             </div>
+            <AnimatePresence>
+               { showDropdownTopbar.userAccount && <UserProfile setShowDropdownTopbar={setShowDropdownTopbar} divRef={userProfileRef}/> }
+            </AnimatePresence>
          </div>
+
       </div>
    </header>
   )
