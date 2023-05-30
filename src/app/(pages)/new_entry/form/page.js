@@ -2,20 +2,15 @@
 
 import Card from '@/app/components/Card'
 import React, { useState } from 'react';
-import InputText from '@/app/components/layout/Form/Input_Text'
-import Select from 'react-select';
-import InputSelect from '@/app/components/layout/Form/Input_Select';
-
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
+import InputText from '@/app/components/Form/Input_Text'
+import InputSelect from '@/app/components/Form/Input_Select';
+import InputFile from '@/app/components/Form/Input_File';
+import Textarea from '@/app/components/Form/Textarea';
+import InputTypeahead from '@/app/components/Form/Input_Typeahead';
+import InputCheckbox from '@/app/components/Form/Input_Checkbox';
+import InputDate from '@/app/components/Form/Input_Date';
 
 const formNewEntry = () => {
-    const [selectedOption, setSelectedOption] = useState(null);
-
-
     return (
         <>
             <Card>
@@ -23,23 +18,27 @@ const formNewEntry = () => {
                     <div>
                         <InputText name={'Contoh'} tittle="Contoh"></InputText>
                     </div>
-                    <div className="App">
-                        {/* <label for="produk" class="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Produk</label> */}
+                    <div>
                         <InputSelect name={'Produk'} tittle="Produk"></InputSelect>
                     </div>
                     <div>
-                        <InputText name={'Contoh'} tittle="Contoh"></InputText>
+                        <InputFile name={'File'} tittle="File"></InputFile>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
-                        <InputText name={'Contoh'} tittle="Contoh"></InputText>
+                        <Textarea name={'Contoh'} tittle="Contoh"></Textarea>
                     </div>
                     <div>
-                        <InputText name={'Contoh'} tittle="Contoh"></InputText>
+                        <InputTypeahead name={'Contoh'} tittle="Cari Lokasi"></InputTypeahead>
                     </div>
                     <div>
-                        <InputText name={'Contoh'} tittle="Contoh"></InputText>
+                        <InputCheckbox name={'Contoh'} tittle="Contoh"></InputCheckbox>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                        <InputDate name={'Contoh'} tittle="Cari Lokasi"></InputDate>
                     </div>
                 </div>
             </Card>
