@@ -31,7 +31,8 @@ module.exports = {
         'main': 'rgb(var(--color-background))',
         'dark' : {
           'main' : 'rgb(var(--color-dark-main))',
-          'depth1': 'rgb(var(--color-dark-depth1))'
+          'depth1': 'rgb(var(--color-dark-depth1))',
+          'depth2': 'rgb(var(--color-dark-depth2))'
         },
         'grey': 'rgb(var(--color-text-dark))',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
