@@ -42,7 +42,7 @@ const Header = () => {
 
   return (
    <header className={`header  ${openSidebar ? 'left-72' : 'left-28'} bg-main dark:bg-dark-main transition-all duration-300`}>
-      <div className='pl-4 pr-8 py-8 flex justify-between mx-5'>
+      <div className='pl-4 pr-8 py-8 flex justify-between items-center mx-5'>
       <div className='flex flex-row gap-3'> 
          <div className='btn-toolbar' onClick={() => setToggleSidebar()}> 
           <VscThreeBars className='text-xl'/>
@@ -68,20 +68,19 @@ const Header = () => {
             </AnimatePresence>
          </div>
          
-
          <div className="flex gap-3 cursor-pointer px-4 py-2 rounded-lg " ref={userProfileRef} onClick={() => toggleDropdownTopbar('userAccount')}>
             <img 
                src={'/man-avatar.png'} 
-               className='w-12 h-12 bg-white rounded-full object-contain' 
+               className='w-12 h-12 bg-white rounded-full object-contain select-none' 
                style={{ 
                   'boxShadow': 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
                }}
                alt='user' />
                <div className='flex flex-col items-start'>
-                  <span className='font-semibold'> 
+                  <span className='font-semibold dark:text-grey'> 
                      Ahmad Fauzi 
                   </span>
-                  <span className='text-primary text-sm'> Admin </span>
+                  <span className='text-primary text-sm dark:text-primary'> Admin </span>
                </div>
             </div>
             <AnimatePresence>
