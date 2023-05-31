@@ -6,10 +6,7 @@ import { Typeahead } from 'react-bootstrap-typeahead'; // ES2015
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 const options = [
-    'John',
-    'Miles',
-    'Charles',
-    'Herbie',
+    ''
   ];
 
 const InputTypeahead = ({ name, tittle }) => {

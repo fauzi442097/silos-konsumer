@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useState} from 'react'
+import React, { useContext, useState } from 'react'
 
 const SidebarContext = React.createContext({});
 

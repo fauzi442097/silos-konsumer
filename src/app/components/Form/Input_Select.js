@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
 import { useTheme } from "@/app/hooks/ThemeContext"
-import Select from "react-select"
+import Select from 'react-select'
 
 const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
 
 const InputSelect = ({ name, tittle }) => {
     const [selectedOption, setSelectedOption] = useState(null);
@@ -29,8 +29,8 @@ const InputSelect = ({ name, tittle }) => {
                     borderRadius: 8,
                     colors: {
                       ...theme.colors, 
-                      primary25: 'black',
-                      primary: 'primary',
+                      danger: 'black',
+                      primary75: 'primary',
                     },
                   })}
             />

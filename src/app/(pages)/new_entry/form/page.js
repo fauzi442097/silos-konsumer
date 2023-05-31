@@ -2,13 +2,14 @@
 
 import Card from '@/app/components/Card'
 import React, { useState } from 'react';
-import InputText from '@/app/components/Form/Input_Text'
-import InputSelect from '@/app/components/Form/Input_Select';
-import InputFile from '@/app/components/Form/Input_File';
-import Textarea from '@/app/components/Form/Textarea';
-import InputTypeahead from '@/app/components/Form/Input_Typeahead';
-import InputCheckbox from '@/app/components/Form/Input_Checkbox';
-import InputDate from '@/app/components/Form/Input_Date';
+import InputText from '@/app/components/form/Input_Text'
+import InputSelect from '@/app/components/form/Input_Select';
+import InputFile from '@/app/components/form/Input_File';
+import Textarea from '@/app/components/form/Textarea';
+import InputTypeahead from '@/app/components/form/Input_Typeahead';
+import InputCheckbox from '@/app/components/form/Input_Checkbox';
+import InputDate from '@/app/components/form/Input_Date';
+import Currency from '@/app/components/form/Currency';
 
 const formNewEntry = () => {
     return (
@@ -38,7 +39,10 @@ const formNewEntry = () => {
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
-                        <InputDate name={'Contoh'} tittle="Cari Lokasi"></InputDate>
+                        <InputDate name={'Dead Time'} tittle="Dead Time"></InputDate>
+                    </div>
+                    <div>
+                        <Currency name={'uang'} tittle="Uang" maxLength={'10'}></Currency>
                     </div>
                 </div>
             </Card>

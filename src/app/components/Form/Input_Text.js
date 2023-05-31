@@ -12,7 +12,7 @@ const InputText = ({ name, tittle }) => {
 
     return (
         <div style={{darkMode}} className="mb-5">
-            <label htmlFor={name} class="block mb-3 text-sm font-medium text-gray-900 dark:text-white">{tittle}</label>
+            <label htmlFor={name} className="block mb-3 text-sm font-medium text-gray-900 dark:text-white">{tittle}</label>
             <input type="text" name={name} id={name} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-primary block w-full p-2.5 dark:bg-dark-depth2">
             </input>
         </div>
