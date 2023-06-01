@@ -89,7 +89,7 @@ const Header = () => {
                }}
                alt='user' />
                <div className='flex flex-col items-start'>
-                  <span className='font-inter-semibold dark:text-grey lg:text-[#5b5b5d] text-grey'> 
+                  <span className='selected-none font-inter-semibold dark:text-grey lg:text-[#5b5b5d] text-grey'> 
                      Ahmad Fauzi 
                   </span>
                   <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> Admin </span>

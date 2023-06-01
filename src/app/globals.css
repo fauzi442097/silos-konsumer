@@ -383,6 +383,20 @@
 	.separator {
 		@apply block border-b border-b-border-light dark:border-b-border-dark h-0;
 	}
+  
+  .modal::before {
+    content: '';
+    background: url('/logo_bank_kalteng_simple.png') no-repeat right;
+    width: 180px;
+    height: 168px;
+    position: absolute;
+    left: 9;
+    right: -86px;
+    opacity: 0.1;
+    background-size: 235px;
+    z-index: -1;
+    top: -46px;
+  }
 
 }
 

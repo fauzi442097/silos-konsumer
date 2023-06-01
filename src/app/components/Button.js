@@ -51,7 +51,7 @@ const ButtonClean = ({ children, className, ...props }) => {
 
 const ButtonCloseModal = ({ ...props}) => {
   return (
-    <button className='bg-slate-100 dark:hover:bg-[#2f3133] dark:bg-dark-depth2 rounded-lg p-1.5 border-slate-100 hover:bg-slate-200 hover:border-slate-200 transition-all duration-300' {...props}> 
+    <button className='bg-slate-100 dark:hover:bg-[#2f3133] shadow-lg dark:bg-dark-depth2 rounded-lg p-1.5 border-slate-100 hover:bg-slate-200 hover:border-slate-200 transition-all duration-300' {...props}> 
       <IoMdClose className='text-xl text-slate-700 dark:text-grey'/>
     </button>
   )

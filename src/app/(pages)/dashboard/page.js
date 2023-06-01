@@ -10,6 +10,7 @@ import { AnimatePresence } from 'framer-motion'
 import Modal from '@/app/components/Modal'
 import PageTitle from '@/app/components/PageTitle'
 
+
 const Dashboard = () => {
 
   const [showModal, setShowModal] = useState({
@@ -26,6 +27,8 @@ const Dashboard = () => {
 
   return (
     <>
+	 
+
         <PageTitle title='Dashboard'/>
         <Card>
           <div className='flex gap-2'>

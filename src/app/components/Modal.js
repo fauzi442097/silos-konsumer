@@ -51,7 +51,7 @@ const Modal = ({ children, size, position, closeOutside = false, setShowModal}) 
                      duration: 2,
                   }}
                   ref={modalDialogRef}
-                  className={` bg-white ${modalSize} dark:bg-dark-depth1 dark:text-grey rounded-2xl shadow-lg dark:shadow-none transform overflow-hidden text-left align-middle transition-all flex flex-col`}>
+                  className={`modal  bg-white ${modalSize} dark:bg-dark-depth1 dark:text-grey rounded-2xl shadow-lg dark:shadow-none transform overflow-hidden text-left align-middle transition-all flex flex-col`}>
                     {children}
                </motion.div>
             </div>
