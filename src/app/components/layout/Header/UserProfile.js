@@ -38,14 +38,14 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                 style={{ 
                     'boxShadow': 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
                  }}
-                className={`bg-white w-[275px] dark:bg-dark-depth1 dark:text-grey absolute rounded-2xl top-24 right-14 py-6 px-3 flex flex-col z-50 ${className || ''}`} {...props}>
+                className={`bg-white w-[275px] dark:bg-dark-depth1 dark:text-grey absolute rounded-2xl top-[5.2rem] lg:top-24 right-14 py-6 px-3 flex flex-col z-50 ${className || ''}`} {...props}>
             <div className='px-3'> 
                 <div className='flex items-center gap-4 px-3 py-3'> 
                     <div className='h-9 w-9 sm:h-11 sm:w-11 rounded-md flex-none overflow-hidden'>
                         <Image src={avatar} alt="avatar" className='bg-cover'/>
                     </div>
                     <div className='flex flex-col overflow-hidden'>
-                        <p className='m-0 text-lg font-semibold'> Ahmad Fauzi </p>
+                        <p className='m-0 text-lg font-inter-semibold'> Ahmad Fauzi </p>
                         <p className='m-0 text-sm break-all font-inter-light'>fauzi442097@gmail.com </p>
                     </div>
                 </div>

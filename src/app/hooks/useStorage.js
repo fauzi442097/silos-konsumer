@@ -9,7 +9,6 @@ export const useLocalStorage = (key, value) => {
 const useStorage = (key, defaultValue, storageObject) => {
    const [value, setValue] = useState(() => {
       const jsonValue = storageObject.getItem(key)
-      console.log({jsonValue})
       if ( jsonValue != undefined || jsonValue != null) {
          return JSON.parse(jsonValue)
       }

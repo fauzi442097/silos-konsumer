@@ -13,6 +13,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      width: {
+        "modal-sm": "300px",
+        "modal-lg": "800px",
+        "modal-xl": "1140px",
+        "modal-base": "500px"
+      },
+      screens: {
+        lg: '991px',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -42,9 +51,21 @@ module.exports = {
           'depth2': 'rgb(var(--color-dark-depth2))'
         },
         'grey': 'rgb(var(--color-text-dark))',
+        'muted' : 'var(--color-text-muted)',
+        'light': 'var(--color-text-light)',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
       },
+      fontFamily: {
+        "inter-thin": ['var(--font-inter-thin)'],
+        "inter-extralight": ['var(--font-inter-extralight)'],
+        "inter-light": ['var(--font-inter-light)'],
+        "inter": ['var(--font-inter-regular)'],
+        "inter-medium": ['var(--font-inter-medium)'],
+        "inter-semibold": ['var(--font-inter-semibold)'],
+        "inter-bold": ['var(--font-inter-bold)'],
+        "inter-extrabold": ['var(--font-inter-extrabold)'],
+      }
     },
   },
   plugins: [],

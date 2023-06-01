@@ -29,8 +29,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
 
    const pathname = usePathname();   
    const activeMenu = CheckMenuActive(url, subMenu)
-   const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu } = useSidebar();
-   const [ subMenuOpen, setSubMenuOpen ]= useState(false);
+   const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu, setOpenSidebarMobile } = useSidebar();
    const hiddenElement = !openSidebar ? 'hidden duration-300' : '';   
    const sideMenuActive = openSideMenu === id;
 
@@ -43,7 +42,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
       <li className={`menu-item ${className || ''} ${activeMenu ? 'active': ''}`}>
          {
             !subMenu ? 
-            (<Link href={url} id={id} onClick={() => setOpenSideMenu(-1)}>
+            (<Link href={url} id={id} onClick={() => {setOpenSideMenu(-1);setOpenSidebarMobile(false)}}>
                <span className="menu-icon">
                   {" "}
                   {icon}{" "}
@@ -71,6 +70,8 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
 }
 
 const SubMenu = ({ items }) => {
+
+   const { setOpenSidebarMobile } = useSidebar();
 
    const menuAnimation = {
       hidden: {
@@ -119,7 +120,7 @@ const SubMenu = ({ items }) => {
          {items.map((item, index) => {
             return (<motion.div variants={menuItemAnimation} key={index} custom={index}> 
                      <li className={`sub-menu-item ${pathname.startsWith(item.url) ? 'active': ''}`} key={item.id}>
-                        <Link href={item.url}>
+                        <Link href={item.url} onClick={() => setOpenSidebarMobile(false)}>
                            <span className="submenu-icon">
                               <TbPointFilled />
                            </span>
