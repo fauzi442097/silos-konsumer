@@ -6,6 +6,18 @@
         "icon": "TiThLarge"        
     },
     {
+        "id": 10,
+        "name": "Form",
+        "url": "/form",
+        "icon": "TiThLarge"        
+    },
+    {
+        "id": 12,
+        "name": "Datatable",
+        "url": "/datatable",
+        "icon": "TiThLarge"        
+    },
+    {
         "id": 2,
         "name": "Dalam Proses",
         "url": "#",

@@ -1,6 +1,7 @@
 import React from 'react'
 import { IoMdClose } from 'react-icons/io'
 
+
 const ButtonPrimary = ({ children, className, ...props }) => {
   return (
     <button className={`btn btn-primary ${className || ''}`} {...props}> 
@@ -18,6 +19,7 @@ const ButtonLightPrimary = ({ children, className, ...props }) => {
 }
 
 const ButtonOutlinePrimary = ({ children, className, ...props }) => {
+
   return (
     <button className={`btn btn-outline-primary ${className || ''}`} {...props}> 
       {children}
@@ -26,6 +28,7 @@ const ButtonOutlinePrimary = ({ children, className, ...props }) => {
 }
 
 const ButtonSecondary = ({ children, className, ...props }) => {
+
   return (
     <button className={`btn btn-secondary ${className || ''}`} {...props}> 
         {children} 

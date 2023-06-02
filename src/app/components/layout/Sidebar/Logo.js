@@ -14,9 +14,11 @@ const Logo = () => {
       <Image
          src={logoBrand}
          alt="logo bank kalteng"
-         className={`m-auto transition-all duration-300 ${openSidebar ? '' : 'hidden'}`}
-         width={160}
-         height={160}
+         className={`m-auto w-[160px] transition-all duration-300 ${openSidebar ? '' : 'hidden'}`}
+         priority={true}
+         width="0"
+         height="0"
+         sizes="100vw"
       />
 
       <Image
@@ -25,6 +27,7 @@ const Logo = () => {
          className={`m-auto transition-all duration-300 ${openSidebar ? 'hidden' : ''}`}
          width={100}
          height={100}
+         priority={true}
       />
    </div>
   )

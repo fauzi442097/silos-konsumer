@@ -56,6 +56,11 @@ module.exports = {
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
       },
+      backgroundColor: {
+        "form-read-only": "3c413fba",
+        "form-check-disabled" : "#f2f3f5",
+        "dark-form-check-disabled": "#2c302f",
+      },
       fontFamily: {
         "inter-thin": ['var(--font-inter-thin)'],
         "inter-extralight": ['var(--font-inter-extralight)'],
