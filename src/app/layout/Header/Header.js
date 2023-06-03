@@ -5,14 +5,46 @@ import { useSidebar } from '@/app/hooks/SidebarContext'
 import { useTheme } from '@/app/hooks/ThemeContext'
 import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
-import { HiOutlineMenuAlt2 } from 'react-icons/hi'
+import { GoKebabHorizontal } from 'react-icons/go'
 import { VscThreeBars } from 'react-icons/vsc'
-import Notification from './Notification'
 import { motion, AnimatePresence } from "framer-motion"
-import UserProfile from './UserProfile'
-import Badge from '../../Badge'
-import ToggleSidebar from '../Sidebar/ToggleSidebar'
+// import Notification from './Notification'
+// import UserProfile from './UserProfile'
+// import ToggleSidebar from '../Sidebar/ToggleSidebar'
+
 import Toolbar from './Toolbar'
+import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+export const LoadingComponent = ({type}) => {
+   return (
+      <motion.div 
+         initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+               default: { ease: "linear"},
+               duration: 2
+            }}
+            className={`${type == 'toggleSidebar' ? 'inset-0' : 'top-24 left-0 right-0 bottom-0'} fixed overflow-hidden backdrop-header`}>
+      </motion.div>
+   )
+}
+
+const Notification = dynamic(() => import('./Notification'), {
+   ssr: false,
+   loading: () => <LoadingComponent/>
+});
+
+const UserProfile = dynamic(() => import('./UserProfile'), {
+   ssr: false,
+   loading: () => <LoadingComponent/>
+});
+
+const ToggleSidebar = dynamic(() => import('../Sidebar/ToggleSidebar'), {
+   ssr: false,
+   loading: () => <LoadingComponent type={'toggleSidebar'}/>
+});
 
 const Header = () => {
 
@@ -51,7 +83,7 @@ const Header = () => {
    }
 
 
-   const ToggleSidebarIcon = openSidebar ? <VscThreeBars className='text-xl'/> :  <HiOutlineMenuAlt2 className='text-xl'/>
+   const ToggleSidebarIcon = openSidebar ? <VscThreeBars className='text-xl'/> :  <GoKebabHorizontal className='text-xl rotate-90'/>
    const ToggleThemeIcon = theme == 'light' ? <BsFillSunFill className='text-yellow-logo text-xl'/> : <BsFillMoonFill className='text-yellow-logo text-xl'/>
       
   return (
@@ -71,7 +103,7 @@ const Header = () => {
 
       <div className='flex flex-row gap-4 items-center'> 
          <div className='relative'>
-            <Toolbar ref={notifRef} className={`btn-toolbar ${showDropdownTopbar.notification ? 'active' : ''}`} onClick={() => toggleDropdownTopbar('notification')}> 
+            <Toolbar ref={notifRef} datacount={10} className={`btn-toolbar toolbar-notification ${showDropdownTopbar.notification ? 'active' : ''}`} onClick={() => toggleDropdownTopbar('notification')}> 
                <IoMdNotificationsOutline className='text-xl'/>   
             </Toolbar>
 
@@ -81,7 +113,10 @@ const Header = () => {
          </div>
          
          <div className="flex gap-3 cursor-pointer px-4 py-2 rounded-lg " ref={userProfileRef} onClick={() => toggleDropdownTopbar('userAccount')}>
-            <img 
+            <Image
+               width={0}
+               height={0}  
+               sizes="100vw"
                src={'/man-avatar.png'} 
                className='w-12 h-12 bg-white rounded-full object-contain select-none' 
                style={{ 

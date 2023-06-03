@@ -104,7 +104,6 @@ const MyDataTable = ({ columns, data, ...props }) => {
          lineHeight: '1.25rem',
          color: '#fff',
          backgroundColor: theme == 'dark' ? 'rgb(var(--color-dark-depth2))' : 'rgb(var(--color-primary))',  // bg-dark-dept-2
-         fontFamily: 'var(--font-inter-bold)',
       },
    },
    rows: {
@@ -122,8 +121,7 @@ const MyDataTable = ({ columns, data, ...props }) => {
          fontSize: '1rem',
          // margin: '1rem 0',
          marginBottom: '1rem',
-         padding: 0,
-         fontFamily: 'var(--font-inter-bold)',
+        padding: 0,
       },
    },
    cells: {
@@ -133,8 +131,6 @@ const MyDataTable = ({ columns, data, ...props }) => {
          wordBreak: 'break-word'
       },
    },
-
-  
    contextMenu: {
       style: {
          backgroundColor: defaultThemes[themeDataTable].context.background,
@@ -145,7 +141,7 @@ const MyDataTable = ({ columns, data, ...props }) => {
          transitionDuration: '125ms',
          transitionTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
          willChange: 'transform',
-         border: theme == 'dark' ? '1px solid rgb(var(--color-dark-depth2))' : '1px dashed #dc1c21'
+         border: theme == 'dark' ? '1px solid rgb(var(--color-dark-depth2))' : '1px solid #dc1c21'
       },
       activeStyle: {
          transform: 'translate3d(0, 0, 0)',
@@ -177,14 +173,14 @@ const MyDataTable = ({ columns, data, ...props }) => {
             opacity: '.2'
          },
          '&:hover:not(:disabled)': {
-            background: (themeDataTable == 'customLight') ? color.bgLightPrimary : 'var(--color-light-primary)',
-            fill: (themeDataTable == 'customLight') ? color.bgRed500 : 'rgb(var(--color-primary))',
+            background: (themeDataTable == 'customLight') ? 'rgb(var(--color-primary))' : 'var(--color-light-primary)',
+            fill: (themeDataTable == 'customLight') ? '#fff' : 'rgb(var(--color-primary))',
             borderRadius: '0.375rem',
          },
          '&:focus': {
             outline: 'none',
-            backgroundColor: (themeDataTable == 'customLight') ? color.bgLightPrimary : 'var(--color-light-primary)',
-            fill: (themeDataTable == 'customLight') ? color.bgRed500 : 'rgb(var(--color-primary))'
+            backgroundColor: (themeDataTable == 'customLight') ? 'rgb(var(--color-primary))' : 'var(--color-light-primary)',
+            fill: (themeDataTable == 'customLight') ? '#fff': 'rgb(var(--color-primary))'
          },
       },
    },

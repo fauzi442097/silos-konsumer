@@ -1,5 +1,5 @@
-import MySelect from '@/app/components/Form/Select'
 import React, { useState } from 'react'
+import { MySelect } from '@/app/components';
  
 const optionsGroups= [
 	{

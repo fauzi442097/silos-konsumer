@@ -20,8 +20,6 @@ const useStorage = (key, defaultValue, storageObject) => {
       }
    });
 
-
-
    useEffect(() => {
       if ( value === undefined) return storageObject.removeItem(key)
       storageObject.setItem(key, JSON.stringify(value))

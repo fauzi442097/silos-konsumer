@@ -48,13 +48,15 @@ module.exports = {
         'dark' : {
           'main' : 'rgb(var(--color-dark-main))',
           'depth1': 'rgb(var(--color-dark-depth1))',
-          'depth2': 'rgb(var(--color-dark-depth2))'
+          'depth2': 'rgb(var(--color-dark-depth2))',
+          'depth3': 'var(--color-dark-depth3)'
         },
         'grey': 'rgb(var(--color-text-dark))',
         'muted' : 'var(--color-text-muted)',
         'light': 'var(--color-text-light)',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
+        'dark-blue-logo' : 'rgb(var(--color-dark-blue-logo))'
       },
       backgroundColor: {
         "form-read-only": "3c413fba",

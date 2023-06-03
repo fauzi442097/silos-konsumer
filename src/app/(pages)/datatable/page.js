@@ -1,11 +1,13 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
-import Button from '../../components/Button';
-import Card from '../../components/Card'
-import MyDataTable from '@/app/components/datatable/MyDatatable';
-import CheckboxTable from '@/app/components/datatable/CheckboxTable';
-import LoadingTable from '@/app/components/datatable/Loading';
+
+import {
+    Button, 
+    Card, 
+    MyDataTable,
+    CheckboxTable,
+    LoadingTable
+} from '@/app/components';
 
 const UsersPage = () => {
    

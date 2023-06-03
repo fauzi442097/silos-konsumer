@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "Dashboard",
-        "url": "/dashboard",
+        "url": "/",
         "icon": "TiThLarge"        
     },
     {
@@ -15,6 +15,12 @@
         "id": 12,
         "name": "Datatable",
         "url": "/datatable",
+        "icon": "TiThLarge"        
+    },
+    {
+        "id": 100,
+        "name": "Alert & Toast",
+        "url": "/alert",
         "icon": "TiThLarge"        
     },
     {

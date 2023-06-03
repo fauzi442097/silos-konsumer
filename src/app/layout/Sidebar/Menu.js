@@ -15,7 +15,8 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const CheckMenuActive = (url, submenu) => {
    const pathname = usePathname();  
-   const activeMenu = pathname.startsWith(url);
+   const activeMenu = pathname === url;
+   // const activeMenu = pathname.startsWith(url);
 
    if ( submenu ) {
       const i = submenu.findIndex(item => pathname.startsWith(item.url));
@@ -27,7 +28,6 @@ const CheckMenuActive = (url, submenu) => {
 
 const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
 
-   const pathname = usePathname();   
    const activeMenu = CheckMenuActive(url, subMenu)
    const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu, setOpenSidebarMobile } = useSidebar();
    const hiddenElement = !openSidebar ? 'hidden duration-300' : '';   
@@ -110,6 +110,8 @@ const SubMenu = ({ items }) => {
    };
 
    const pathname = usePathname();   
+
+   
    return (
       <motion.ul 
          variants={menuAnimation}

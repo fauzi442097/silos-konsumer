@@ -179,3 +179,8 @@
   font-family: var(--font-inter-semibold);
  }
 
+ .rdt_TableHead div {
+  font-family: var(--font-inter-semibold) !important;
+  @apply dark:text-grey;
+ }
+

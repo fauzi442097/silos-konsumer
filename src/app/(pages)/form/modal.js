@@ -1,12 +1,10 @@
 'use client'
 import React, { useState } from 'react'
-import Button from '@/app/components/Button'
-import Modal from '@/app/components/Modal'
 import { AnimatePresence } from 'framer-motion'
+import { Button, Modal } from '@/app/components';
+
 
 const FormModal = () => {
-
-   
   const [showModal, setShowModal] = useState({
       base: false,
       sm: false,

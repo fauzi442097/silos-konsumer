@@ -1,10 +1,15 @@
-import Checkbox from '@/app/components/Form/Checkbox'
-import Input from '@/app/components/Form/Input'
-import Radio from '@/app/components/Form/Radio'
-import Textarea from '@/app/components/Form/Textarea'
 import React from 'react'
+import { 
+   Button, 
+   Checkbox, 
+   Input, 
+   Radio, 
+   Textarea 
+} from '@/app/components'
+
 
 const FormInput = () => {
+
   return (
    <>
       <div className='flex gap-2'>
@@ -16,7 +21,7 @@ const FormInput = () => {
       <div className='flex gap-2 my-4'>
          <Checkbox label={'Setuju'} name={'setuju'} id="accept"/>
          <Checkbox label={'Tidak setuju'} name={'setuju'} id="no-accept"/>
-         <Checkbox label={'Disabled'} name={'1'} id="no-accept" disabled/>
+         <Checkbox label={'Disabled'} name={'1'} id="no-accept2" disabled/>
       </div>
 
       <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4'>
@@ -69,6 +74,77 @@ const FormInput = () => {
          <div> 
             <label className='block mb-1.5'> Input File </label>
             <Input.File/>
+         </div>
+      </div>
+
+
+      <div className='flex gap-4 my-4 '>
+         <div>
+            <label className='block mb-1.5'> Input Group Prepend </label>
+            <Input.Group
+               inputGroupText={'@'}
+               inputElement={<Input.Text name='password'/>}
+            />
+         </div>
+
+         <div>
+            <label className='block mb-1.5'> Input Group Append </label>
+            <Input.Group
+               append
+               inputGroupText={'@example.com'}
+               inputElement={<Input.Text name='password'/>}
+            />
+         </div>
+
+         <div>
+            <label className='block mb-1.5'> Input Group Append (Btn) </label>
+            <Input.Group
+               append
+               useButton
+               inputElement={<Input.Text name='search' placeholder='search for'/>}
+               inputGroupText={<Button.Primary> Go! </Button.Primary>}
+            />
+         </div>
+      </div>   
+
+      <div className='flex gap-4 my-4'>
+         <div>
+            <label className='block mb-1.5'> Input Currency (Without Decimal) </label>
+            <Input.Currency 
+               id="input-example"
+               name="input-name"
+               prefix='$'
+               placeholder="Please enter a number"
+               allowDecimals={false}
+               onChange={(value, name) => console.log(value, name)}
+            />
+         </div>
+         <div>
+            <label className='block mb-1.5'> Input Currency (Without Prefix)</label>
+            <Input.Currency 
+               id="input-example2"
+               name="input-name"
+               placeholder="Please enter a number"
+               defaultValue={1000}
+               allowDecimals={false}
+               allowNegativeValue={false}
+               onChange={(value, name) => console.log(value, name)}
+            />
+         </div>
+
+         <div>
+            <label className='block mb-1.5'> Input Rupiah (Allow Decimal)</label>
+            <Input.Currency 
+               id="input-example3"
+               name="input-name"
+               placeholder="Please enter a number"
+               prefix={'Rp'}
+               allowDecimals={true}
+               allowNegativeValue={false}
+               decimalSeparator={','}
+               groupSeparator={'.'}
+               onChange={(value, name) => console.log(value, name)}
+            />
          </div>
       </div>
    </>

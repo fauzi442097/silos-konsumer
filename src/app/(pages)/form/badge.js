@@ -1,4 +1,4 @@
-import Badge from '@/app/components/Badge'
+import { Badge } from '@/app/components'
 import React from 'react'
 
 const FormBadge = () => {
