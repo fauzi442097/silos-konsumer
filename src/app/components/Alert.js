@@ -19,7 +19,7 @@ const getColorAlert = (alertType) => {
     return 'text-dark-blue-logo dark:text-[rgb(121,122,221)]';
 }
 
-const Alert = ({ type, title, message, onCloseAlert }) => {
+const Alert = ({ type, title, message, onClose }) => {
 
    const { theme } = useTheme();
    const alertType = !type ? 'primary' : type;
@@ -48,7 +48,7 @@ const Alert = ({ type, title, message, onCloseAlert }) => {
                   <span className='dark:text-grey'>{message}</span>
               </div>
    
-              <button type="button" onClick={onCloseAlert} className="absolute sm:relative m-2 sm:m-0 top-0 end-0 p-2 rounded-md sm:ml-auto hover:bg-gray-100 dark:hover:bg-gray-500 transition-all duration-300">
+              <button type="button" onClick={onClose} className="absolute sm:relative m-2 sm:m-0 top-0 end-0 p-2 rounded-md sm:ml-auto hover:bg-gray-100 dark:hover:bg-gray-500 transition-all duration-300">
                   <TfiClose className='text-sm text-gray-400 '/>
               </button>
           </motion.div>

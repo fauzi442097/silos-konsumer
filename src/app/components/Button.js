@@ -52,6 +52,14 @@ const ButtonClean = ({ children, className, ...props }) => {
   )
 }
 
+const ButtonCustom = ({ children, className, ...props }) => {
+  return (
+     <button className={`btn ${className || ''}`} {...props}> 
+        {children} 
+    </button>
+  )
+}
+
 const ButtonCloseModal = ({ ...props}) => {
   return (
     <button className='bg-slate-100 dark:hover:bg-[#2f3133] shadow-lg dark:bg-dark-depth2 rounded-lg p-1.5 border-slate-100 hover:bg-slate-200 hover:border-slate-200 transition-all duration-300' {...props}> 
@@ -68,7 +76,8 @@ const Button = {
   Secondary : ButtonSecondary,
   Icon: ButtonIcon,
   Clean: ButtonClean,
-  CloseModal : ButtonCloseModal
+  CloseModal : ButtonCloseModal,
+  Custom: ButtonCustom
 }
 
 

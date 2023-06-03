@@ -5,7 +5,7 @@ import { Header } from './Header'
 import { useTheme } from '@/app/hooks/ThemeContext'
 import { useSidebar } from '@/app/hooks/SidebarContext'
 import NextTopLoader from 'nextjs-toploader';
-import { MyToast } from '../components'
+import { MySwal, MyToast } from '../components'
 
 // import dynamic from "next/dynamic";
 // const Sidebar = dynamic(() => import("./Sidebar"));
@@ -32,6 +32,7 @@ const Layout = ({ children }) => {
           shadow="0 0 10px #2299DD,0 0 5px #2299DD"
       />
       <MyToast/>
+      <MySwal/>
       <div className={`${theme == 'dark' ? 'dark' : ''}`}>
         <div className={`flex h-screen overflow-auto bg-main dark:bg-dark-main transition-color duration-200`}>
           <Sidebar/>

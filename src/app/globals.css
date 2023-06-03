@@ -645,5 +645,30 @@
   .text-danger {
     color: var(--bs-text-danger) !important;
   }
+
+  .btn-custom-warning {
+    @apply  bg-yellow-500 hover:bg-yellow-600;
+  }
+
+  .btn-custom-danger,
+  .btn-custom-danger-dark {
+    @apply  bg-danger hover:bg-red-600;
+  }
+
+  .btn-custom-info {
+    @apply bg-dark-blue-logo hover:bg-[#1c1b80];
+  }
+
+  .btn-custom-warning-dark {
+    @apply bg-yellow-600 hover:bg-yellow-700;
+  }
+
+  .btn-custom-info-dark {
+    @apply bg-[rgb(121,122,221)] hover:bg-[rgb(110,111,201)];
+  }
+
+  .btn-clean-dark {
+    @apply bg-dark-depth2 border-dark-depth2 hover:bg-dark-depth3 hover:border-dark-depth3 text-grey !important;
+  }
 }
 

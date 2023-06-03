@@ -37,7 +37,7 @@ const ToastContent = ({
             boxShadow: '0 3px 10px rgb(0 0 0 / 10%), 0 3px 3px rgb(0 0 0 / 5%)',
             width: '320px'
         }}
-        className={`bg-white relative flex flex-col items-start gap-4 rounded-xl sm:flex-row p-5 overflow-hidden`}>
+        className={`bg-white relative flex items-start gap-4 rounded-xl flex-row p-5 overflow-hidden`}>
 
         <div className={`${bgColor} rounded-full h-7 w-7 flex items-center justify-center`}>
           {icon}
@@ -45,7 +45,7 @@ const ToastContent = ({
 
         <div className="d-flex flex-column pe-0">
             <h4 className={`mb-1 ${textColor}`}>{titleToast}</h4>
-            <p className={messageColor} dangerouslySetInnerHTML={{ __html: message }} />
+            <p className={`${messageColor} mb-0`} dangerouslySetInnerHTML={{ __html: message }} />
         </div>
         
     
