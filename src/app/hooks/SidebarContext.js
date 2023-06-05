@@ -9,6 +9,7 @@ export const useSidebar = () => {
 export function SidebarProvider({ children }) {
    const [ openSidebar, setOpenSidebar ] = useState(true)
    const [ openSideMenu, setOpenSideMenu ] = useState(-1);
+   const [ openSidebarMobile, setOpenSidebarMobile ] = useState(false);
    
    const toggleSidebar = () => {
       setOpenSidebar(prevSidebar => !prevSidebar)
@@ -22,8 +23,11 @@ export function SidebarProvider({ children }) {
       <SidebarContext.Provider value={{
          openSidebar,
          toggleSidebar,
+         setOpenSidebar,
          openSideMenu,
-         setOpenSideMenu
+         setOpenSideMenu,
+         openSidebarMobile,
+         setOpenSidebarMobile
       }}>
          {children}
       </SidebarContext.Provider>

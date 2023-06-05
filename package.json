@@ -9,21 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.1.0",
     "autoprefixer": "10.4.14",
     "chroma-js": "^2.4.2",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "framer-motion": "^10.12.16",
     "next": "13.4.3",
+    "nextjs-toploader": "^1.4.2",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-bootstrap-typeahead": "^6.2.2",
+    "react-currency-input-field": "^3.6.10",
     "react-data-table-component": "^7.5.3",
     "react-data-table-component-extensions": "^1.6.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.44.3",
     "react-icons": "^4.8.0",
-    "react-select": "^5.7.3",
     "react-tailwindcss-datepicker": "^1.6.1",
-    "tailwindcss": "3.3.2"
+    "react-tailwindcss-select": "^1.8.5",
+    "styled-components": "^5.3.11",
+    "tailwindcss": "3.3.2",
+    "yup": "^1.2.0",
+    "zustand": "^4.3.8"
   }
 }

@@ -3,7 +3,7 @@
 import React from "react"
 import { useTheme } from "@/app/hooks/ThemeContext"
 
-const InputFile = ({ name, tittle }) => {
+const InputFileDropzone = ({ name, tittle }) => {
 
     const { theme } = useTheme()
     const darkMode = theme == 'light' ? {
@@ -27,4 +27,4 @@ const InputFile = ({ name, tittle }) => {
     )
 }
 
-export default InputFile
+export default InputFileDropzone

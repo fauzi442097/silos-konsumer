@@ -1,145 +1,219 @@
-'use client'
-import React from "react"
+import { useTheme } from '@/app/hooks/ThemeContext';
+import React from 'react'
+import { MdKeyboardArrowDown } from 'react-icons/md';
+import { createTheme, defaultThemes } from 'react-data-table-component';
+import dynamic from 'next/dynamic';
 
-import DataTable, { createTheme } from 'react-data-table-component';
-import styled, { keyframes } from 'styled-components';
-import DropdownButton from "../DropdownButton";
+import '../../../../public/css/datatables-extensions.css';
 
+const DataTableExtensions = dynamic(() => import('react-data-table-component-extensions'), {ssr: false})
+const DataTable = dynamic(() => import('react-data-table-component'), {ssr: false})
 
-const MyDatatable = () => {
-  const [pending, setPending] = React.useState(true);
-  const [rows, setRows] = React.useState([]);
+const color = {
+  bgRed500 : '#B91C1C',
+  bgRed900: '#991B1B',
+  bgGray400: '#9CA3AF',
+  bgGray500: '#6c7281',
+  bgLightPrimary: '#ffedec',
+  bgDarkLightPrimary: '#d5b5b3'
+}
 
-  const Spinner = styled.div`
-	margin: 16px;
-	transform: translateZ(0);
-	border-top: 2px solid grey;
-	border-right: 2px solid grey;
-	border-bottom: 2px solid grey;
-	border-left: 4px solid black;
-	background: transparent;
-	width: 80px;
-	height: 80px;
-	border-radius: 50%;
-`;
+createTheme('customLight', {
+  background: {
+     default: '#fff',
+  },
+  button: {
+     default: "#66748c",
+  },
+  striped: {
+     default: '#F5F7FB',
+     text: '#66748c'
+  },
+  highlightOnHover: {
+     default: '#eff9f2',
+  },
+  text: {
+     primary: '#0c0c0F', 
+  },
+  selected: {
+     default: '#eff9f2',
+     text: '#0c0c0F'
+  },
+  context: {
+     background: '#fef1f1',
+     text: '#0c0c0F',
+  },
+  divider: {
+     default: '#eff2f5',
+  },
+  action: {
+     button: '#ff0d0d89',
+     hover: '#e9323214',
+     disabled: 'rgba(0,0,0,.12)',
+  },
+});
+
+createTheme('customDark', {
+  background: {
+     default: 'rgb(var(--color-dark-depth1))',
+  },
+  button: {
+     default: "#66748c",
+  },
+  striped: {
+     default: '#F5F7FB',
+     text: '#66748c'
+  },
+  highlightOnHover: {
+     default: 'rgb(44,47,51)',
+     text: 'rgb(var(--color-text-dark))'
+  },
+  text: {
+     primary: 'rgb(var(--color-text-dark))', // bg-gray-400
+     secondary: '#e3e8f0',
+  },
+  selected: {
+     default: 'rgb(44,47,51)',
+     text: 'rgb(var(--color-text-dark))'
+  },
+  context: {
+     background: 'rgb(var(--color-dark-depth2))',
+     text: 'rgb(var(--color-text-dark))',
+  },
+  divider: {
+     default: '#eff2f51a', // color-border-dark
+  },
+  action: {
+     button: 'var(--color-light-primary)',
+     hover: 'var(--color-light-primary)',
+     disabled: 'rgba(0,0,0,.12)',
+  },
+});
+
+const MyDataTable = ({ columns, data, ...props }) => {
+
+  const { theme } = useTheme();
+  const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
+
 
   const customStyles = {
-    headRow: {
-      style: {
-        border: 'none',
-      },
-    },
     headCells: {
       style: {
-        color: '#202124',
-        fontSize: '14px',
+         // override the cell padding for data cells
+         fontSize: ' 0.875rem',
+         lineHeight: '1.25rem',
+         color: '#fff',
+         backgroundColor: theme == 'dark' ? 'rgb(var(--color-dark-depth2))' : 'rgb(var(--color-primary))',  // bg-dark-dept-2
       },
-    },
-    rows: {
-      highlightOnHoverStyle: {
-        backgroundColor: 'rgb(230, 244, 244)',
-        borderBottomColor: '#FFFFFF',
-        borderRadius: '25px',
-        outline: '1px solid #FFFFFF',
-      },
-    },
-    pagination: {
+   },
+   rows: {
       style: {
-        border: 'none',
+         '&:not(:last-of-type)': {
+            borderBottomStyle: 'dashed',
+            borderBottomWidth: '1px',
+            borderBottomColor: defaultThemes[themeDataTable].divider.default,
+         },
       },
-    },
-  };
-
-  const CustomLoader = () => (
-    <div style={{ padding: '24px' }}>
-      <Spinner />
-      <div>Fancy Loader...</div>
-    </div>
-  );
-
-  const columns = [
-    {
-      name: 'Title',
-      selector: row => row.title,
-      sortable: true,
-      grow: 2,
+   },
+   header: {
+      // Title 
       style: {
-        color: '#202124',
-        fontSize: '14px',
-        fontWeight: 500,
+         fontSize: '1rem',
+         // margin: '1rem 0',
+         marginBottom: '1rem',
+        padding: 0,
       },
-    },
-    {
-      name: 'Owner',
-      selector: row => row.by,
-      sortable: true,
+   },
+   cells: {
       style: {
-        color: 'rgba(0,0,0,.54)',
+         padding: '1rem 1.25rem', // override the cell padding for data cells
+         fontSize: '0.875rem',
+         wordBreak: 'break-word'
       },
-    },
-    {
-      name: 'Last opened',
-      selector: row => row.lastOpened,
-      sortable: true,
+   },
+   contextMenu: {
       style: {
-        color: 'rgba(0,0,0,.54)',
+         backgroundColor: defaultThemes[themeDataTable].context.background,
+         color: defaultThemes[themeDataTable].context.text,
+         borderRadius: '0.75rem', // rounded-md
+         padding: '1rem 1.5rem',
+         transform: 'translate3d(0, -100%, 0)',
+         transitionDuration: '125ms',
+         transitionTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+         willChange: 'transform',
+         border: theme == 'dark' ? '1px solid rgb(var(--color-dark-depth2))' : '1px solid #dc1c21'
       },
-    },
-    {
-      cell: row => <DropdownButton row={row} />,
-      allowOverflow: true,
-      button: true,
-      width: '56px',
-    },
-  ];
-
-  const data = [
-    {
-      id: 1,
-      title: 'Cutting Costs',
-      by: 'me',
-      lastOpened: 'Aug 7 9:52 AM',
-    },
-    {
-      id: 2,
-      title: 'Wedding Planner',
-      by: 'me',
-      lastOpened: 'Sept 14 2:52 PM',
-    },
-    {
-      id: 3,
-      title: 'Expense Tracker',
-      by: 'me',
-      lastOpened: 'Sept 14 2:52 PM',
-    },
-    {
-      id: 4,
-      title: 'Home Brew Water Calculator',
-      by: 'me',
-      lastOpened: 'Jube 3 5:45 PM',
-    },
-  ];
-
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      setRows(data);
-      setPending(false);
-    }, 2000);
-    return () => clearTimeout(timeout);
-  }, []);
+      activeStyle: {
+         transform: 'translate3d(0, 0, 0)',
+      },
+   },
+   pagination: {
+      style: {
+         color: defaultThemes[themeDataTable].text.primary,
+         fontSize: '0.875rem', // text-sm
+         lineHeight: '1.25rem',
+         minHeight: '56px',
+         borderTopStyle: 'solid',
+         borderTopWidth: '1px',
+         borderTopColor: defaultThemes[themeDataTable].divider.default
+      },
+      pageButtonsStyle: {
+         borderRadius: '0.375rem',
+         height: '40px',
+         width: '40px',
+         padding: '8px',
+         margin: 'px',
+         cursor: 'pointer',
+         fill: defaultThemes[themeDataTable].text.primary,
+         transition: '0.4s',
+         backgroundColor: 'transparent',
+         '&:disabled': {
+            cursor: 'not-allowed',
+            fill: defaultThemes[themeDataTable].text.primary,
+            opacity: '.2'
+         },
+         '&:hover:not(:disabled)': {
+            background: (themeDataTable == 'customLight') ? 'rgb(var(--color-primary))' : 'var(--color-light-primary)',
+            fill: (themeDataTable == 'customLight') ? '#fff' : 'rgb(var(--color-primary))',
+            borderRadius: '0.375rem',
+         },
+         '&:focus': {
+            outline: 'none',
+            backgroundColor: (themeDataTable == 'customLight') ? 'rgb(var(--color-primary))' : 'var(--color-light-primary)',
+            fill: (themeDataTable == 'customLight') ? '#fff': 'rgb(var(--color-primary))'
+         },
+      },
+   },
+  }
 
   return (
-    <div className="position-relative">
-      <DataTable
-        columns={columns}
-        data={data}
-        customStyles={customStyles}
-        progressPending={pending}
-        progressComponent={<CustomLoader />}
-        pagination
-      />
+    <div className='relative'>
+      <DataTableExtensions
+          columns={columns}
+          data={data}
+          print={false}
+          export={false}
+          filterPlaceholder={'Cari Data'}
+        >
+          <DataTable
+              theme={theme == 'dark' ? 'customDark' : 'customLight'}
+              customStyles={customStyles}
+              paginationServer={false}
+              pagination={true}
+              defaultSortAsc={false}
+              defaultSortFieldId={1}
+              sortIcon={<MdKeyboardArrowDown />}
+              striped={false}
+              highlightOnHover={true}
+              pointerOnHover={false}
+              persistTableHead={true}
+              selectableRowsHighlight={true}
+              noDataComponent={"Data tidak tersedia"}
+              {...props}
+            />
+        </DataTableExtensions>
     </div>
   )
 }
 
-export default MyDatatable
+export default MyDataTable
