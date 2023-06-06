@@ -22,9 +22,9 @@ export default function RootLayout({ children }) {
         <SidebarProvider>
           <html lang="en">
             <body>
-              <Layout>
+              {/* <Layout> */}
                 {children}
-              </Layout>
+              {/* </Layout> */}
             </body>
           </html>
         </SidebarProvider>

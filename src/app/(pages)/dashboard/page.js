@@ -3,11 +3,10 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import Button from './components/Button';
-import Card from './components/Card';
-import PageTitle from './components/PageTitle';
-import Input from './components/Form/Input';
-
+import Button from "@/app/components";
+import Card from "@/app/components";
+import PageTitle from "@/app/components";
+import Input from "@/app/components";
 
 const loginSchema = yup.object({
   nama: yup.string().required('Wajib diisi').min(6, 'Minimal disii 6 karakter'),
@@ -16,6 +15,7 @@ const loginSchema = yup.object({
 });
 
 export default function Home() {
+
   const { 
     register, 
     handleSubmit, 
@@ -26,6 +26,7 @@ export default function Home() {
   });
   const onSubmit = data => console.log(data);
 
+
   return (
     <>
       <PageTitle title='Dashboard'/>
@@ -33,10 +34,19 @@ export default function Home() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className='my-4'>
               <Input.Text 
-                name={'username'}
+                name={'nama'}
                 register={register} 
-                placeholder={'Username'}
+                placeholder={'Nama Lengkap'}
                 errors={errors.nama}
+              />
+            </div>
+
+            <div className="my-4">
+              <Input.Number
+                name={'number'}
+                placeholder={'Lama Kerja'}
+                errors={errors.number}
+                register={register}
               />
             </div>
 
