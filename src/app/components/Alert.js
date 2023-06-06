@@ -1,6 +1,5 @@
-import React, { ReactNode, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { motion } from "framer-motion"
-import { IoClose, IoAlertOutline, IoCheckmarkSharp, IoInformationSharp } from "react-icons/io5"
 import { TfiClose } from "react-icons/tfi"
 import { useTheme } from '../hooks/ThemeContext'
 import notificationStyle from '../utils/notificationStyle'

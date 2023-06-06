@@ -9,24 +9,15 @@ export const metadata = {
   description: 'Webmin Silos Konsumer - Reborn',
 };
 
-export function reportWebVitals(metric) {
-  console.log(metric);
-  alert('tes');
-}
-
 export default function RootLayout({ children }) {
   return (
     <>
       <InitialGlobalFont/>
       <ThemeProvider>
         <SidebarProvider>
-          <html lang="en">
-            <body>
-              {/* <Layout> */}
-                {children}
-              {/* </Layout> */}
-            </body>
-          </html>
+          <Layout>
+            {children}
+          </Layout>
         </SidebarProvider>
       </ThemeProvider>
     </>
