@@ -42,5 +42,5 @@ export function useMySwal() {
         error: (message, title, onClose) => show({dialogType: "info", id, message, title, type: "error", onClose}),
         clear: () => store.clearAlert(),
         confirm: ({type, title, message, labelSubmit, onSubmit, labelCancel, onCancel}) => show({dialogType: "confirm", id, type, title, message, labelSubmit, onSubmit, labelCancel, onCancel})
-    }), [show, store]);
+    }), [show, store, id]);
 }

@@ -1,16 +1,10 @@
 'use client'
 
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
-import { useTheme } from '@/app/hooks/ThemeContext'
-import { SidebarProvider, useSidebar } from '@/app/hooks/SidebarContext'
-import { MySwal, MyToast } from '@/app/components'
+import {useSidebar } from '@/app/hooks/SidebarContext'
 import LoadingPage from '@/app/components/LoadingPage'
-
-// import dynamic from "next/dynamic";
-// const Sidebar = dynamic(() => import("./Sidebar"));
-// const Header = dynamic(() => import("./Header"));
 
 const AdminLayout = ({ children }) => {
 

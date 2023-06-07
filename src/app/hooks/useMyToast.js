@@ -22,7 +22,7 @@ export function useMyToast() {
         setTimeout(() => {
             store.removeMessage(id)
         }, timeout);
-    }, [store]) ;
+    }, [store, generateId]) ;
 
     return useMemo(() => ({
         default: (message, title , timeout = TIMEOUT) => show(message, title, "default", timeout),

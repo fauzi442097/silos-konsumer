@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { useClickOutside } from '@/app/hooks/useClickOutside'
 import Menu from "./Menu";

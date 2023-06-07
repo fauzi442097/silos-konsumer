@@ -3,12 +3,14 @@
 const { useEffect, useState, useCallback } = require("react")
 
 export const useLocalStorage = (key, value) => {
-   return useStorage(key, value, window.localStorage)
+   let ls;
+   if (typeof window !== "undefined") ls = window.localStorage;
+   return useStorage(key, value, ls)
 }
 
 const useStorage = (key, defaultValue, storageObject) => {
    const [value, setValue] = useState(() => {
-      const jsonValue = storageObject.getItem(key)
+      const jsonValue = storageObject === undefined ? undefined : storageObject.getItem(key)
       if ( jsonValue != undefined || jsonValue != null) {
          return JSON.parse(jsonValue)
       }

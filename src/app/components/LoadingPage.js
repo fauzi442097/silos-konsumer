@@ -1,13 +1,10 @@
 import React from 'react'
 import NextTopLoader from 'nextjs-toploader';
-import { useTheme } from '../hooks/ThemeContext';
 
 const LoadingPage = () => {
-   const { theme } = useTheme();
-   const loadingPageColor = theme == 'dark' ? '#FFF' : '#009A4B'
    return (
       <NextTopLoader
-         color={loadingPageColor}
+         color={'#E72129'}
          initialPosition={0.01}
          crawlSpeed={200}
          height={3}
@@ -15,7 +12,6 @@ const LoadingPage = () => {
          showSpinner={true}
          easing="ease"
          speed={200}
-         shadow="0 0 10px #2299DD,0 0 5px #2299DD"
       />
   )
 }

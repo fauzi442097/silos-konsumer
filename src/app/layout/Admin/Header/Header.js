@@ -8,9 +8,6 @@ import { IoMdNotificationsOutline } from 'react-icons/io'
 import { GoKebabHorizontal } from 'react-icons/go'
 import { VscThreeBars } from 'react-icons/vsc'
 import { motion, AnimatePresence } from "framer-motion"
-// import Notification from './Notification'
-// import UserProfile from './UserProfile'
-// import ToggleSidebar from '../Sidebar/ToggleSidebar'
 
 import Toolbar from './Toolbar'
 import Image from 'next/image'

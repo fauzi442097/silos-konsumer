@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 const MAX_TOASTS = 5;
 
 export const useToasterStore = create((set, get) => ({
