@@ -1,11 +1,12 @@
 'use client'
 import { Button, Input } from '@/app/components'
 import React from 'react'
+import { usePathname } from 'next/navigation';
 
 const page = () => {
-
+  const pathname = usePathname();  
   const login = () => {
-    alert('tes');
+    pathname.startsWith('/dashboard');
   }
 
   return (
