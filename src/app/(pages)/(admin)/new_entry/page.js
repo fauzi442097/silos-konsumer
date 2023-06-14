@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { Button, Card, MyDataTable, CheckboxTable, LoadingTable, DropdownButton } from '@/app/components';
 import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList } from "react-icons/hi2";
 
-const newEntry = () => {
+const NewEntry = () => {
 
     const [listNewEntry, setListNewEntry] = useState([]);
     useEffect(() => {
@@ -137,4 +137,4 @@ const newEntry = () => {
 
 }
 
-export default newEntry
+export default NewEntry
