@@ -181,7 +181,8 @@
     background: transparent;
     border-radius: 45%;
     bottom: 0px;
-    left: 0px;
+    /* left: 0px; */
+    left: 18rem;
     box-shadow: -15px 15px rgb(var(--color-primary));
     @apply dark:shadow-[-15px_15px_0_rgb(33,35,39)] lg:w-[40px] h-[40px];
   }
