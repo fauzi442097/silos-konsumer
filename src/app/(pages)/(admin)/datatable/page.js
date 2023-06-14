@@ -7,7 +7,7 @@ import {
     MyDataTable,
     CheckboxTable,
     LoadingTable
-} from '@/app/components';
+} from '@/app/components'
 
 const UsersPage = () => {
    
