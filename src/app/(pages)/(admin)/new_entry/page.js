@@ -1,8 +1,9 @@
 'use client'
 import React, { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation';
 
 import { Button, Card, MyDataTable, CheckboxTable, LoadingTable, DropdownButton } from '@/app/components';
-import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList } from "react-icons/hi2";
+import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList, HiPlusCircle } from "react-icons/hi2";
 
 const NewEntry = () => {
 
@@ -116,10 +117,19 @@ const NewEntry = () => {
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         New Entry
                     </h3>
+                    <Button.Custom 
+                        className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
+                        onClick={() => router.push(`/new_entry/form`)}>
+                        <HiPlusCircle>
+                        </HiPlusCircle>
+                        <span className="ml-3">
+                            Tambah Data
+                        </span>
+                    </Button.Custom>
                 </div>
                 <MyDataTable
-                    fixedHeader={true}
-                    // fixedHeaderScrollHeight="500px"
+                    // fixedHeader={false}
+                    fixedHeaderScrollHeight="500px"
                     columns={columns}
                     data={listNewEntry}
                     selectableRows={true}
@@ -129,7 +139,8 @@ const NewEntry = () => {
                     progressPending={false}
                     selectableRowsComponent={CheckboxTable}
                     progressComponent={<LoadingTable />}
-                    contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}>
+                // contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}
+                >
                 </MyDataTable>
             </Card>
         </>
