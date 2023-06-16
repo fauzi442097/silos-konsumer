@@ -2,15 +2,14 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { RxCaretDown, RxHamburgerMenu } from "react-icons/rx";
-import { TiThLarge } from "react-icons/ti";
-import { FaUserCheck, FaUserClock } from "react-icons/fa";
+import { RxCaretDown  } from "react-icons/rx";
 import { TbPointFilled } from "react-icons/tb";
 import { useSidebar } from '@/app/hooks/SidebarContext';
 import Link from 'next/link'
 import menus from './Menu.json';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from "framer-motion"
+import DynamicFaIcon from '@/app/components/DynamicFaIcon';
 
 
 const CheckMenuActive = (url, submenu) => {
@@ -30,7 +29,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
 
    const activeMenu = CheckMenuActive(url, subMenu)
    const { openSidebar, toggleSidebar, openSideMenu, setOpenSideMenu, setOpenSidebarMobile } = useSidebar();
-   const hiddenElement = !openSidebar ? 'hidden duration-300' : '';   
+   const hiddenElement = !openSidebar ? 'hidden duration-300 group-hover:block' : '';   
    const sideMenuActive = openSideMenu === id;
 
    const toggleSubMenu = (id) => {
@@ -44,8 +43,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
             !subMenu ? 
             (<Link href={url} id={id} onClick={() => {setOpenSideMenu(-1);setOpenSidebarMobile(false)}}>
                <span className="menu-icon">
-                  {" "}
-                  {icon}{" "}
+                  <DynamicFaIcon name={icon}/>
                </span>
                <span className={`menu-item-name ${hiddenElement}`}> {name} </span>
             </Link>
@@ -53,8 +51,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
                <>
                   <a id={id} onClick={() => toggleSubMenu(id)}>
                      <span className="menu-icon">
-                        {" "}
-                        {icon}{" "}
+                        <DynamicFaIcon name={icon}/>
                      </span>
                      <span className={`menu-item-name ${hiddenElement}`}> {name} </span>
                      {subMenu && <span className={`menu-icon absolute right-2 ${hiddenElement}`}><RxCaretDown className={`transition-all duration-300 ${sideMenuActive? 'rotate-180' : 'rotate-0'} `} /></span>}            
@@ -63,8 +60,6 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
                </>
             )
          }
-         
-         
       </li>
    )
 }
@@ -145,7 +140,7 @@ const Menu = () => {
                key={item.id}
                id={item.id}
                name={item.name}
-               icon={<TiThLarge />}
+               icon={item.icon}
                url={item.url}
                subMenu={item.subMenu}
             />

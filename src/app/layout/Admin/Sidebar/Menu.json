@@ -3,25 +3,25 @@
         "id": 1,
         "name": "Dashboard",
         "url": "/",
-        "icon": "TiThLarge"        
+        "icon": "FaTachometerAlt"        
     },
     {
         "id": 10,
         "name": "Form",
         "url": "/form",
-        "icon": "TiThLarge"        
+        "icon": "FaStickyNote"        
     },
     {
         "id": 12,
         "name": "Datatable",
         "url": "/datatable",
-        "icon": "TiThLarge"        
+        "icon": "FaTable"        
     },
     {
         "id": 14,
         "name": "User",
         "url": "/users",
-        "icon": "TiThLarge"        
+        "icon": "FaUsers"        
     },
     {
         "id": 100,
@@ -66,7 +66,7 @@
         "id": 7,
         "name": "Sudah Disetujui",
         "url": "#",
-        "icon": "FaUserClock",
+        "icon": "FaUserCheck",
         "subMenu": [
             {
                 "id": 7,

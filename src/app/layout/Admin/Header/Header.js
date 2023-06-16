@@ -83,7 +83,7 @@ const Header = () => {
    const ToggleThemeIcon = theme == 'light' ? <BsFillSunFill className='text-yellow-logo text-xl'/> : <BsFillMoonFill className='text-yellow-logo text-xl'/>
       
   return (
-   <header className={`header left-0 ${openSidebar ? 'lg:left-72' : 'lg:left-28'} bg-main dark:bg-dark-main transition-all duration-300`}>
+   <header className={`header left-0 ${openSidebar ? 'lg:left-72' : 'lg:left-28 peer-hover:left-72'} bg-main dark:bg-dark-main transition-all duration-300`}>
       <div className='pl-4 pr-2 lg:pr-8 lg:py-8 py-1 flex justify-between items-center lg:mx-5 lg:bg-main bg-primary dark:bg-primary-800 dark:lg:bg-dark-main rounded-b-3xl'>
       <div className='flex flex-row gap-3'> 
 
@@ -94,7 +94,7 @@ const Header = () => {
          <Toolbar className={'hidden lg:flex'} onClick={() => setToggleSidebar()}> {ToggleSidebarIcon} </Toolbar>
 
          {/* Toggle Theme */}
-         <Toolbar onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}> {ToggleThemeIcon} </Toolbar>
+         <Toolbar className={"toolbar-theme"} title={theme == 'light' ? 'Light Mode' : 'Dark Mode'} onClick={() => setTheme(theme == 'light' ? 'dark' : 'light')}> {ToggleThemeIcon} </Toolbar>
       </div>
 
       <div className='flex flex-row gap-4 items-center'> 

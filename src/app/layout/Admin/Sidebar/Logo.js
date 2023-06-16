@@ -14,7 +14,7 @@ const Logo = () => {
       <Image
          src={logoBrand}
          alt="logo bank kalteng"
-         className={`m-auto w-[160px] transition-all duration-300  ${openSidebar ? '' : 'hidden'}`}
+         className={`m-auto w-[160px] transition-all duration-300  ${openSidebar ? '' : 'hidden group-hover:block'}`}
          priority={true}
          width="0"
          height="0"
@@ -24,7 +24,7 @@ const Logo = () => {
       <Image
          src={"/logo_bank_kalteng_simple.png"}
          alt="logo bank kalteng"
-         className={`m-auto transition-all duration-300 ${openSidebar ? 'hidden' : ''}`}
+         className={`m-auto transition-all duration-300 ${openSidebar ? 'hidden' : 'group-hover:hidden'}`}
          width={100}
          height={100}
          priority={true}

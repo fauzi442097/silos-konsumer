@@ -181,8 +181,6 @@
     background: transparent;
     border-radius: 45%;
     bottom: 0px;
-    /* left: 0px; */
-    left: 18rem;
     box-shadow: -15px 15px rgb(var(--color-primary));
     @apply dark:shadow-[-15px_15px_0_rgb(33,35,39)] lg:w-[40px] h-[40px];
   }
@@ -208,7 +206,7 @@
   }
 
   .side-menu li.menu-item {
-    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-4 transition duration-300;
+    @apply p-4 rounded-tl-2xl rounded-bl-2xl cursor-pointer ml-4 transition duration-300 relative;
   }
 
   .side-menu li.menu-item.active {
@@ -220,13 +218,15 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    border-radius: 30%;
+    /* border-radius: 30%; */
+    border-bottom-right-radius: 30%;
     top: -40px;
     right: 0;
-    box-shadow: 20px 20px 0 rgb(var(--color-background));
+    /* box-shadow: 20px 20px 0 rgb(var(--color-background)); */
+    box-shadow: 0px 20px 0 rgb(var(--color-background));
     z-index: -1;
     background: var(--color-primary);
-    @apply dark:shadow-[20px_20px_0_rgb(6,11,15)];
+    @apply dark:shadow-[0_20px_0_rgb(6,11,15)];
   }
 
   .side-menu li.menu-item.active::after {
@@ -234,13 +234,15 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    border-radius: 30%;
+    /* border-radius: 30%; */
+    border-top-right-radius: 30%;
     bottom: -40px;
     right: 0;
-    box-shadow: 20px -20px 0 rgb(var(--color-background));
+    /* box-shadow: 20px -20px 0 rgb(var(--color-background)); */
+    box-shadow: 0 -20px 0 rgb(var(--color-background));
     z-index: -1;
     background: var(--color-primary);
-    @apply dark:shadow-[20px_-20px_0_rgb(6,11,15)];
+    @apply dark:shadow-[0_-20px_0_rgb(6,11,15)];
   }
 
   .side-menu li.menu-item.active > a {
@@ -671,5 +673,17 @@
   .btn-clean-dark {
     @apply bg-dark-depth2 border-dark-depth2 hover:bg-dark-depth3 hover:border-dark-depth3 text-grey !important;
   }
+
+  .toolbar-theme:hover:after {
+    display: block;
+  }
+
+  .toolbar-theme::after {
+    box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.2);
+    content: attr(title);
+    display: none;
+    @apply rounded-lg bg-white absolute top-16 left-14 lg:top-24 lg:left-20 p-2 text-sm cursor-auto dark:shadow-none transition-all duration-300 dark:bg-dark-depth1;
+  }
+
 }
 
