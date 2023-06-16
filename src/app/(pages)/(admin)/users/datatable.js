@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Card, CheckboxTable, LoadingTable, MyDataTable } from '@/app/components'
+import { Button, Card, CardHeader, CheckboxTable, LoadingTable, MyDataTable, PageTitle } from '@/app/components'
 import React from 'react'
 
 const Datatable = ({ data }) => {
@@ -71,23 +71,32 @@ const Datatable = ({ data }) => {
       ];
       
   return (
-    <Card>
-        <MyDataTable
-            fixedHeader={true}
-            // fixedHeaderScrollHeight="500px"
-            columns={columns}
-            data={data}
-            selectableRows={false}
-            pagination={true}
-            paginationPerPage={10}
-            responsive={true}
-            progressPending={false}
-            title="List User"
-            selectableRowsComponent={CheckboxTable}
-            progressComponent={<LoadingTable/>}
-            contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}
-        />
-    </Card>
+    <>
+        <PageTitle title='Users'/>
+        <Card>
+            <div className='flex justify-between items-center mb-8'>
+                <h3> Users </h3>
+                <Button.Primary> Tambah Data </Button.Primary>
+            </div>
+
+            <MyDataTable
+                compactness={true}
+                fixedHeader={true}
+                withFilter={false}
+                // fixedHeaderScrollHeight="500px"
+                columns={columns}
+                data={data}
+                selectableRows={false}
+                pagination={true}
+                paginationPerPage={10}
+                responsive={true}
+                progressPending={false}
+                selectableRowsComponent={CheckboxTable}
+                progressComponent={<LoadingTable/>}
+                contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}
+            />
+        </Card>
+    </>
   )
 }
 

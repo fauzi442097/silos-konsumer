@@ -12,6 +12,8 @@ const NewEntry = () => {
         const getNewEntry = async () => {
             const res = await fetch('https://dummyjson.com/products');
             const data = await res.json();
+
+            console.log(data.products);
             setListNewEntry(data.products);
         }
         getNewEntry();
@@ -113,8 +115,8 @@ const NewEntry = () => {
     return (
         <>
             <Card>
-                <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                         New Entry
                     </h3>
                     <Button.Custom 

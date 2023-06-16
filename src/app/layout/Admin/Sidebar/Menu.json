@@ -18,6 +18,12 @@
         "icon": "TiThLarge"        
     },
     {
+        "id": 14,
+        "name": "User",
+        "url": "/users",
+        "icon": "TiThLarge"        
+    },
+    {
         "id": 100,
         "name": "Alert & Toast",
         "url": "/alert",

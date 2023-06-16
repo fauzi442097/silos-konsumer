@@ -90,7 +90,7 @@ createTheme('customDark', {
   },
 });
 
-const MyDataTable = ({ columns, data, ...props }) => {
+const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ...props }) => {
 
   const { theme } = useTheme();
   const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
@@ -188,30 +188,55 @@ const MyDataTable = ({ columns, data, ...props }) => {
 
   return (
     <div className='relative'>
-      <DataTableExtensions
-          columns={columns}
-          data={data}
-          print={false}
-          export={false}
-          filterPlaceholder={'Cari Data'}
-        >
-          <DataTable
-              theme={theme == 'dark' ? 'customDark' : 'customLight'}
-              customStyles={customStyles}
-              paginationServer={false}
-              pagination={true}
-              defaultSortAsc={false}
-              defaultSortFieldId={1}
-              sortIcon={<MdKeyboardArrowDown />}
-              striped={false}
-              highlightOnHover={true}
-              pointerOnHover={false}
-              persistTableHead={true}
-              selectableRowsHighlight={true}
-              noDataComponent={"Data tidak tersedia"}
-              {...props}
-            />
-        </DataTableExtensions>
+      {
+         withFilter ? (
+            <DataTableExtensions
+               columns={columns}
+               data={data}
+               print={false}
+               export={false}
+               filterPlaceholder={'Cari Data'}
+            >
+               <DataTable
+                  dense={compactness}
+                  theme={theme == 'dark' ? 'customDark' : 'customLight'}
+                  customStyles={customStyles}
+                  paginationServer={false}
+                  pagination={true}
+                  defaultSortAsc={false}
+                  defaultSortFieldId={1}
+                  sortIcon={<MdKeyboardArrowDown />}
+                  striped={false}
+                  highlightOnHover={true}
+                  pointerOnHover={false}
+                  persistTableHead={true}
+                  selectableRowsHighlight={true}
+                  noDataComponent={"Data tidak tersedia"}
+                  {...props}
+                  />
+            </DataTableExtensions>
+         ) : (
+            <DataTable
+               dense={compactness}
+               columns={columns}
+               data={data}
+               theme={theme == 'dark' ? 'customDark' : 'customLight'}
+               customStyles={customStyles}
+               paginationServer={false}
+               pagination={true}
+               defaultSortAsc={false}
+               defaultSortFieldId={1}
+               sortIcon={<MdKeyboardArrowDown />}
+               striped={false}
+               highlightOnHover={true}
+               pointerOnHover={false}
+               persistTableHead={true}
+               selectableRowsHighlight={true}
+               noDataComponent={"Data tidak tersedia"}
+               {...props}
+               />
+         )
+      }
     </div>
   )
 }

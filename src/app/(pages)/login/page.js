@@ -3,7 +3,7 @@ import { Button, Input } from '@/app/components'
 import React from 'react'
 import { usePathname } from 'next/navigation';
 
-const page = () => {
+const Login = () => {
   const pathname = usePathname();  
   const login = () => {
     pathname.startsWith('/dashboard');
@@ -29,4 +29,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Login

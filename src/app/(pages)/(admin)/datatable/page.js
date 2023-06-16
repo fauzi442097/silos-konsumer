@@ -80,6 +80,34 @@ const UsersPage = () => {
         center: true
     },
     {
+        name: 'Alamat',
+        selector: (row) => row.address.address,
+        cellExport: row => row.address.address,
+        sortable: true,
+        center: true
+    },
+    {
+        name: 'Tinggi Badan',
+        selector: (row) => row.height,
+        cellExport: row => row.height,
+        sortable: true,
+        center: true
+    },
+    {
+        name: 'Berat Badan',
+        selector: (row) => row.weight,
+        cellExport: row => row.weight,
+        sortable: true,
+        center: true
+    },
+    {
+        name: 'Golongan Darah',
+        selector: (row) => row.bloodGroup,
+        cellExport: row => row.bloodGroup,
+        sortable: true,
+        center: true
+    },
+    {
         name: 'Action',
         cell: (row, index, column, id) => <Button.Primary className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button.Primary>,
         ignoreRowClick: true,

@@ -4,7 +4,7 @@ import { Button, Card, PageTitle } from "@/app/components"
 import Step1 from './step1'
 import Step2 from "./step2"
 
-const formNewEntry = () => {
+const FormNewEntry = () => {
     const [step, setStep] = useState(1);
 
     const handleNext = () => {
@@ -44,9 +44,9 @@ const formNewEntry = () => {
                                     {/* <h3 className="font-medium leading-tight">Simulasi</h3>
                                     <p className="text-sm">Isian Form Simulasi</p> */}
                                 </li>
-                                <li class="h-[100px]">
+                                <li className="h-[100px]">
                                     <span className={`absolute flex items-center justify-center w-8 h-8 ${step === 2 ? "bg-green-200" : "bg-gray-100"} rounded-full -left-4 ring-white dark:ring-gray-900 dark:bg-gray-700`}>
-                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                        <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                                     </span>
                                     {/* <h3 className="font-medium leading-tight">Biaya - biaya</h3>
                                     <p className="text-sm">Isian Form Biaya - biaya</p> */}
@@ -81,4 +81,4 @@ const formNewEntry = () => {
     );
 }
 
-export default formNewEntry
+export default FormNewEntry

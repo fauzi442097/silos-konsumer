@@ -11,7 +11,7 @@ const Card = ({ children }) => {
   } : {}
 
   return (
-    <div style={boxShadowCardStyle} className='card bg-white dark:bg-dark-depth1 dark:text-grey dark:shadow-none'>
+    <div style={boxShadowCardStyle} className='card bg-white dark:bg-dark-depth1 dark:text-grey dark:shadow-none w-full'>
       {children}
     </div>
   )

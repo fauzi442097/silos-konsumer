@@ -3,10 +3,7 @@
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import Button from "@/app/components";
-import Card from "@/app/components";
-import PageTitle from "@/app/components";
-import Input from "@/app/components";
+import { Button, Card, Input, PageTitle } from "@/app/components";
 
 const loginSchema = yup.object({
   nama: yup.string().required('Wajib diisi').min(6, 'Minimal disii 6 karakter'),
