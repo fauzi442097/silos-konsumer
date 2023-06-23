@@ -1,12 +1,15 @@
 'use client'
 
-import { Alert, Button, Card, PageTitle } from '@/app/components'
 import { AnimatePresence } from 'framer-motion'
 import React, { useState} from 'react'
+import PageTitle from '@/app/components/PageTitle'
+import Card from '@/app/components/Card'
+import Alert from '@/app/components/Alert'
+import Button from '@/app/components/Button'
 import { useMyToast } from '@/app/hooks/useMyToast'
 import { useMySwal } from '@/app/hooks/useMySwal'
 
-const AlertPage = () => {
+const Page = () => {
 
   const [ showAlert, setShowAlert ] = useState({
       success: true,
@@ -92,4 +95,4 @@ const AlertPage = () => {
   )
 }
 
-export default AlertPage
+export default Page

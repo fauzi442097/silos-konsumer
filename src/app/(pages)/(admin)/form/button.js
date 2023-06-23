@@ -1,5 +1,6 @@
+import Button from '@/app/components/Button'
 import React from 'react'
-import { Button } from '@/app/components'
+
 import { FiSave } from 'react-icons/fi'
 
 const FormButton = () => {

@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from "react"
-import { Button, Card, PageTitle } from "@/app/components"
 import Step1 from './step1'
 import Step2 from "./step2"
+import PageTitle from "@/app/components/PageTitle"
+import Button from "@/app/components/Button"
+import Card from "@/app/components/Card"
 
 const FormNewEntry = () => {
     const [step, setStep] = useState(1);

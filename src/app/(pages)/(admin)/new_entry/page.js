@@ -2,12 +2,17 @@
 import React, { useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { Button, Card, MyDataTable, CheckboxTable, LoadingTable, DropdownButton } from '@/app/components';
 import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList, HiPlusCircle } from "react-icons/hi2";
 import Breadcrumbs from "@/app/components/Breadcrumbs";
+import LoadingTable from "@/app/components/Datatable/LoadingTable";
+import MyDataTable from "@/app/components/Datatable/MyDatatable";
+import Button from "@/app/components/Button";
+import Card from "@/app/components/Card";
+import DropdownButton from "@/app/components/DropdownButton";
+import CheckboxTable from "@/app/components/Datatable/CheckboxTable";
 
 
-const NewEntry = () => {
+const Page = () => {
 
     const router = useRouter();
 
@@ -156,4 +161,4 @@ const NewEntry = () => {
 
 }
 
-export default NewEntry
+export default Page

@@ -1,11 +1,11 @@
 'use client'
 import React, { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { Button } from '@/app/components';
-// import Modal from '@/app/components/Modal';
+
 import dynamic from 'next/dynamic';
 import Preloader from '@/app/layout/Admin/Header/Preloader';
 import Modal from '@/app/components/Modal/ModalSection';
+import Button from '@/app/components/Button';
 
 const MyModal = dynamic(() => import('../../../components/Modal'), {ssr: false, loading: () => <Preloader type={'toggleSidebar'}/>})
 

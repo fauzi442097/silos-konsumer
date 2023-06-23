@@ -9,8 +9,7 @@ import FormModal from './modal'
 import FormButton from './button'
 import FormBadge from './badge'
 
-
-const FormsPage = () => {
+const Page = () => {
 
   return (
     <>
@@ -22,9 +21,8 @@ const FormsPage = () => {
             <FormInput/>
             <FormSelect/>
         </Card>
-        
     </>
   )
 }
 
-export default FormsPage
+export default Page

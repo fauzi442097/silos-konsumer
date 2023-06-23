@@ -1,15 +1,14 @@
 'use client'
+import Button from '@/app/components/Button';
+import Card from '@/app/components/Card';
+import CheckboxTable from '@/app/components/Datatable/CheckboxTable';
+import LoadingTable from '@/app/components/Datatable/LoadingTable';
+import MyDataTable from '@/app/components/Datatable/MyDatatable';
 import React, { useEffect, useState } from 'react'
 
-import {
-    Button, 
-    Card, 
-    MyDataTable,
-    CheckboxTable,
-    LoadingTable
-} from '@/app/components'
 
-const UsersPage = () => {
+
+const Page = () => {
    
   const [ listUsers, setListUsers] = useState([]);
   useEffect(() => {
@@ -139,4 +138,4 @@ const UsersPage = () => {
 
 
 
-export default UsersPage
+export default Page

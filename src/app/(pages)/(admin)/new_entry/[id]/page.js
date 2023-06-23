@@ -1,7 +1,7 @@
 'use client'
 
-import { PageTitle } from '@/app/components'
 import Breadcrumbs from '@/app/components/Breadcrumbs'
+import PageTitle from '@/app/components/PageTitle'
 import React from 'react'
 
 const page = () => {
