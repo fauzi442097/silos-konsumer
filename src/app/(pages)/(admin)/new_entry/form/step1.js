@@ -2,6 +2,12 @@
 import React from "react"
 import { MySelect, Input } from '@/app/components';
 
+const options = [
+    { value: "fox", label: "Fox" },
+    { value: "Butterfly", label: "Butterfly" },
+    { value: "Honeybee", label: "Honeybee" }
+ ];
+
 const Step1 = () => {
     return (
         <>
@@ -9,15 +15,15 @@ const Step1 = () => {
             <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4'>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Produk </label>
-                    <MySelect withSearch />
+                    <MySelect withSearch options={options} />
                 </div>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Pekerjaan </label>
-                    <MySelect withSearch />
+                    <MySelect withSearch options={options}/>
                 </div>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Status Menikah </label>
-                    <MySelect withSearch />
+                    <MySelect withSearch options={options}/>
                 </div>
             </div>
             <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4'>
@@ -96,7 +102,7 @@ const Step1 = () => {
                 </div>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Asuransi </label>
-                    <MySelect withSearch />
+                    <MySelect withSearch options={options}/>
                 </div>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Rate Asuransi </label>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { IoMdClose } from 'react-icons/io'
 
-
 const ButtonPrimary = ({ children, className, ...props }) => {
   return (
     <button className={`btn btn-primary ${className || ''}`} {...props}> 

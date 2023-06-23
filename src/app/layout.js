@@ -4,6 +4,7 @@ import { SidebarProvider } from './hooks/SidebarContext'
 import InitialGlobalFont from '@/app/config/font'
 import Layout from './layout/Layout';
 
+
 export const metadata = {
   title: 'Silos Konsumer',
   description: 'Webmin Silos Konsumer - Reborn',
@@ -14,10 +15,10 @@ export default function RootLayout({ children }) {
     <>
       <InitialGlobalFont/>
       <ThemeProvider>
-        <SidebarProvider>
-          <Layout>
-            {children}
-          </Layout>
+        <SidebarProvider>          
+            <Layout>
+              {children}
+            </Layout>
         </SidebarProvider>
       </ThemeProvider>
     </>

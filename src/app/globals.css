@@ -685,5 +685,9 @@
     @apply rounded-lg bg-white absolute top-16 left-14 lg:top-24 lg:left-20 p-2 text-sm cursor-auto dark:shadow-none transition-all duration-300 dark:bg-dark-depth1;
   }
 
+  .breadcrumb {
+    @apply flex flex-wrap gap-2;
+  }
+
 }
 

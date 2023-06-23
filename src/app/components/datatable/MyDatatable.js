@@ -9,15 +9,6 @@ import '../../../../public/css/datatables-extensions.css';
 const DataTableExtensions = dynamic(() => import('react-data-table-component-extensions'), {ssr: false})
 const DataTable = dynamic(() => import('react-data-table-component'), {ssr: false})
 
-const color = {
-  bgRed500 : '#B91C1C',
-  bgRed900: '#991B1B',
-  bgGray400: '#9CA3AF',
-  bgGray500: '#6c7281',
-  bgLightPrimary: '#ffedec',
-  bgDarkLightPrimary: '#d5b5b3'
-}
-
 createTheme('customLight', {
   background: {
      default: '#fff',
@@ -94,7 +85,6 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
 
   const { theme } = useTheme();
   const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
-
 
   const customStyles = {
     headCells: {
