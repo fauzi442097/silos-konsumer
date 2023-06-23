@@ -6,7 +6,7 @@ import { Button, Card, MyDataTable, CheckboxTable, LoadingTable, DropdownButton 
 import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList, HiPlusCircle } from "react-icons/hi2";
 
 const NewEntry = () => {
-
+    const router = useRouter();
     const [listNewEntry, setListNewEntry] = useState([]);
     useEffect(() => {
         const getNewEntry = async () => {
