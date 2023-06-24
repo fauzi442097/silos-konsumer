@@ -3,11 +3,15 @@ import { useTheme } from '@/hooks/ThemeContext';
 import Image from 'next/image'
 import React from 'react'
 
+import logo_bank_kalteng from '../../../../../public/logo_bank_kalteng.png'
+import logo_bank_kalteng_trf from '../../../../../public/logo_bank_kalteng_transparent.png'
+import logo_bank_kalteng_simple from '../../../../../public/logo_bank_kalteng_simple.png'
+
 const Logo = () => {
 
    const { openSidebar } = useSidebar();
    const { theme } = useTheme();
-   const logoBrand = theme == 'light' ? '/logo_bank_kalteng.png' : '/logo_bank_kalteng_transparent.png';
+   const logoBrand = theme == 'light' ? logo_bank_kalteng : logo_bank_kalteng_trf;
 
   return (
    <div className="mb-12 py-8 app-brand bg-[#D5EBE1] dark:bg-dark-depth1 w-full m-auto">
@@ -22,7 +26,7 @@ const Logo = () => {
       />
 
       <Image
-         src={"/logo_bank_kalteng_simple.png"}
+         src={logo_bank_kalteng_simple}
          alt="logo bank kalteng"
          className={`m-auto transition-all duration-300 ${openSidebar ? 'hidden' : 'group-hover:hidden'}`}
          width={100}
