@@ -1,7 +1,13 @@
 'use client'
 import React, { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
-import { Button, Modal } from '@/app/components';
+
+import dynamic from 'next/dynamic';
+import Preloader from '@/app/layout/Admin/Header/Preloader';
+import Modal from '@/app/components/Modal/ModalSection';
+import Button from '@/app/components/Button';
+
+const MyModal = dynamic(() => import('../../../components/Modal'), {ssr: false, loading: () => <Preloader type={'toggleSidebar'}/>})
 
 
 const FormModal = () => {
@@ -14,7 +20,7 @@ const FormModal = () => {
    });
 
    const showModalDialog = (type) => {
-   setShowModal((prev) => ({ ...prev, [type]: true }))
+   	setShowModal((prev) => ({ ...prev, [type]: true }))
    }
 
   return (
@@ -30,7 +36,7 @@ const FormModal = () => {
 
           <AnimatePresence>
 						{showModal.base && (
-							<Modal closeOutside={true} setShowModal={setShowModal}>
+							<MyModal closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
                   <Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
                   <Button.CloseModal onClick={() =>
@@ -60,11 +66,11 @@ const FormModal = () => {
                   <Button.Clean> Batal </Button.Clean>
 									<Button.Primary> Simpan </Button.Primary>
 								</Modal.Footer>
-							</Modal>
+							</MyModal>
 						)}
 
             {showModal.sm && (
-							<Modal size='sm' closeOutside={true} setShowModal={setShowModal}>
+							<MyModal size='sm' closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
                   <div>
                     <h3 className='font-bold mb-1'> Tambah Data </h3>
@@ -97,11 +103,11 @@ const FormModal = () => {
                   <Button.Clean> Batal </Button.Clean>
 									<Button.Primary> Simpan </Button.Primary>
 								</Modal.Footer>
-							</Modal>
+							</MyModal>
 						)}
 
             {showModal.lg && (
-							<Modal size='lg' closeOutside={true} setShowModal={setShowModal}>
+							<MyModal size='lg' closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
                   <div>
                     <h3 className='font-bold mb-1'> Tambah Data </h3>
@@ -134,11 +140,11 @@ const FormModal = () => {
                   <Button.Clean> Batal </Button.Clean>
 									<Button.Primary> Simpan </Button.Primary>
 								</Modal.Footer>
-							</Modal>
+							</MyModal>
 						)}
 
             {showModal.xl && (
-							<Modal size='xl' closeOutside={true} setShowModal={setShowModal}>
+							<MyModal size='xl' closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
                   <div>
                     <h3 className='font-bold mb-1'> Tambah Data </h3>
@@ -171,11 +177,11 @@ const FormModal = () => {
                   <Button.Clean> Batal </Button.Clean>
 									<Button.Primary> Simpan </Button.Primary>
 								</Modal.Footer>
-							</Modal>
+							</MyModal>
 						)}
 
             {showModal.fullScreen && (
-							<Modal size='fullscreen' closeOutside={true} setShowModal={setShowModal}>
+							<MyModal size='fullscreen' closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
                   <div>
                     <h3 className='font-bold mb-1'> Tambah Data </h3>
@@ -208,7 +214,7 @@ const FormModal = () => {
                   <Button.Clean> Batal </Button.Clean>
 									<Button.Primary> Simpan </Button.Primary>
 								</Modal.Footer>
-							</Modal>
+							</MyModal>
 						)}
 
 						

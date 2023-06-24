@@ -1,7 +1,4 @@
-'use client';
-
-import React, { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation';
+import React from 'react'
 import { RxCaretDown  } from "react-icons/rx";
 import { TbPointFilled } from "react-icons/tb";
 import { useSidebar } from '@/app/hooks/SidebarContext';

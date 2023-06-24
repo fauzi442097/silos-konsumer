@@ -1,13 +1,17 @@
 'use client'
 
 import React from 'react'
-import { Sidebar } from './Sidebar'
-import { Header } from './Header'
 import {useSidebar } from '@/app/hooks/SidebarContext'
 import LoadingPage from '@/app/components/LoadingPage'
 
 import { useTheme } from '@/app/hooks/ThemeContext'
-import { MySwal, MyToast } from '@/app/components'
+import Preloader from './Header/Preloader'
+import dynamic from 'next/dynamic'
+
+const Header = dynamic(() => import('./Header/Header'))
+const Sidebar = dynamic(() => import('./Sidebar/Sidebar'))
+const MySwal = dynamic(() => import('../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
+const MyToast = dynamic(() => import('../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 
 const AdminLayout = ({ children }) => {
 

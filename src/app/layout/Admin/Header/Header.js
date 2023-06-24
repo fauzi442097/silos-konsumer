@@ -1,4 +1,3 @@
-// "use client"
 import React, { useState, useRef} from 'react'
 import { useSidebar } from '@/app/hooks/SidebarContext'
 import { useTheme } from '@/app/hooks/ThemeContext'
@@ -6,50 +5,23 @@ import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { GoKebabHorizontal } from 'react-icons/go'
 import { VscThreeBars } from 'react-icons/vsc'
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 
 import Toolbar from './Toolbar'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
+import Preloader from './Preloader'
 
-export const LoadingComponent = ({type}) => {
-   return (
-      <motion.div 
-         initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-               default: { ease: "linear"},
-               duration: 2
-            }}
-            className={`${type == 'toggleSidebar' ? 'inset-0' : 'top-24 left-0 right-0 bottom-0'} fixed overflow-hidden backdrop-header`}>
-      </motion.div>
-   )
-}
 
-const Notification = dynamic(() => import('./Notification'), {
-   ssr: false,
-   loading: () => <LoadingComponent/>
-});
-
-const UserProfile = dynamic(() => import('./UserProfile'), {
-   ssr: false,
-   loading: () => <LoadingComponent/>
-});
-
-const ToggleSidebar = dynamic(() => import('../Sidebar/ToggleSidebar'), {
-   ssr: false,
-   loading: () => <LoadingComponent type={'toggleSidebar'}/>
-});
+const Notification = dynamic(() => import('./Notification'), { ssr: false, loading: () => <Preloader/> });
+const UserProfile = dynamic(() => import('./UserProfile'), { ssr: false, loading: () => <Preloader/> });
+const ToggleSidebar = dynamic(() => import('../Sidebar/ToggleSidebar'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 
 const Header = () => {
 
    const {theme, setTheme} = useTheme();
    const { openSidebar, toggleSidebar, setOpenSidebar, setOpenSideMenu, openSidebarMobile, setOpenSidebarMobile } = useSidebar();
-   const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({
-      notification: false,
-      userAccount: false
-   });
+   const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({notification: false, userAccount: false});
 
    const setToggleSidebar = () => {
       toggleSidebar();
@@ -77,7 +49,6 @@ const Header = () => {
       setOpenSidebarMobile(true)
       setOpenSidebar(true)
    }
-
 
    const ToggleSidebarIcon = openSidebar ? <VscThreeBars className='text-xl'/> :  <GoKebabHorizontal className='text-xl rotate-90'/>
    const ToggleThemeIcon = theme == 'light' ? <BsFillSunFill className='text-yellow-logo text-xl'/> : <BsFillMoonFill className='text-yellow-logo text-xl'/>

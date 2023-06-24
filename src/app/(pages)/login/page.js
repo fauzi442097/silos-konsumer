@@ -1,9 +1,10 @@
 'use client'
-import { Button, Input } from '@/app/components'
 import React from 'react'
 import { usePathname } from 'next/navigation';
+import Input from '@/app/components/Form/Input';
+import Button from '@/app/components/Button';
 
-const Login = () => {
+const Page = () => {
   const pathname = usePathname();  
   const login = () => {
     pathname.startsWith('/dashboard');
@@ -29,4 +30,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Page

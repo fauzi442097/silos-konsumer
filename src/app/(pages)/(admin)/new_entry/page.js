@@ -1,12 +1,21 @@
 'use client'
 import React, { useEffect, useState } from "react"
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { Button, Card, MyDataTable, CheckboxTable, LoadingTable, DropdownButton } from '@/app/components';
 import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList, HiPlusCircle } from "react-icons/hi2";
+import Breadcrumbs from "@/app/components/Breadcrumbs";
+import LoadingTable from "@/app/components/Datatable/LoadingTable";
+import MyDataTable from "@/app/components/Datatable/MyDatatable";
+import Button from "@/app/components/Button";
+import Card from "@/app/components/Card";
+import DropdownButton from "@/app/components/DropdownButton";
+import CheckboxTable from "@/app/components/Datatable/CheckboxTable";
 
-const NewEntry = () => {
+
+const Page = () => {
+
     const router = useRouter();
+
     const [listNewEntry, setListNewEntry] = useState([]);
     useEffect(() => {
         const getNewEntry = async () => {
@@ -114,6 +123,7 @@ const NewEntry = () => {
 
     return (
         <>
+            <Breadcrumbs/>
             <Card>
                 <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -150,4 +160,4 @@ const NewEntry = () => {
 
 }
 
-export default NewEntry
+export default Page

@@ -1,11 +1,10 @@
+import Button from '@/app/components/Button'
+import Checkbox from '@/app/components/Form/Checkbox'
+import Input from '@/app/components/Form/Input'
+import Radio from '@/app/components/Form/Radio'
+import Textarea from '@/app/components/Form/Textarea'
 import React from 'react'
-import { 
-   Button, 
-   Checkbox, 
-   Input, 
-   Radio, 
-   Textarea 
-} from '@/app/components'
+
 
 
 const FormInput = () => {

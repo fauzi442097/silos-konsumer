@@ -1,11 +1,19 @@
 'use client'
-import { useTheme } from '@/app/hooks/ThemeContext';
-import Toolbar from '@/app/layout/Admin/Header/Toolbar';
-import Image from 'next/image'
+
 import React from 'react'
+import dynamic from 'next/dynamic';
+import Image from 'next/image'
+
+import { useTheme } from '@/app/hooks/ThemeContext';
 import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
+
+import Toolbar from '@/app/layout/Admin/Header/Toolbar';
+import Preloader from '@/app/layout/Admin/Header/Preloader';
 import styles from './login.module.css'
-import { MySwal, MyToast } from '@/app/components';
+
+
+const MySwal = dynamic(() => import('../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
+const MyToast = dynamic(() => import('../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 
 const GuestLayout = ({ children }) => {
 

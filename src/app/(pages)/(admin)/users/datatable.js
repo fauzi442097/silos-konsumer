@@ -1,6 +1,11 @@
 'use client'
 
-import { Button, Card, CardHeader, CheckboxTable, LoadingTable, MyDataTable, PageTitle } from '@/app/components'
+import Button from '@/app/components/Button';
+import Card from '@/app/components/Card';
+import CheckboxTable from '@/app/components/Datatable/CheckboxTable';
+import LoadingTable from '@/app/components/Datatable/LoadingTable';
+import MyDataTable from '@/app/components/Datatable/MyDatatable';
+import PageTitle from '@/app/components/PageTitle';
 import React from 'react'
 
 const Datatable = ({ data }) => {

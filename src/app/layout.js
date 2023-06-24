@@ -14,10 +14,10 @@ export default function RootLayout({ children }) {
     <>
       <InitialGlobalFont/>
       <ThemeProvider>
-        <SidebarProvider>
-          <Layout>
-            {children}
-          </Layout>
+        <SidebarProvider>          
+            <Layout>
+              {children}
+            </Layout>
         </SidebarProvider>
       </ThemeProvider>
     </>

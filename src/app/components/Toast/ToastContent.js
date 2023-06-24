@@ -53,7 +53,6 @@ const ToastContent = ({
             <TfiClose className='text-sm text-gray-400 '/>
          </button>
 
-
          <div style={bgProgressBar} className={`${styles['notification']} absolute left-0 bottom-0 start-0 h-[8px] w-full rounded-b-xl`}>
         </div>
     </motion.div>

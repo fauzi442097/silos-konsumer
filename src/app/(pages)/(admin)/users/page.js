@@ -8,7 +8,7 @@ const getData = async() => {
     return res.json();
 }
 
-const Users = () => {
+const page = () => {
     const data = use(getData());
     return (
         <>
@@ -19,4 +19,5 @@ const Users = () => {
     )
 }
 
-export default Users
+export default page
+
