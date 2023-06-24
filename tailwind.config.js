@@ -56,7 +56,7 @@ module.exports = {
         'light': 'var(--color-text-light)',
         'yellow-logo': 'rgb(var(--color-yellow-logo))',
         'red-logo': 'rgb(var(--color-red-logo))',
-        'dark-blue-logo' : 'rgb(var(--color-dark-blue-logo))'
+        'dark-blue-logo' : 'rgb(var(--color-dark-blue-logo))',
       },
       backgroundColor: {
         "form-read-only": "3c413fba",

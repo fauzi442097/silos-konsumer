@@ -1,5 +1,4 @@
 import { IoClose, IoAlertOutline, IoCheckmarkSharp, IoInformationSharp } from "react-icons/io5"
-import { TfiClose } from "react-icons/tfi"
 
 const setIcon = (type) => {
    if ( type == 'success' ) return <IoCheckmarkSharp className='text-2xl text-white' />;

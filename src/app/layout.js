@@ -1,8 +1,8 @@
 import './globals.css'
-import { ThemeProvider } from './hooks/ThemeContext'
-import { SidebarProvider } from './hooks/SidebarContext'
-import InitialGlobalFont from '@/app/config/font'
-import Layout from './layout/Layout';
+import { ThemeProvider } from '@/hooks/ThemeContext';
+import { SidebarProvider } from '@/hooks/SidebarContext';
+import InitialGlobalFont from '@/config/font';
+import Layout from '@/components/Layout/Layout';
 
 export const metadata = {
   title: 'Silos Konsumer',
