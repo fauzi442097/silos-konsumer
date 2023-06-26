@@ -12,7 +12,6 @@ const options = [
 const Step1 = () => {
     return (
         <>
-            {/* <h3 className="font-medium leading-tight mb-10">Form Simulasi</h3> */}
             <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4'>
                 <div className='w-1/2'>
                     <label className='block mb-3'> Produk </label>
