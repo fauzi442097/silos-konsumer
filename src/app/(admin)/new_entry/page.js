@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { HiPencilSquare, HiPaperAirplane, HiPencil, HiOutlineClipboardDocumentList, HiPlusCircle } from "react-icons/hi2";
 import DropdownButton from "@/components/DropdownButton";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Card from "@/components/Card";
@@ -35,7 +34,6 @@ const Page = () => {
             cell: (row, index, column, id) => <DropdownButton>
                 <li>
                     <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <HiPencilSquare className="w-5 h-5 mx-1"></HiPencilSquare>
                         <span className="ml-3">
                             Ubah Data
                         </span>
@@ -43,7 +41,6 @@ const Page = () => {
                 </li>
                 <li>
                     <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <HiOutlineClipboardDocumentList className="w-5 h-5 mx-1"></HiOutlineClipboardDocumentList>
                         <span className="ml-3">
                             Slik
                         </span>
@@ -51,7 +48,6 @@ const Page = () => {
                 </li>
                 <li>
                     <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <HiPencil className="w-5 h-5 mx-1"></HiPencil>
                         <span className="ml-3">
                             Checklist Dokumen
                         </span>
@@ -59,7 +55,6 @@ const Page = () => {
                 </li>
                 <li>
                     <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <HiPencil className="w-5 h-5 mx-1"></HiPencil>
                         <span className="ml-3">
                             Edit Biaya Lainnya
                         </span>
@@ -67,7 +62,6 @@ const Page = () => {
                 </li>
                 <li>
                     <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <HiPaperAirplane className="w-5 h-5 mx-1"></HiPaperAirplane>
                         <span className="ml-3">
                             Kirim Prospek
                         </span>
@@ -133,8 +127,6 @@ const Page = () => {
                     <Button.Custom 
                         className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                         onClick={() => router.push(`/new_entry/form`)}>
-                        <HiPlusCircle>
-                        </HiPlusCircle>
                         <span className="ml-3">
                             Tambah Data
                         </span>

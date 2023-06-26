@@ -2,18 +2,12 @@ import React, { useState, useRef} from 'react'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 
-
-import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import { GoKebabHorizontal } from 'react-icons/go'
-import { VscThreeBars } from 'react-icons/vsc'
 import { AnimatePresence } from "framer-motion"
-
 import Toolbar from './Toolbar'
-
 import Preloader from './Preloader'
 import { useTheme } from '@/hooks/ThemeContext'
 import { useSidebar } from '@/hooks/SidebarContext'
+import { BellIcon, BurgerIcon, KebabIcon, MoonIcon, SunIcon } from './HeaderIcon'
 
 
 const Notification = dynamic(() => import('./Notification'), { ssr: false, loading: () => <Preloader/> });
@@ -53,8 +47,8 @@ const Header = () => {
       setOpenSidebar(true)
    }
 
-   const ToggleSidebarIcon = openSidebar ? <VscThreeBars className='text-xl'/> :  <GoKebabHorizontal className='text-xl rotate-90'/>
-   const ToggleThemeIcon = theme == 'light' ? <BsFillSunFill className='text-yellow-logo text-xl'/> : <BsFillMoonFill className='text-yellow-logo text-xl'/>
+   const ToggleSidebarIcon = <span dangerouslySetInnerHTML={{ __html: openSidebar ? BurgerIcon : KebabIcon }}/> 
+   const ToggleThemeIcon = <span className='text-yellow-logo' dangerouslySetInnerHTML={{ __html: theme == 'light' ? SunIcon : MoonIcon }}/>
       
   return (
    <header className={`header left-0 ${openSidebar ? 'lg:left-72' : 'lg:left-28 peer-hover:left-72'} bg-main dark:bg-dark-main transition-all duration-300`}>
@@ -74,7 +68,7 @@ const Header = () => {
       <div className='flex flex-row gap-4 items-center'> 
          <div className='relative'>
             <Toolbar ref={notifRef} datacount={10} className={`btn-toolbar toolbar-notification ${showDropdownTopbar.notification ? 'active' : ''}`} onClick={() => toggleDropdownTopbar('notification')}> 
-               <IoMdNotificationsOutline className='text-xl'/>   
+               <span dangerouslySetInnerHTML={{ __html: BellIcon }}/>
             </Toolbar>
 
             <AnimatePresence>

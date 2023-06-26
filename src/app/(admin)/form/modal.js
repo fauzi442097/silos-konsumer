@@ -39,13 +39,13 @@ const FormModal = () => {
 						{showModal.base && (
 							<MyModal closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
-                  <Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
-                  <Button.CloseModal onClick={() =>
-											setShowModal((prev) => ({
-												...prev,
-												base: false,
-											}))
-										}/>
+									<Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
+									<Button.CloseModal onClick={() =>
+														setShowModal((prev) => ({
+														...prev,
+															base: false,
+														}))
+													}/>
 								</Modal.Header>
 								<Modal.Body>
 									Lorem ipsum dolor sit amet consectetur adipisicing
