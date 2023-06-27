@@ -1,10 +1,10 @@
 import React, { Suspense, use } from 'react'
 import Datatable from './datatable';
+import { API_URL } from '@/config/env';
 
 // Server Side
 const getData = async() => {
-    const res = await fetch('https://dummyjson.com/users');
-    if ( !res.ok ) throw new Error('Terjadi kesalahan');
+    const res = await fetch(`${API_URL}/users`);
     return res.json();
 }
 
