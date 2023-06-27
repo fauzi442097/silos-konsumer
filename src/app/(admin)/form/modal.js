@@ -6,19 +6,21 @@ import dynamic from 'next/dynamic';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal/ModalSection';
 import Preloader from '@/components/Layout/Admin/Header/Preloader';
+import useModal from '@/hooks/useModal';
 
 
 const MyModal = dynamic(() => import('../../../components/Modal'), {ssr: false, loading: () => <Preloader type={'toggleSidebar'}/>})
 
 
 const FormModal = () => {
-  const [showModal, setShowModal] = useState({
-      base: false,
+	
+ 	const { showModal, setShowModal } = useModal({
+		base: false,
       sm: false,
       lg: false,
       xl: false,
       fullScreen: false,
-   });
+	})
 
    const showModalDialog = (type) => {
    	setShowModal((prev) => ({ ...prev, [type]: true }))
