@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { motion } from "framer-motion"
-import { TfiClose } from "react-icons/tfi"
 import { useTheme } from '../hooks/ThemeContext'
 import notificationStyle from '../app/utils/notificationStyle'
 
@@ -17,6 +16,8 @@ const getColorAlert = (alertType) => {
     if ( alertType == 'error' ) return 'text-danger'
     return 'text-dark-blue-logo dark:text-[rgb(121,122,221)]';
 }
+
+const closeIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' d='m7 7l10 10M7 17L17 7'/></svg>"
 
 const Alert = ({ type, title, message, onClose }) => {
 
@@ -47,7 +48,8 @@ const Alert = ({ type, title, message, onClose }) => {
               </div>
    
               <button type="button" onClick={onClose} className="absolute sm:relative m-2 sm:m-0 top-0 end-0 p-2 rounded-md sm:ml-auto hover:bg-gray-100 dark:hover:bg-gray-500 transition-all duration-300">
-                  <TfiClose className='text-sm text-gray-400 '/>
+                  <span className='text-sm text-gray-400' dangerouslySetInnerHTML={{ __html: closeIcon }}/>
+                  
               </button>
           </motion.div>
     )

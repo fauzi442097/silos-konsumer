@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { motion } from "framer-motion"
 import styles from './Notification.module.css'
-import { TfiClose } from "react-icons/tfi"
 import notificationStyle from '@/app/utils/notificationStyle';
 import { useTheme } from '@/hooks/ThemeContext';
 
+
+const closeIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' d='m7 7l10 10M7 17L17 7'/></svg>"
 
 const ToastContent = ({ 
    message, 
@@ -50,7 +51,7 @@ const ToastContent = ({
         
     
         <button type="button" onClick={onClose} className="absolute sm:relative m-2 sm:m-0 top-0 end-0 p-2 rounded-md sm:ml-auto hover:bg-gray-100 dark:hover:bg-gray-500 transition-all duration-300">
-            <TfiClose className='text-sm text-gray-400 '/>
+            <span className='text-sm text-gray-400' dangerouslySetInnerHTML={{ __html: closeIcon }}/>
          </button>
 
          <div style={bgProgressBar} className={`${styles['notification']} absolute left-0 bottom-0 start-0 h-[8px] w-full rounded-b-xl`}>

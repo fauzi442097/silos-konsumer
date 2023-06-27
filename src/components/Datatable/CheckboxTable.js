@@ -1,7 +1,6 @@
 import React, {forwardRef} from 'react';
-import { FaCheck } from 'react-icons/fa';
 
-
+const checkIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M20 7L10 17l-5-5'/></svg>"
 const CheckboxTable = forwardRef(({...rest}, ref) => {
   return(
         <>
@@ -13,7 +12,9 @@ const CheckboxTable = forwardRef(({...rest}, ref) => {
                         ref={ref}
                         {...rest}
                     />
-                    <FaCheck className='font-inter-bold w-3 h-3 absolute text-green-500 dark:text-green-600 top-1 left-1 dark:text-opacity-0 text-opacity-0 transition check peer-checked:text-opacity-100'/>
+                    <span className='font-inter-bold absolute text-green-500 dark:text-green-600 top-[0.05rem] left-[0.05rem] dark:text-opacity-0 text-opacity-0 transition check peer-checked:text-opacity-100'
+                    dangerouslySetInnerHTML={{ __html: checkIcon }}/>
+                    
                 </span>
                 <label className="form-check-label" id="booty-check" />
             </div>

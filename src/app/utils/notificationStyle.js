@@ -1,10 +1,13 @@
-import { IoClose, IoAlertOutline, IoCheckmarkSharp, IoInformationSharp } from "react-icons/io5"
+const closeIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2.5' d='m7 7l10 10M7 17L17 7'/></svg>"
+const checkIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M20 7L10 17l-5-5'/></svg>"
+const ExclamationIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24'><g fill='none' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M13.253 5.98L12 13.5l-1.253-7.52a1.27 1.27 0 1 1 2.506 0Z'/><circle cx='12' cy='19' r='1' strokeWidth='2'/></g></svg>"
+const IconIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 16 16'><path fill='currentColor' d='m8.93 6.588l-2.29.287l-.082.38l.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319c.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246c-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0a1 1 0 0 1 2 0z'/></svg>"
 
 const setIcon = (type) => {
-   if ( type == 'success' ) return <IoCheckmarkSharp className='text-2xl text-white' />;
-   if ( type == 'warning' ) return <IoAlertOutline className='text-2xl text-white'/>
-   if ( type == 'error' ) return <IoClose className='text-2xl text-white'/>;
-   return <IoInformationSharp className='text-2xl text-white'/>;
+   if ( type == 'success' ) return <span className='text-2xl text-white' dangerouslySetInnerHTML={{ __html: checkIcon }}/>;
+   if ( type == 'warning' ) return <span className='text-2xl text-white' dangerouslySetInnerHTML={{ __html: ExclamationIcon }}/>
+   if ( type == 'error' ) return <span className='text-2xl text-white' dangerouslySetInnerHTML={{ __html: closeIcon }}/>;
+   return <span className='text-2xl text-white' dangerouslySetInnerHTML={{ __html: IconIcon }}/>;
 }
 
 const setBgColor = (type, theme) => {

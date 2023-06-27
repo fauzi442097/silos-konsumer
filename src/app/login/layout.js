@@ -4,13 +4,11 @@ import React from 'react'
 import dynamic from 'next/dynamic';
 import Image from 'next/image'
 
-import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs'
-
-
 import styles from './login.module.css'
 import { useTheme } from '@/hooks/ThemeContext';
 import Preloader from '@/components/Layout/Admin/Header/Preloader';
 import Toolbar from '@/components/Layout/Admin/Header/Toolbar';
+import { MoonIcon, SunIcon } from '@/components/Layout/Admin/Header/HeaderIcon';
 
 
 const MySwal = dynamic(() => import('../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
@@ -20,7 +18,7 @@ const GuestLayout = ({ children }) => {
 
    const { theme, setTheme } = useTheme();
    const logoBrand = theme == 'light' ? '/logo_bank_kalteng.png' : '/logo_bank_kalteng_transparent.png';
-   const ToggleThemeIcon = theme == 'light' ? <BsFillSunFill className='text-yellow-logo text-xl'/> : <BsFillMoonFill className='text-yellow-logo text-xl'/>
+   const ToggleThemeIcon = <span className='text-yellow-logo' dangerouslySetInnerHTML={{ __html: theme == 'light' ? SunIcon : MoonIcon }}/>
 
   return (
    <body className={`${theme == 'dark' ? 'dark' : ''}`}>

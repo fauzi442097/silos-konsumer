@@ -2,10 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
 import avatar from "/public/man-avatar.png";
-import { FiLogOut } from 'react-icons/fi'
-import { RiUserSettingsLine } from 'react-icons/ri'
 import { motion } from 'framer-motion'
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { LogOutIcon, UserSettingIcon } from './HeaderIcon';
 
 const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => {
 
@@ -54,11 +53,11 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
             <div className='px-3'>
                 <ul className='flex flex-col gap-2 text-sm'>
                     <ItemUserProfileMenu>
-                        <RiUserSettingsLine/>
+                        <span dangerouslySetInnerHTML={{ __html: UserSettingIcon }}/>
                         <span> Profile  </span>
                     </ItemUserProfileMenu>
                     <ItemUserProfileMenu>
-                        <FiLogOut/>
+                        <span dangerouslySetInnerHTML={{ __html: LogOutIcon }}/>
                         <Link href={'/login'}> Logout </Link>
                     </ItemUserProfileMenu>
                 </ul>
