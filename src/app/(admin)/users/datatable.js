@@ -12,10 +12,14 @@ import React from 'react'
 import columns from './columns';
 import dynamic from 'next/dynamic';
 import Preloader from '@/components/Layout/Admin/Header/Preloader';
+import useModal from '@/hooks/useModal';
 
 const MyModal = dynamic(() => import('../../../components/Modal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'} /> })
 
 const Datatable = ({ data }) => {
+
+  const {showModal, setShowModal} = useModal()
+
   return (
     <>
         <PageTitle title='Users'/>

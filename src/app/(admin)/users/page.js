@@ -1,4 +1,4 @@
-import React, { Suspense, use } from 'react'
+import React from 'react'
 import Datatable from './datatable';
 import { API_URL } from '@/config/env';
 
@@ -8,14 +8,10 @@ const getData = async() => {
     return res.json();
 }
 
-const page = () => {
-    const data = use(getData());
+const page = async () => {
+    const data = await getData();
     return (
-        <>
-            <Suspense fallback={<div>Loading...</div>}>
-                <Datatable data={data.users} /> 
-            </Suspense>
-        </>
+        <Datatable data={data.users} />    
     )
 }
 

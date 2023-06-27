@@ -49,10 +49,10 @@ const GuestLayout = ({ children }) => {
                <div className='invisible'></div>
             </div>
          
-            <svg className='absolute bottom-0' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#009A4B" fill-opacity="1" d="M0,32L80,37.3C160,43,320,53,480,96C640,139,800,213,960,256C1120,299,1280,309,1360,314.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
+            <svg className='absolute bottom-0' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#009A4B" fillOpacity="1" d="M0,32L80,37.3C160,43,320,53,480,96C640,139,800,213,960,256C1120,299,1280,309,1360,314.7L1440,320L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path></svg>
          </div>
          <div className={`w-3/5 ${styles['bg_login']} relative`}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#009A4B" fill-opacity="1" d="M0,0L80,5.3C160,11,320,21,480,64C640,107,800,181,960,181.3C1120,181,1280,107,1360,69.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#009A4B" fillOpacity="1" d="M0,0L80,5.3C160,11,320,21,480,64C640,107,800,181,960,181.3C1120,181,1280,107,1360,69.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
             <div className='absolute top-48 left-[50%]'>
                <h1 className='text-primary font-inter-bold text-3xl'> Silos </h1>
                <p className='text-lg text-gray-500'> Platform Digital Pengelolaan Pinjaman </p>
