@@ -1,16 +1,23 @@
 'use client'
 
 import React, { useState } from 'react'
-import { usePathname } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+
 import Input from '@/components/Form/Input';
 import Button from '@/components/Button';
 
-import { useForm } from 'react-hook-form';
+
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { PUBLIC_URL_API } from '@/config/env';
-
+import { API } from '@/config/api';
+import { AnimatePresence } from 'framer-motion'
+import Alert from '@/components/Alert';
+import Cookies from 'universal-cookie';
+import { useRouter } from 'next/navigation';
+import useAuth from '@/hooks/useAuth';
+ 
+const cookies = new Cookies();
 const loginSchema = yup.object({
   username: yup.string().required('Wajib diisi'),
   password: yup.string().required('Wajib diisi')
@@ -27,33 +34,33 @@ const Page = () => {
   });
 
   const [ processing, setProcessing ] = useState(false)
+  const router = useRouter();
+  const [ alert, setAlert ] = useState({show: false,rc: 0,message: ''})
 
-  const pathname = usePathname();  
-  const login = () => {
-    pathname.startsWith('/dashboard');
-  }
+  const { setAuth, isAuthenticated} = useAuth()
+  if ( isAuthenticated) router.push('/')  
 
-  const onSubmit = async (data) => {
-    setProcessing(true)
-    try {
-      const result = await fetch(`${PUBLIC_URL_API}auth/login`, {
-                        method: 'POST',
-                        headers: {
-                          'Accept': 'application/json',
-                          'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                      })
-
-      console.log(result)
+  const onSubmit = async (formData) => {
+      setProcessing(true)
+      const { data, status, statusText} = await API.POST_PUBLIC(`auth/login`, formData)
       setProcessing(false)
-    } catch (e) {
-      setProcessing(false)
-    }
+      if ( status != 200 ) return setAlert({show: true, rc: status, message: statusText})
+      console.log(data)
+
+      let token = data.data.token
+      let user = data.data.user
+
+      setAuth(token, user)
+      router.push('/')  
   }
 
   return (
     <div className='w-full mt-4'>
+
+      <AnimatePresence>
+          { alert.show && <Alert onClose={() => setAlert((prev) => ({...prev, show: false}))} type="error" title={`Error - ${alert.rc}`} message={alert.message}/>}
+      </AnimatePresence>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className='mt-8 mb-10'> Login </h2>
         <div className='mb-8'>
