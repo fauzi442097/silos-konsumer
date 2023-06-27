@@ -2,16 +2,16 @@ import React from 'react'
 
 const ButtonPrimary = ({ children, className, ...props }) => {
   return (
-    <button className={`btn btn-primary ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn btn-primary ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
 
 const ButtonLightPrimary = ({ children, className, ...props }) => {
   return (
-    <button className={`btn btn-light-primary ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn btn-light-primary ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
@@ -19,7 +19,7 @@ const ButtonLightPrimary = ({ children, className, ...props }) => {
 const ButtonOutlinePrimary = ({ children, className, ...props }) => {
 
   return (
-    <button className={`btn btn-outline-primary ${className || ''}`} {...props}> 
+    <button className={`btn btn-outline-primary ${className || ''}`} {...props}>
       {children}
     </button>
   )
@@ -28,32 +28,32 @@ const ButtonOutlinePrimary = ({ children, className, ...props }) => {
 const ButtonSecondary = ({ children, className, ...props }) => {
 
   return (
-    <button className={`btn btn-secondary ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn btn-secondary ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
 
 const ButtonIcon = ({ children, className, ...props }) => {
   return (
-    <button className={`btn ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
 
 const ButtonClean = ({ children, className, ...props }) => {
   return (
-     <button className={`btn btn-clean ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn btn-clean ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
 
 const ButtonCustom = ({ children, className, ...props }) => {
   return (
-     <button className={`btn ${className || ''}`} {...props}> 
-        {children} 
+    <button className={`btn ${className || ''}`} {...props}>
+      {children}
     </button>
   )
 }
@@ -70,13 +70,13 @@ const ButtonCloseModal = ({ ...props}) => {
 
 
 const Button = {
-  Primary : ButtonPrimary,
-  LightPrimary : ButtonLightPrimary,
+  Primary: ButtonPrimary,
+  LightPrimary: ButtonLightPrimary,
   OutlinePrimary: ButtonOutlinePrimary,
-  Secondary : ButtonSecondary,
+  Secondary: ButtonSecondary,
   Icon: ButtonIcon,
   Clean: ButtonClean,
-  CloseModal : ButtonCloseModal,
+  CloseModal: ButtonCloseModal,
   Custom: ButtonCustom
 }
 

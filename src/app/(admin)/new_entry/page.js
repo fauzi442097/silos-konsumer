@@ -15,7 +15,6 @@ const Page = () => {
 
     const router = useRouter();
 
-
     const [listNewEntry, setListNewEntry] = useState([]);
     useEffect(() => {
         const getNewEntry = async () => {
