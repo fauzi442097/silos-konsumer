@@ -5,12 +5,23 @@ import avatar from "/public/man-avatar.png";
 import { motion } from 'framer-motion'
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { LogOutIcon, UserSettingIcon } from './HeaderIcon';
+import useAuth from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => {
 
     let userAccountRef = useClickOutside(() => {
       setShowDropdownTopbar((prev) => ({ ...prev, userAccount: false}));
     }, divRef);
+
+    const router = useRouter()
+    const { removeAuth } = useAuth()
+
+    const logOut = (e) => {
+        e.preventDefault()
+        removeAuth()
+        router.push('/login')
+    }
   
      return (
         <>
@@ -58,7 +69,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                     </ItemUserProfileMenu>
                     <ItemUserProfileMenu>
                         <span dangerouslySetInnerHTML={{ __html: LogOutIcon }}/>
-                        <Link href={'/login'}> Logout </Link>
+                        <a href="" onClick={(e) => logOut(e)}> Logout </a>
                     </ItemUserProfileMenu>
                 </ul>
             </div>

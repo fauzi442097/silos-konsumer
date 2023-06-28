@@ -2,22 +2,17 @@
 
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AnimatePresence } from 'framer-motion'
+import { useRouter } from 'next/navigation';
+import * as yup from "yup";
 
 import Input from '@/components/Form/Input';
 import Button from '@/components/Button';
-
-
-import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { API } from '@/config/api';
-import { AnimatePresence } from 'framer-motion'
 import Alert from '@/components/Alert';
-import Cookies from 'universal-cookie';
-import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
  
-const cookies = new Cookies();
 const loginSchema = yup.object({
   username: yup.string().required('Wajib diisi'),
   password: yup.string().required('Wajib diisi')
@@ -33,24 +28,20 @@ const Page = () => {
     resolver: yupResolver(loginSchema)
   });
 
-  const [ processing, setProcessing ] = useState(false)
-  const router = useRouter();
-  const [ alert, setAlert ] = useState({show: false,rc: 0,message: ''})
 
-  const { setAuth, isAuthenticated} = useAuth()
-  if ( isAuthenticated) router.push('/')  
+  const router = useRouter();
+  const [ processing, setProcessing ] = useState(false)
+  const [ alert, setAlert ] = useState({show: false,rc: 0,message: ''})
+  const { setAuth } = useAuth()
 
   const onSubmit = async (formData) => {
       setProcessing(true)
       const { data, status, statusText} = await API.POST_PUBLIC(`auth/login`, formData)
       setProcessing(false)
       if ( status != 200 ) return setAlert({show: true, rc: status, message: statusText})
-      console.log(data)
-
       let token = data.data.token
       let user = data.data.user
-
-      setAuth(token, user)
+      setAuth(token,user)
       router.push('/')  
   }
 

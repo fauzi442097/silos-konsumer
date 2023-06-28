@@ -1,8 +1,7 @@
 'use client'
-import Input from "@/app/components/Form/Input";
-import MySelect from "@/app/components/Form/Select";
-import Detail from "@/app/components/Detail";
 import React from "react"
+import MySelect from "@/components/Form/Select";
+import Input from "@/components/Form/Input";
 
 const options = [
     { value: "fox", label: "Fox" },

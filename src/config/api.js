@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 
 // import {useRouter} from "next/router";
 
-// const cookies = new Cookies();
+const cookies = new Cookies();
 const mainAPI = axios.create({
   baseURL: '/api/'
 });
@@ -13,11 +13,6 @@ export const API = {
   POST,
   GET,
 };
-
-function logout() {
-  cookies.remove('token',{path: '/'})
-  window.location.replace("/login");
-}
 
 function POST_PUBLIC(url, formData) {
   return mainAPI

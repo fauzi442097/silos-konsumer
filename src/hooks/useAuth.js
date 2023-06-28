@@ -4,19 +4,23 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 
 const useAuth = () => {
-    const isAuthenticated = () => {
-        let token = cookies.get('token')
-        return token
-    }
 
     const setAuth = (token, user) => {
-        cookies.set('token', token)
-        cookies.set('user', user)
+        cookies.set('auth', {token, user})
     }
-   
+
+    const auth = cookies.get('auth')
+    const isAuthenticated = auth ? true : false
+
+    const removeAuth = () => {
+        cookies.remove('auth')
+    }
+  
     return {
+        auth,
+        setAuth,
         isAuthenticated,
-        setAuth
+        removeAuth
     }
 }
 

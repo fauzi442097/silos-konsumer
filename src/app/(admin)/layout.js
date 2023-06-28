@@ -1,15 +1,13 @@
 import AdminLayout from '@/components/Layout/Admin/AdminLayout'
 import React from 'react'
+import AuthMiddleware from './AuthMiddleware'
 
-const layout = ({ children }) => {
-
-  
-  
+const Layout = ({ children }) => {
   return (
-    <AdminLayout>
-      {children}
-    </AdminLayout>
+      <AdminLayout>
+        {children}
+      </AdminLayout>
   )
 }
 
-export default layout
+export default Layout
