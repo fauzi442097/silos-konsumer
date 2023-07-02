@@ -12,7 +12,7 @@ const AuthMiddleware = ({ children }) => {
 
    useEffect(() => {
       if ( !isAuthenticated ) {
-         router.push('/login')
+         // router.push('/login')
       } 
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [])
