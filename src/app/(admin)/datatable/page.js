@@ -108,7 +108,7 @@ const Page = () => {
     },
     {
         name: 'Action',
-        cell: (row, index, column, id) => <Button.Primary className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button.Primary>,
+        cell: (row, index, column, id) => <Button className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button>,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,
@@ -130,7 +130,7 @@ const Page = () => {
          title="List User"
          selectableRowsComponent={CheckboxTable}
          progressComponent={<LoadingTable/>}
-         contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}
+         contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
       />
     </Card>
   )

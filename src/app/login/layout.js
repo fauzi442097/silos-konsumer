@@ -10,8 +10,8 @@ import Preloader from '@/components/Layout/Admin/Header/Preloader';
 import Toolbar from '@/components/Layout/Admin/Header/Toolbar';
 import { MoonIcon, SunIcon } from '@/components/Layout/Admin/Header/HeaderIcon';
 import { useRouter } from 'next/navigation';
-import useAuth from '@/hooks/useAuth';
 import { useEffect } from 'react';
+import useAuth from '@/hooks/useAuth';
 
 const MySwal = dynamic(() => import('../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 const MyToast = dynamic(() => import('../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });

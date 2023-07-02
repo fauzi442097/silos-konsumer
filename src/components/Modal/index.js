@@ -1,23 +1,27 @@
 import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
+import { cva } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
-const getSizeModal = (size) => {
-    if ( size == 'fullscreen') return 'modal-fullscreen';
-    switch ( size ) {
-    case 'sm': return 'w-modal-sm rounded-xl';
-    case 'lg': return 'w-modal-lg rounded-xl';
-    case 'xl': return 'w-modal-xl rounded-xl';
-    default: return 'w-modal-base ';
-    }
-}
+const modalVariants = cva('modal bg-white dark:bg-dark-depth1 dark:text-grey rounded-2xl shadow-lg dark:shadow-none transform overflow-hidden text-left align-middle transition-all flex flex-col', {
+  variants: {
+    size: {
+      default: 'w-modal-base',
+      sm: 'w-modal-sm rounded-xl',
+      lg: 'w-modal-lg rounded-xl',
+      xl: 'w-modal-xl rounded-xl',
+      fullscreen: 'modal-fullscreen'
+    }, 
+  },
+  defaultVariants: {
+    size: 'default',
+    position: 'default'
+  }
+})
 
 const Modal = ({ children, size, position, closeOutside = false, setShowModal}) => {
 
-    const modalSize = getSizeModal(size);
-    const modalPosition = position == 'center' ? 'items-center' : 'items-start';
-    const modalBackdropHeight = (size == 'fullscreen' || position == 'center') ? 'h-full' : 'my-32';
-    const modalDialogRef = useRef(null);
-  
+    const modalDialogRef = useRef(null);  
     const closeModal = (e) => {
       if ( closeOutside && e.target.contains(modalDialogRef.current) && setShowModal ) setShowModal((prev) => !prev);
     }
@@ -36,7 +40,11 @@ const Modal = ({ children, size, position, closeOutside = false, setShowModal}) 
         </motion.div>
   
           <div className='z-30 fixed inset-0 overflow-auto' onClick={closeModal}>
-              <div className={`flex justify-center text-center ${modalBackdropHeight} ${modalPosition}`}>
+              <div className={cn([
+                'flex justify-center text-center',
+                (size == 'fullscreen' || position == 'center') ? 'h-full' : 'my-32',
+                position == 'center' ? 'items-center' : 'items-start',
+              ])}>
                  <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -46,7 +54,7 @@ const Modal = ({ children, size, position, closeOutside = false, setShowModal}) 
                        duration: 2,
                     }}
                     ref={modalDialogRef}
-                    className={`modal  bg-white ${modalSize} dark:bg-dark-depth1 dark:text-grey rounded-2xl shadow-lg dark:shadow-none transform overflow-hidden text-left align-middle transition-all flex flex-col`}>
+                    className={cn(modalVariants({size}))}>
                       {children}
                  </motion.div>
               </div>

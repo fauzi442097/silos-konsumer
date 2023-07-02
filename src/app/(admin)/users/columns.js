@@ -59,7 +59,7 @@ const columns = [
     },
     {
         name: 'Action',
-        cell: (row, index, column, id) => <Button.Primary className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button.Primary>,
+        cell: (row, index, column, id) => <Button className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button>,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,

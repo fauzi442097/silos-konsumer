@@ -1,7 +1,7 @@
 'use client'
 
 
-import Button from '@/components/Button';
+import Button, { ButtonCloseModal } from '@/components/Button';
 import Card from '@/components/Card';
 import CheckboxTable from '@/components/Datatable/CheckboxTable';
 import LoadingTable from '@/components/Datatable/LoadingTable';
@@ -26,14 +26,14 @@ const Datatable = ({ data }) => {
         <Card>
             <div className='flex justify-between items-center mb-8'>
                 <h3> Users </h3>
-                <Button.Primary onClick={() => setShowModal(true)}> Tambah Data </Button.Primary>
+                <Button onClick={() => setShowModal(true)}> Tambah Data </Button>
             </div>
 
             {showModal && (
 							<MyModal closeOutside={true} setShowModal={setShowModal}>
 								<Modal.Header>
 									<Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
-									<Button.CloseModal onClick={() => setShowModal(false)}/>
+									<ButtonCloseModal onClick={() => setShowModal(false)}/>
 								</Modal.Header>
 								<Modal.Body>
 									Lorem ipsum dolor sit amet consectetur adipisicing
@@ -52,8 +52,8 @@ const Datatable = ({ data }) => {
 									rerum debitis. Consequuntur, tenetur laborum?
 								</Modal.Body>
 								<Modal.Footer>
-                  <Button.Clean> Batal </Button.Clean>
-									<Button.Primary> Simpan </Button.Primary>
+                  <Button variant={'clean'}> Batal </Button>
+									<Button> Simpan </Button>
 								</Modal.Footer>
 							</MyModal>
 						)}
@@ -73,7 +73,7 @@ const Datatable = ({ data }) => {
                 progressPending={false}
                 selectableRowsComponent={CheckboxTable}
                 progressComponent={<LoadingTable/>}
-                contextActions={<Button.LightPrimary onClick={() => alert('on progress')}>Hapus</Button.LightPrimary>}
+                contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
             />
         </Card>
     </>

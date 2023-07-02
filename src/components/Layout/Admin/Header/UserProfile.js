@@ -5,8 +5,8 @@ import avatar from "/public/man-avatar.png";
 import { motion } from 'framer-motion'
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { LogOutIcon, UserSettingIcon } from './HeaderIcon';
-import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import useAuth from '@/hooks/useAuth';
 
 const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => {
 

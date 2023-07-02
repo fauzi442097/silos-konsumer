@@ -7,7 +7,7 @@ import Step1 from './step1'
 import Step2 from "./step2"
 
 import PageTitle from "@/components/PageTitle";
-import Button from "@/components/Button";
+import Button, { ButtonCloseModal } from "@/components/Button";
 import Card from "@/components/Card";
 import Modal from "@/components/Modal/ModalSection";
 import Detail from "@/components/Detail";
@@ -44,9 +44,9 @@ const FormNewEntry = () => {
                 <div dir="rtl">
                     <div class="relative h-12 w-full ...">
                         <div class="absolute h-14 w-[120px] top-0 start-0 ...">
-                            <Button.Icon
+                            <Button
                                 className="btn-white bg-red-700 text-white text-sm px-15 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 mr-5 mb-2"
-                                onClick={() => router.push(`/new_entry`)}> Kembali </Button.Icon>
+                                onClick={() => router.push(`/new_entry`)}> Kembali </Button>
                         </div>
                     </div>
                 </div>
@@ -54,9 +54,9 @@ const FormNewEntry = () => {
                 <div dir="rtl">
                     <div class="relative h-12 w-full ...">
                         <div class="absolute h-14 w-[120px] top-0 start-0 ...">
-                            <Button.Icon
+                            <Button
                                 className="btn-primary text-white text-sm px-15 py-2.5 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 mr-5 mb-2"
-                                onClick={() => showModalDialog('xl')}> Simulasi </Button.Icon>
+                                onClick={() => showModalDialog('xl')}> Simulasi </Button>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ const FormNewEntry = () => {
                             <h3 className='font-bold mb-1'> Biaya - biaya </h3>
                             <span> Preview biaya - biaya </span>
                         </div>
-                        <Button.CloseModal onClick={() =>
+                        <ButtonCloseModal onClick={() =>
                             setShowModal((prev) => ({
                                 ...prev,
                                 xl: false,
@@ -140,8 +140,8 @@ const FormNewEntry = () => {
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button.Clean> Batal </Button.Clean>
-                        <Button.Primary> Simpan </Button.Primary>
+                        <Button variant={'clean'}> Batal </Button>
+                        <Button> Simpan </Button>
                     </Modal.Footer>
                 </MyModal>
             )}

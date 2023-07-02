@@ -9,7 +9,7 @@ const error = ({ error, reset }) => {
         <div className='p-8'>
           <h1>Something went wrong!</h1>
           <p className='text-danger text-xl'> {error.message || 'Terjadi kesalahan'} </p>
-          <Button.Primary size={'sm'} onClick={reset}> Try Again </Button.Primary>
+          <Button size={'sm'} onClick={reset}> Try Again </Button>
         </div>
     </div>
   )

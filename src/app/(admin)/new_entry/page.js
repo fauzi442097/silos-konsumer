@@ -123,13 +123,13 @@ const Page = () => {
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                         New Entry
                     </h3>
-                    <Button.Custom 
+                    <Button 
                         className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                         onClick={() => router.push(`/new_entry/form`)}>
                         <span className="ml-3">
                             Tambah Data
                         </span>
-                    </Button.Custom>
+                    </Button>
                 </div>
                 <MyDataTable
                     // fixedHeader={false}

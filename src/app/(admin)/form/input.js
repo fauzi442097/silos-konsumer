@@ -102,7 +102,7 @@ const FormInput = () => {
                append
                useButton
                inputElement={<Input.Text name='search' placeholder='search for'/>}
-               inputGroupText={<Button.Primary> Go! </Button.Primary>}
+               inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Go! </Button>}
             />
          </div>
       </div>   

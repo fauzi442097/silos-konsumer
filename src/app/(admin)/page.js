@@ -47,7 +47,7 @@ export default function Page() {
               />
             </div>
 
-            <Button.Primary type={'Submit'}> Submit </Button.Primary>
+            <Button type={'Submit'}> Submit </Button>
           </form>
       </Card>
     </>

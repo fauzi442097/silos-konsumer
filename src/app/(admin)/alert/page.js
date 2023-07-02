@@ -72,24 +72,24 @@ const Page = () => {
          </div>
 
          <div className='flex gap-4 my-4 items-start'>
-            <Button.Primary onClick={() => showToast('warning')}> Toast Warning </Button.Primary>
-            <Button.Primary onClick={() => showToast('success')}> Toast Sukses </Button.Primary>
-            <Button.Primary onClick={() => showToast('error')}> Toast Error </Button.Primary>
-            <Button.Primary onClick={() => showToast('info')}> Toast Info </Button.Primary>
+            <Button onClick={() => showToast('warning')}> Toast Warning </Button>
+            <Button onClick={() => showToast('success')}> Toast Sukses </Button>
+            <Button onClick={() => showToast('error')}> Toast Error </Button>
+            <Button onClick={() => showToast('info')}> Toast Info </Button>
          </div>
 
          <div className='flex gap-4 my-4 items-start'>
-            <Button.Primary onClick={() => showSwal('warning', 'info')}> Swal Warning </Button.Primary>
-            <Button.Primary onClick={() => showSwal('success', 'info')}> Swal Sukses </Button.Primary>
-            <Button.Primary onClick={() => showSwal('error', 'info')}> Swal Error </Button.Primary>
-            <Button.Primary onClick={() => showSwal('info', 'info')}> Swal Info </Button.Primary>
+            <Button onClick={() => showSwal('warning', 'info')}> Swal Warning </Button>
+            <Button onClick={() => showSwal('success', 'info')}> Swal Sukses </Button>
+            <Button onClick={() => showSwal('error', 'info')}> Swal Error </Button>
+            <Button onClick={() => showSwal('info', 'info')}> Swal Info </Button>
          </div>
 
          <div className='flex gap-4 my-4 items-start'>
-            <Button.Primary onClick={() => showSwal('warning', 'confirm')}> Swal Confirm Warning </Button.Primary>
-            <Button.Primary onClick={() => showSwal('success', 'confirm')}> Swal Confirm Sukses </Button.Primary>
-            <Button.Primary onClick={() => showSwal('error', 'confirm')}> Swal Confirm Error </Button.Primary>
-            <Button.Primary onClick={() => showSwal('info', 'confirm')}> Swal Confirm Info </Button.Primary>
+            <Button onClick={() => showSwal('warning', 'confirm')}> Swal Confirm Warning </Button>
+            <Button onClick={() => showSwal('success', 'confirm')}> Swal Confirm Sukses </Button>
+            <Button onClick={() => showSwal('error', 'confirm')}> Swal Confirm Error </Button>
+            <Button onClick={() => showSwal('info', 'confirm')}> Swal Confirm Info </Button>
          </div>
       </Card>
     </>

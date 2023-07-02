@@ -3,10 +3,9 @@ import React, { useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 
 import dynamic from 'next/dynamic';
-import Button from '@/components/Button';
 import Modal from '@/components/Modal/ModalSection';
 import Preloader from '@/components/Layout/Admin/Header/Preloader';
-import useModal from '@/hooks/useModal';
+import Button, { ButtonCloseModal } from '@/components/Button';
 
 
 const MyModal = dynamic(() => import('../../../components/Modal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'} /> })
@@ -29,11 +28,11 @@ const FormModal = () => {
 		<>
 
 			<div className='mt-3 flex gap-2'>
-				<Button.Primary onClick={() => showModalDialog('base')}> Modal Default </Button.Primary>
-				<Button.Primary onClick={() => showModalDialog('sm')}> Modal Small </Button.Primary>
-				<Button.Primary onClick={() => showModalDialog('lg')}> Modal Large </Button.Primary>
-				<Button.Primary onClick={() => showModalDialog('xl')}> Modal XL </Button.Primary>
-				<Button.Primary onClick={() => showModalDialog('fullScreen')}> Modal Fullscreen </Button.Primary>
+				<Button onClick={() => showModalDialog('base')}> Modal Default </Button>
+				<Button onClick={() => showModalDialog('sm')}> Modal Small </Button>
+				<Button onClick={() => showModalDialog('lg')}> Modal Large </Button>
+				<Button onClick={() => showModalDialog('xl')}> Modal XL </Button>
+				<Button onClick={() => showModalDialog('fullScreen')}> Modal Fullscreen </Button>
 			</div>
 
 			<AnimatePresence>
@@ -41,7 +40,7 @@ const FormModal = () => {
 					<MyModal closeOutside={true} setShowModal={setShowModal}>
 						<Modal.Header>
 							<Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'} />
-							<Button.CloseModal onClick={() =>
+							<ButtonCloseModal onClick={() =>
 								setShowModal((prev) => ({
 									...prev,
 									base: false,
@@ -65,8 +64,8 @@ const FormModal = () => {
 							rerum debitis. Consequuntur, tenetur laborum?
 						</Modal.Body>
 						<Modal.Footer>
-							<Button.Clean> Batal </Button.Clean>
-							<Button.Primary> Simpan </Button.Primary>
+							<Button variant={'clean'}> Batal </Button>
+							<Button> Simpan </Button>
 						</Modal.Footer>
 					</MyModal>
 				)}
@@ -78,7 +77,7 @@ const FormModal = () => {
 								<h3 className='font-bold mb-1'> Tambah Data </h3>
 								<span> Tambah data pegawai </span>
 							</div>
-							<Button.CloseModal onClick={() =>
+							<ButtonCloseModal onClick={() =>
 								setShowModal((prev) => ({
 									...prev,
 									sm: false,
@@ -102,20 +101,20 @@ const FormModal = () => {
 							rerum debitis. Consequuntur, tenetur laborum?
 						</Modal.Body>
 						<Modal.Footer>
-							<Button.Clean> Batal </Button.Clean>
-							<Button.Primary> Simpan </Button.Primary>
+							<Button variant={'clean'}> Batal </Button>
+							<Button> Simpan </Button>
 						</Modal.Footer>
 					</MyModal>
 				)}
 
 				{showModal.lg && (
-					<MyModal size='lg' closeOutside={true} setShowModal={setShowModal}>
+					<MyModal size='lg'closeOutside={true} setShowModal={setShowModal}>
 						<Modal.Header>
 							<div>
 								<h3 className='font-bold mb-1'> Tambah Data </h3>
 								<span> Tambah data pegawai </span>
 							</div>
-							<Button.CloseModal onClick={() =>
+							<ButtonCloseModal onClick={() =>
 								setShowModal((prev) => ({
 									...prev,
 									lg: false,
@@ -139,8 +138,8 @@ const FormModal = () => {
 							rerum debitis. Consequuntur, tenetur laborum?
 						</Modal.Body>
 						<Modal.Footer>
-							<Button.Clean> Batal </Button.Clean>
-							<Button.Primary> Simpan </Button.Primary>
+							<Button variant={'clean'}> Batal </Button>
+							<Button> Simpan </Button>
 						</Modal.Footer>
 					</MyModal>
 				)}
@@ -152,7 +151,7 @@ const FormModal = () => {
 								<h3 className='font-bold mb-1'> Tambah Data </h3>
 								<span> Tambah data pegawai </span>
 							</div>
-							<Button.CloseModal onClick={() =>
+							<ButtonCloseModal onClick={() =>
 								setShowModal((prev) => ({
 									...prev,
 									xl: false,
@@ -176,8 +175,8 @@ const FormModal = () => {
 							rerum debitis. Consequuntur, tenetur laborum?
 						</Modal.Body>
 						<Modal.Footer>
-							<Button.Clean> Batal </Button.Clean>
-							<Button.Primary> Simpan </Button.Primary>
+							<Button variant={'clean'}> Batal </Button>
+							<Button> Simpan </Button>
 						</Modal.Footer>
 					</MyModal>
 				)}
@@ -189,7 +188,7 @@ const FormModal = () => {
 								<h3 className='font-bold mb-1'> Tambah Data </h3>
 								<span> Tambah data pegawai </span>
 							</div>
-							<Button.CloseModal onClick={() =>
+							<ButtonCloseModal onClick={() =>
 								setShowModal((prev) => ({
 									...prev,
 									fullScreen: false,
@@ -213,8 +212,8 @@ const FormModal = () => {
 							rerum debitis. Consequuntur, tenetur laborum?
 						</Modal.Body>
 						<Modal.Footer>
-							<Button.Clean> Batal </Button.Clean>
-							<Button.Primary> Simpan </Button.Primary>
+							<Button variant={'clean'}> Batal </Button>
+							<Button> Simpan </Button>
 						</Modal.Footer>
 					</MyModal>
 				)}

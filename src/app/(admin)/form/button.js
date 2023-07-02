@@ -5,15 +5,15 @@ const SaveIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'
 const FormButton = () => {
   return (
    <div className='flex gap-2 items-start'>
-      <Button.Primary className='btn-sm'> Simpan </Button.Primary>
-      <Button.Primary> Simpan </Button.Primary>
-      <Button.LightPrimary className='btn-lg'> Simpan </Button.LightPrimary>
-      <Button.OutlinePrimary> Simpan </Button.OutlinePrimary>
-      <Button.Icon className="btn-primary btn-sm"> 
+      <Button size={'sm'}> Simpan </Button>
+      <Button> Simpan </Button>
+      <Button variant={'light'} size={'lg'}> Simpan </Button>
+      <Button variant={'outline'}> Simpan </Button>
+      <Button variant={'light'} size={'sm'}> 
         <span dangerouslySetInnerHTML={{ __html: SaveIcon }}/>
-      </Button.Icon>
-      <Button.Secondary> Simpan </Button.Secondary>
-      <Button.LightPrimary> Simpan </Button.LightPrimary>
+      </Button>
+      <Button variant={'secondary'}> Simpan </Button>
+      <Button variant={'light'}> Simpan </Button>
    </div>
   )
 }
