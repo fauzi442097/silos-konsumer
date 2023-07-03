@@ -28,27 +28,29 @@ export default function Page() {
     <>
       <PageTitle title='Dashboard'/>
       <Card>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='my-4'>
-              <Input.Text 
-                name={'username'}
-                register={register} 
-                placeholder={'Username'}
-                errors={errors.nama}
-              />
-            </div>
+          <Card.Body>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className='my-4'>
+                <Input.Text 
+                  name={'username'}
+                  register={register} 
+                  placeholder={'Username'}
+                  errors={errors.nama}
+                />
+              </div>
 
-            <div className="my-4">
-              <Input.Password
-                name={'password'}
-                placeholder={'password'}
-                errors={errors.password}
-                register={register}
-              />
-            </div>
+              <div className="my-4">
+                <Input.Password
+                  name={'password'}
+                  placeholder={'password'}
+                  errors={errors.password}
+                  register={register}
+                />
+              </div>
 
-            <Button type={'Submit'}> Submit </Button>
-          </form>
+              <Button type={'Submit'}> Submit </Button>
+            </form>
+          </Card.Body>
       </Card>
     </>
   )

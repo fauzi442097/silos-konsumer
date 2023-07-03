@@ -10,6 +10,7 @@ import { API } from "@/config/api";
 import { columns } from "./columns";
 import PageTitle from "@/components/PageTitle";
 import { useLoadingStore } from "@/stores/loading";
+import { useMySwal } from "@/hooks/useMySwal";
 
 
 const Page = () => {
@@ -18,6 +19,7 @@ const Page = () => {
     const [listNewEntry, setListNewEntry] = useState([]);
     const { loading, setLoading } = useLoadingStore()
 
+    const mySwal = useMySwal();
 
     useEffect(() => {
         getNewEntry(1);
@@ -27,10 +29,10 @@ const Page = () => {
         setLoading(true)
         const response = await API.GET(`/master/prospek?page=${page}`)
         setLoading(false)
-        if ( response.status == 200 ) {
-            let data = response.data
-            setListNewEntry(data)
-        }
+        if ( response.status != 200 ) return mySwal.error(response.data.error)
+        
+        let data = response.data
+        setListNewEntry(data)
     }
 
     const handlePageChange = async (page) => {

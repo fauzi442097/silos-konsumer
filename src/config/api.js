@@ -62,7 +62,7 @@ function GET(url) {
   return mainAPI
     .get(url, {
       headers: {
-        Authorization: "Bearer "+token,
+        Authorization: "Bearer "+ token,
       },
     })
     .then((res) => {

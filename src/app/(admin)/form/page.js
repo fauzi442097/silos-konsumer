@@ -15,11 +15,13 @@ const Page = () => {
     <>
         <PageTitle title='Form'/>
         <Card>
-            <FormButton/>
-            <FormBadge/>
-            <FormModal/>
-            <FormInput/>
-            <FormSelect/>
+            <Card.Body>
+              <FormButton/>
+              <FormBadge/>
+              <FormModal/>
+              <FormInput/>
+              <FormSelect/>
+            </Card.Body>
         </Card>
     </>
   )

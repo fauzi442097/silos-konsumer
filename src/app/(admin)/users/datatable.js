@@ -24,57 +24,59 @@ const Datatable = ({ data }) => {
     <>
         <PageTitle title='Users'/>
         <Card>
-            <div className='flex justify-between items-center mb-8'>
+
+          <Card.Header className={'flex justify-between items-center mb-8'}>
                 <h3> Users </h3>
                 <Button onClick={() => setShowModal(true)}> Tambah Data </Button>
-            </div>
+            </Card.Header>
 
-            {showModal && (
-							<MyModal closeOutside={true} setShowModal={setShowModal}>
-								<Modal.Header>
-									<Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
-									<ButtonCloseModal onClick={() => setShowModal(false)}/>
-								</Modal.Header>
-								<Modal.Body>
-									Lorem ipsum dolor sit amet consectetur adipisicing
-									elit. Illum quisquam vero quo enim corporis eligendi
-									fuga porro, qui consequuntur quasi illo ea minima
-									placeat molestiae cupiditate doloribus est nostrum
-									sunt repellat perferendis! Modi impedit deserunt
-									voluptas qui iste ducimus, nemo repellendus tempora
-									neque excepturi, totam quo ut eveniet minima sunt
-									quam, a esse velit sapiente nostrum libero? Ad est
-									doloribus sunt officia et ab labore earum accusamus
-									sint deleniti, eaque accusantium aperiam aliquid
-									consequuntur mollitia esse incidunt dolor consectetur
-									sit magnam ipsum? Quaerat culpa fuga, quia quibusdam
-									minima a est consequatur autem deleniti harum illo
-									rerum debitis. Consequuntur, tenetur laborum?
-								</Modal.Body>
-								<Modal.Footer>
-                  <Button variant={'clean'}> Batal </Button>
-									<Button> Simpan </Button>
-								</Modal.Footer>
-							</MyModal>
-						)}
+            <Card.Body className={'pt-2'}>
+              {showModal && (
+                <MyModal closeOutside={true} setShowModal={setShowModal}>
+                  <Modal.Header>
+                    <Modal.Title title="Tambah Data" subTitle={'Tambah data pegawai'}/>
+                    <ButtonCloseModal onClick={() => setShowModal(false)}/>
+                  </Modal.Header>
+                  <Modal.Body>
+                    Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Illum quisquam vero quo enim corporis eligendi
+                    fuga porro, qui consequuntur quasi illo ea minima
+                    placeat molestiae cupiditate doloribus est nostrum
+                    sunt repellat perferendis! Modi impedit deserunt
+                    voluptas qui iste ducimus, nemo repellendus tempora
+                    neque excepturi, totam quo ut eveniet minima sunt
+                    quam, a esse velit sapiente nostrum libero? Ad est
+                    doloribus sunt officia et ab labore earum accusamus
+                    sint deleniti, eaque accusantium aperiam aliquid
+                    consequuntur mollitia esse incidunt dolor consectetur
+                    sit magnam ipsum? Quaerat culpa fuga, quia quibusdam
+                    minima a est consequatur autem deleniti harum illo
+                    rerum debitis. Consequuntur, tenetur laborum?
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant={'clean'}> Batal </Button>
+                    <Button> Simpan </Button>
+                  </Modal.Footer>
+                </MyModal>
+              )}
             
-
-            <MyDataTable
-                compactness={true}
-                fixedHeader={true}
-                withFilter={false}
-                // fixedHeaderScrollHeight="500px"
-                columns={columns}
-                data={data}
-                selectableRows={false}
-                pagination={true}
-                paginationPerPage={10}
-                responsive={true}
-                progressPending={false}
-                selectableRowsComponent={CheckboxTable}
-                progressComponent={<LoadingTable/>}
-                contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
-            />
+              <MyDataTable
+                  compactness={true}
+                  fixedHeader={true}
+                  withFilter={false}
+                  // fixedHeaderScrollHeight="500px"
+                  columns={columns}
+                  data={data}
+                  selectableRows={false}
+                  pagination={true}
+                  paginationPerPage={10}
+                  responsive={true}
+                  progressPending={false}
+                  selectableRowsComponent={CheckboxTable}
+                  progressComponent={<LoadingTable/>}
+                  contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
+              />
+            </Card.Body>
         </Card>
     </>
   )

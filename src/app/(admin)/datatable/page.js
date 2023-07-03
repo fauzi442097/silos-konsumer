@@ -117,21 +117,23 @@ const Page = () => {
 
   return (
     <Card>
-      <MyDataTable
-         fixedHeader={true}
-         // fixedHeaderScrollHeight="500px"
-         columns={columns}
-         data={listUsers}
-         selectableRows={true}
-         pagination={true}
-         paginationPerPage={10}
-         responsive={true}
-         progressPending={false}
-         title="List User"
-         selectableRowsComponent={CheckboxTable}
-         progressComponent={<LoadingTable/>}
-         contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
-      />
+        <Card.Body>
+            <MyDataTable
+                fixedHeader={true}
+                // fixedHeaderScrollHeight="500px"
+                columns={columns}
+                data={listUsers}
+                selectableRows={true}
+                pagination={true}
+                paginationPerPage={10}
+                responsive={true}
+                progressPending={false}
+                title="List User"
+                selectableRowsComponent={CheckboxTable}
+                progressComponent={<LoadingTable/>}
+                contextActions={<Button variant={'light'} onClick={() => alert('on progress')}>Hapus</Button>}
+            />
+        </Card.Body>
     </Card>
   )
 }

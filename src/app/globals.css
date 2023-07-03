@@ -421,7 +421,7 @@
 
   .modal::before {
     content: '';
-    background: url('/logo_bank_kalteng_simple.png') no-repeat right;
+    background: url('/img/logo_bank_kalteng_simple.png') no-repeat right;
     width: 180px;
     height: 168px;
     position: absolute;

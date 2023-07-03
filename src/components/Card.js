@@ -26,13 +26,13 @@ const CardHeader = ({ className, ...props}) => {
 
 const CardBody = ({ className, ...props}) => {
   return (
-    <div className={cn(['px-10 py-6', className])} {...props} /> 
+    <div className={cn(['px-10 py-8', className])} {...props} /> 
   )
 }
 
 const CardFooter = ({ className, ...props}) => {
   return (
-    <div className={cn(['px-10 py-6', className])} {...props} /> 
+    <div className={cn(['px-10 py-8', className])} {...props} /> 
   )
 }
 
