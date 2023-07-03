@@ -12,7 +12,7 @@ const Card = ({ children, className }) => {
   } : {}
 
   return (
-    <div style={boxShadowCardStyle} className={cn(['card rounded-xl bg-white dark:bg-dark-depth1 dark:text-grey dark:shadow-none w-full', className])}>
+    <div style={boxShadowCardStyle} className={cn(['card rounded-2xl bg-white dark:bg-dark-depth1 dark:text-grey dark:shadow-none w-full', className])}>
       {children}
     </div>
   )
@@ -20,7 +20,7 @@ const Card = ({ children, className }) => {
 
 const CardHeader = ({ className, ...props}) => {
   return (
-    <div className={cn(['px-10 py-8 border-b', className])} {...props} /> 
+    <div className={cn(['px-10 py-8 border-b dark:border-b-[#2f3237]', className])} {...props} /> 
   )
 }
 

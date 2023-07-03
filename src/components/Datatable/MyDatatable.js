@@ -95,7 +95,14 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
          lineHeight: '1.25rem',
          color: '#fff',
          backgroundColor: theme == 'dark' ? 'rgb(var(--color-dark-depth2))' : 'rgb(var(--color-primary))',  // bg-dark-dept-2
-         padding: '1rem',
+         '&:first-child': {
+            borderTopLeftRadius: '0.75rem',
+            borderBottomLeftRadius: '0.75rem'
+         },
+         '&:last-child': {
+            borderTopRightRadius: '0.75rem',
+            borderBottomRightRadius: '0.75rem'
+         },
       },
    },
    rows: {
@@ -105,6 +112,7 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
             borderBottomWidth: '1px',
             borderBottomColor: defaultThemes[themeDataTable].divider.default,
          },
+         margin: '2px',
       },
    },
    header: {
@@ -118,9 +126,18 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
    },
    cells: {
       style: {
-         padding: '1rem 1.25rem', // override the cell padding for data cells
+         // padding: '1rem 1.25rem', // override the cell padding for data cells
          fontSize: '0.875rem',
+         lineHeight: '1.5rem',
          wordBreak: 'break-word',
+         '&:first-child': {
+            borderTopLeftRadius: '0.75rem',
+            borderBottomLeftRadius: '0.75rem'
+         },
+         '&:last-child': {
+            borderTopRightRadius: '0.75rem',
+            borderBottomRightRadius: '0.75rem'
+         },
       },
    },
    contextMenu: {

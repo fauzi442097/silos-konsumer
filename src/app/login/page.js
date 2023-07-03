@@ -14,7 +14,6 @@ import Alert from '@/components/Alert';
 import Button from '@/components/Button';
 import { useLoadingStore } from '@/stores/loading';
 import useAuth from '@/hooks/useAuth';
-import { API } from '@/config/api';
  
 const loginSchema = yup.object({
   username: yup.string().required('Wajib diisi'),
