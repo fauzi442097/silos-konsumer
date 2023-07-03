@@ -18,4 +18,26 @@ const Card = ({ children, className }) => {
   )
 }
 
+const CardHeader = ({ className, ...props}) => {
+  return (
+    <div className={cn(['px-10 py-8 border-b', className])} {...props} /> 
+  )
+}
+
+const CardBody = ({ className, ...props}) => {
+  return (
+    <div className={cn(['px-10 py-6', className])} {...props} /> 
+  )
+}
+
+const CardFooter = ({ className, ...props}) => {
+  return (
+    <div className={cn(['px-10 py-6', className])} {...props} /> 
+  )
+}
+
+Card.Body = CardBody
+Card.Header = CardHeader
+Card.Footer = CardFooter
+
 export default Card

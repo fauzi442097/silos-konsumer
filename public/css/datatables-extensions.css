@@ -1,13 +1,23 @@
 .data-table-extensions {
-   display: inline-block;
-   width: 100%;
-   box-sizing: border-box;
-   padding: 0.7rem 0;
-    top: 50px;
-    position: relative;
-    margin-bottom: 55px;
-    margin-top: 10px;
- }
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0;
+   top: 50px;
+   position: relative;
+   margin-bottom: 55px;
+   margin-top: 10px;
+}
+
+.without-filter .data-table-extensions {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0;
+  position: relative;
+  top: 0;
+  margin: 0;
+}
  
  .data-table-extensions > .data-table-extensions-filter {
    float: left;

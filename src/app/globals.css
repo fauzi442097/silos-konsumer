@@ -328,7 +328,7 @@
   }
 
   .card {
-    @apply rounded-2xl p-8 my-4
+    @apply rounded-2xl
   }
 
   .btn {

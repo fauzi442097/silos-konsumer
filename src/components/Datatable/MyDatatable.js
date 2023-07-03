@@ -91,10 +91,11 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
     headCells: {
       style: {
          // override the cell padding for data cells
-         fontSize: ' 0.875rem',
+         fontSize: '1rem',
          lineHeight: '1.25rem',
          color: '#fff',
          backgroundColor: theme == 'dark' ? 'rgb(var(--color-dark-depth2))' : 'rgb(var(--color-primary))',  // bg-dark-dept-2
+         padding: '1rem',
       },
    },
    rows: {
@@ -119,7 +120,7 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
       style: {
          padding: '1rem 1.25rem', // override the cell padding for data cells
          fontSize: '0.875rem',
-         wordBreak: 'break-word'
+         wordBreak: 'break-word',
       },
    },
    contextMenu: {
@@ -178,7 +179,7 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
   }
 
   return (
-    <div className='relative'>
+   <div className='relative'>
       {
          withFilter ? (
             <DataTableExtensions

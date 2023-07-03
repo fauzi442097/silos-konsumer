@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react'
+import React, { useState, useRef, useEffect} from 'react'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
 
@@ -9,6 +9,8 @@ import { useTheme } from '@/hooks/ThemeContext'
 import { useSidebar } from '@/hooks/SidebarContext'
 import { BellIcon, BurgerIcon, KebabIcon, MoonIcon, SunIcon } from './HeaderIcon'
 import { cn } from '@/lib/utils'
+import useAuth from '@/hooks/useAuth'
+import imgAvatar from "/public/img/man-avatar.png";
 
 
 const Notification = dynamic(() => import('./Notification'), { ssr: false, loading: () => <Preloader/> });
@@ -18,8 +20,11 @@ const ToggleSidebar = dynamic(() => import('../Sidebar/ToggleSidebar'), { ssr: f
 const Header = () => {
 
    const {theme, setTheme} = useTheme();
+   const { auth } = useAuth()
+
    const { openSidebar, toggleSidebar, setOpenSidebar, setOpenSideMenu, openSidebarMobile, setOpenSidebarMobile } = useSidebar();
    const [ showDropdownTopbar, setShowDropdownTopbar ] = useState({notification: false, userAccount: false});
+
 
    const setToggleSidebar = () => {
       toggleSidebar();
@@ -92,7 +97,7 @@ const Header = () => {
                width={0}
                height={0}  
                sizes="100vw"
-               src={'/man-avatar.png'} 
+               src={imgAvatar} 
                className='w-12 h-12 bg-white rounded-full object-contain select-none' 
                style={{ 
                   'boxShadow': 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px'
@@ -100,9 +105,9 @@ const Header = () => {
                alt='user' />
                <div className='flex flex-col items-start'>
                   <span className='selected-none font-inter-semibold dark:text-grey lg:text-[#5b5b5d] text-grey'> 
-                     Ahmad Fauzi 
+                     {auth.user.uFirstName} 
                   </span>
-                  <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> Admin </span>
+                  <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> {auth.user.branch.branchName} </span>
                </div>
             </div>
 
