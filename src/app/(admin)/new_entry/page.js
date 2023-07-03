@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import Card from "@/components/Card";
 import Button from "@/components/Button";
@@ -30,7 +30,7 @@ const Page = () => {
         const response = await API.GET(`/master/prospek?page=${page}`)
         setLoading(false)
         if ( response.status != 200 ) return mySwal.error(response.data.error)
-        
+
         let data = response.data
         setListNewEntry(data)
     }
