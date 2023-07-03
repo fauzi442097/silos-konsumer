@@ -4,7 +4,6 @@ export function middleware(request) {
 
    const isAuthenticated = request.cookies.has('auth')
    const route = request.nextUrl.pathname
-   console.log(route)
    if ( route != '/login' && !isAuthenticated ) return NextResponse.redirect(new URL('/login', request.url))
    if ( route == '/login' && isAuthenticated ) return NextResponse.redirect(new URL('/', request.url))
    return NextResponse.next()
