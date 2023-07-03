@@ -1,4 +1,8 @@
 'use client'
+
+import Input from "@/components/Form/Input";
+import MySelect from "@/components/Form/Select";
+import Detail from "@/components/Detail";
 import React from "react"
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
