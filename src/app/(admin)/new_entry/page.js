@@ -123,13 +123,14 @@ const Page = () => {
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                         New Entry
                     </h3>
-                    <Button.Custom 
+                    <Button.Icon 
                         className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-white-600 dark:hover:bg-white-700 dark:focus:ring-white-800"
                         onClick={() => router.push(`/new_entry/form`)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/></svg>
                         <span className="ml-3">
                             Tambah Data
                         </span>
-                    </Button.Custom>
+                    </Button.Icon>
                 </div>
                 <MyDataTable
                     // fixedHeader={false}
