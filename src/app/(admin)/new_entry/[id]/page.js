@@ -1,6 +1,3 @@
-'use client'
-
-
 import PageTitle from '@/components/PageTitle'
 import React from 'react'
 

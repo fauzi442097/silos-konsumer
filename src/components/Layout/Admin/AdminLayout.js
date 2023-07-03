@@ -7,7 +7,6 @@ import { useTheme } from '@/hooks/ThemeContext'
 import { useSidebar } from '@/hooks/SidebarContext'
 import LoadingPage from '@/components/LoadingPage'
 import Preloader from './Header/Preloader'
-import AuthMiddleware from '@/app/(admin)/AuthMiddleware'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 import { cn } from '@/lib/utils'
@@ -21,7 +20,6 @@ const AdminLayout = ({ children }) => {
   const { theme } = useTheme();
 
   return (
-    <AuthMiddleware>
       <body className={`${theme == 'dark' ? 'dark' : ''}`}>
           <MyToast/>
           <MySwal/>
@@ -38,7 +36,6 @@ const AdminLayout = ({ children }) => {
             </div>
           </div>
       </body>
-    </AuthMiddleware>
   )
 }
 

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
-import avatar from "/public/man-avatar.png";
+import avatar from "/public/img/man-avatar.png";
 import { motion } from 'framer-motion'
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { LogOutIcon, UserSettingIcon } from './HeaderIcon';

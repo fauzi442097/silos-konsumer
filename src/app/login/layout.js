@@ -9,22 +9,9 @@ import { useTheme } from '@/hooks/ThemeContext';
 import Preloader from '@/components/Layout/Admin/Header/Preloader';
 import Toolbar from '@/components/Layout/Admin/Header/Toolbar';
 import { MoonIcon, SunIcon } from '@/components/Layout/Admin/Header/HeaderIcon';
-import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
-import useAuth from '@/hooks/useAuth';
 
 const MySwal = dynamic(() => import('../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 const MyToast = dynamic(() => import('../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
-
-const Unauthenticated = ({ children }) => {
-   const  { isAuthenticated } = useAuth()
-   useEffect(() => {
-      if ( isAuthenticated ) redirect('/')
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [])
-   
-   return children
-}
 
 const GuestLayout = ({ children }) => {
 
@@ -34,7 +21,6 @@ const GuestLayout = ({ children }) => {
 
 
   return (
-   <Unauthenticated>
       <body className={`${theme == 'dark' ? 'dark' : ''}`}>
          <MyToast/>
          <MySwal/>
@@ -85,7 +71,6 @@ const GuestLayout = ({ children }) => {
             </div>
          </div>
       </body>
-   </Unauthenticated>
   )
 }
 

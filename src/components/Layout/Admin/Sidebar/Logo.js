@@ -3,9 +3,9 @@ import { useTheme } from '@/hooks/ThemeContext';
 import Image from 'next/image'
 import { cn } from '@/lib/utils';
 
-import logo_bank_kalteng from '../../../../../public/logo_bank_kalteng.png'
-import logo_bank_kalteng_trf from '../../../../../public/logo_bank_kalteng_transparent.png'
-import logo_bank_kalteng_simple from '../../../../../public/logo_bank_kalteng_simple.png'
+import logo_bank_kalteng from '/public/img/logo_bank_kalteng.png'
+import logo_bank_kalteng_trf from '/public/img/logo_bank_kalteng_transparent.png'
+import logo_bank_kalteng_simple from '/public/img/logo_bank_kalteng_simple.png'
 
 const Logo = () => {
 
