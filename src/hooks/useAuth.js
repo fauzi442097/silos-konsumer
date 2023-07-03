@@ -9,8 +9,8 @@ const useAuth = () => {
         cookies.set('auth', {token, user})
     }
 
-    const auth = cookies.get('auth')
-    const isAuthenticated = auth ? true : false
+    const auth = cookies.get('auth') ? cookies.get('auth') : null
+    const isAuthenticated = cookies.get('auth') ? true : false
 
     const removeAuth = () => {
         cookies.remove('auth')

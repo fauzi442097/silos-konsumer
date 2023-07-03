@@ -8,11 +8,11 @@ import { useSidebar } from '@/hooks/SidebarContext'
 import LoadingPage from '@/components/LoadingPage'
 import Preloader from './Header/Preloader'
 import { Sidebar } from './Sidebar'
-import { Header } from './Header'
 import { cn } from '@/lib/utils'
 
 const MySwal = dynamic(() => import('../../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 const MyToast = dynamic(() => import('../../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
+const Header = dynamic(() => import('./Header/Header'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 
 const AdminLayout = ({ children }) => {
 

@@ -1,8 +1,6 @@
 import axios from "axios";
 import Cookies from 'universal-cookie';
 
-// import {useRouter} from "next/router";
-
 const cookies = new Cookies();
 const mainAPI = axios.create({
   baseURL: '/api/'
@@ -35,10 +33,12 @@ function POST_PUBLIC(url, formData) {
 }
 
 function POST(url, formData) {
+  let auth = cookies.get('auth')
+  let token = auth.token
   return mainAPI
     .post(url, formData, {
       headers: {
-        Authorization: "Bearer "+cookies.get('token'),
+        Authorization: "Bearer "+token,
       },
     })
     .then((res) => {
@@ -57,10 +57,12 @@ function POST(url, formData) {
 }
 
 function GET(url) { 
+  let auth = cookies.get('auth')
+  let token = auth.token
   return mainAPI
     .get(url, {
       headers: {
-        Authorization: "Bearer "+cookies.get('token'),
+        Authorization: "Bearer "+token,
       },
     })
     .then((res) => {

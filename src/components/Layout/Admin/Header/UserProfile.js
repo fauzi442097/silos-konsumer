@@ -15,13 +15,16 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
     }, divRef);
 
     const router = useRouter()
-    const { removeAuth } = useAuth()
+    const { auth, removeAuth } = useAuth()
 
     const logOut = (e) => {
         e.preventDefault()
         removeAuth()
         router.push('/login')
     }
+
+    
+    console.log(auth)
   
      return (
         <>
@@ -55,8 +58,8 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                         <Image src={avatar} alt="avatar" className='bg-cover'/>
                     </div>
                     <div className='flex flex-col overflow-hidden'>
-                        <p className='m-0 text-lg font-inter-semibold'> Ahmad Fauzi </p>
-                        <p className='m-0 text-sm break-all font-inter-light'>fauzi442097@gmail.com </p>
+                        <p className='m-0 text-lg font-inter-semibold'> {auth.user.uFirstName} {auth.user.uLastNames} </p>
+                        <p className='m-0 text-sm break-all font-inter-light'> {auth.user.email} </p>
                     </div>
                 </div>
             </div>

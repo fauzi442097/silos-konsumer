@@ -14,6 +14,7 @@ import Alert from '@/components/Alert';
 import Button from '@/components/Button';
 import { useLoadingStore } from '@/stores/loading';
 import useAuth from '@/hooks/useAuth';
+import { API } from '@/config/api';
  
 const loginSchema = yup.object({
   username: yup.string().required('Wajib diisi'),
@@ -37,7 +38,6 @@ const Page = () => {
   const [ alert, setAlert ] = useState({show: false,rc: 0,message: ''})
 
 
-
   const onSubmit = async (formData) => {
       setLoading(true)
       const { data, status, statusText} = await API.POST_PUBLIC(`auth/login`, formData)
@@ -45,7 +45,14 @@ const Page = () => {
       if ( status != 200 ) return setAlert({show: true, rc: status, message: statusText})
       let token = data.data.token
       let user = data.data.user
-      setAuth(token,user)
+      let authUser = {
+        username: user.username,
+        uFirstName: user.uFirstName,
+        uLastName: user.uLastName,
+        email: user.email,
+        branch: user.branch
+      }
+      setAuth(token,authUser)
       router.push('/')  
   }
 
