@@ -1,8 +1,5 @@
 'use client'
 
-import Input from "@/components/Form/Input";
-import MySelect from "@/components/Form/Select";
-import Detail from "@/components/Detail";
 import React from "react"
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
@@ -13,7 +10,7 @@ const options = [
     { value: "Honeybee", label: "Honeybee" }
  ];
 
-const Step1 = () => {
+const Simulasi = () => {
     return (
         <>
             <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{gap: "30px"}}>
@@ -145,4 +142,4 @@ const Step1 = () => {
     )
 };
 
-export default Step1
+export default Simulasi

@@ -7,6 +7,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation';
 import * as yup from "yup";
 
+import { API } from '@/config/api';
 import Input from '@/components/Form/Input';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Alert from '@/components/Alert';
