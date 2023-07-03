@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import styles from './Notification.module.css'
 import notificationStyle from '@/app/utils/notificationStyle';
 import { useTheme } from '@/hooks/ThemeContext';
+import { cn } from '@/lib/utils';
 
 
 const closeIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24'><path fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' d='m7 7l10 10M7 17L17 7'/></svg>"
@@ -10,18 +11,15 @@ const closeIcon = "<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15
 const ToastContent = ({ 
    message, 
    title, 
-   context = "default", 
+   context = "info", 
    onClose 
 }) => {
 
   const { theme } = useTheme();
   const icon = useMemo(() => notificationStyle.setIcon(context, theme), [context, theme]);
-  const bgColor = useMemo(() => notificationStyle.setBgColor(context, theme), [context, theme]);
   const bgColorProgress = useMemo(() => notificationStyle.setBgColorProgress(context, theme), [context, theme]);
-  const textColor = useMemo(() => notificationStyle.setColor(context, theme), [context, theme]);
   const gradientColor = useMemo(() => notificationStyle.setGradient(context, theme), [context, theme]);
   const titleToast = useMemo(() => notificationStyle.setTitle(context, title), [context, title]);
-  const messageColor = theme == 'dark' ? 'text-grey' : '';
 
   const bgProgressBar = {
     "--bg-progressbar": bgColorProgress
@@ -40,13 +38,25 @@ const ToastContent = ({
         }}
         className={`bg-white relative flex items-start gap-4 rounded-xl flex-row p-5 overflow-hidden`}>
 
-        <div className={`${bgColor} rounded-full h-7 w-7 flex items-center justify-center`}>
+        <div className={cn([
+          'rounded-full h-7 w-7 flex items-center justify-center',
+          context == 'info' && 'bg-dark-blue-logo dark:bg-[rgb(121,122,221)]',
+          context == 'success' && 'bg-primary dark:bg-[#50cd89]',
+          context == 'warning' && 'bg-yellow-logo dark:bg-yellow-500',
+          context == 'error' && 'bg-danger',
+        ])}>
           {icon}
          </div>
 
         <div className="d-flex flex-column pe-0">
-            <h4 className={`mb-1 ${textColor}`}>{titleToast}</h4>
-            <p className={`${messageColor} mb-0`} dangerouslySetInnerHTML={{ __html: message }} />
+            <h4 className={cn([
+              'mb-1',
+              context == 'info' && 'text-dark-blue-logo dark:text-[rgb(121,122,221)]',
+              context == 'success' && 'text-primary dark:text-[#50cd89]',
+              context == 'warning' && 'text-yellow-logo dark:text-yellow-500',
+              context == 'error' && 'text-danger',
+            ])}>{titleToast}</h4>
+            <p className={cn('mb-0 dark:text-grey')} dangerouslySetInnerHTML={{ __html: message }} />
         </div>
         
     

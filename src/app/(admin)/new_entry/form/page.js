@@ -6,11 +6,11 @@ import dynamic from 'next/dynamic';
 import Step1 from './step1';
 
 import PageTitle from "@/components/PageTitle";
-import Button from "@/components/Button";
+import Button, { ButtonCloseModal } from "@/components/Button";
 import Card from "@/components/Card";
-import Modal from '@/components/Modal/ModalSection';
-import Preloader from "@/components/Layout/Admin/Header/Preloader";
+import Modal from "@/components/Modal/ModalSection";
 import Detail from "@/components/Detail";
+import Preloader from "@/components/Layout/Admin/Header/Preloader";
 
 
 const MyModal = dynamic(() => import('../../../../components/Modal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'} /> })
@@ -76,7 +76,7 @@ const FormNewEntry = () => {
                             <h3 className='font-bold mb-1'> Biaya - biaya </h3>
                             <span> Preview biaya - biaya </span>
                         </div>
-                        <Button.CloseModal onClick={() =>
+                        <ButtonCloseModal onClick={() =>
                             setShowModal((prev) => ({
                                 ...prev,
                                 xl: false,

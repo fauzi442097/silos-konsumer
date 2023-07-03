@@ -2,7 +2,7 @@ import React from 'react'
 
 const ModalHeader = ({ children }) => {
     return (
-        <div className='flex justify-between items-baseline px-6 py-4'>
+        <div className='flex justify-between items-baseline px-6 py-4 w-full'>
             { children }
         </div>
     )
@@ -27,7 +27,7 @@ const ModalBody = ({ children }) => {
   
 const ModalFooter = ({ children }) => {
     return (
-        <div className='modal-footer bg-main px-6 py-4 dark:bg-dark-depth2'>
+        <div className='modal-footer bg-main px-6 py-4 dark:bg-dark-depth2 w-full'>
             { children }
         </div>
     )

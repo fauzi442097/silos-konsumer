@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from "framer-motion"
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { cn } from '@/lib/utils';
 
 
 const Notification = ({ setShowDropdownTopbar, btnRef, className, ...props }) => {
@@ -34,7 +35,10 @@ const Notification = ({ setShowDropdownTopbar, btnRef, className, ...props }) =>
         style={{ 
             'boxShadow': 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
          }}
-        className={`w-80 absolute rounded-2xl dark:text-grey top-16 lg:top-14 right-2 shadow-lg dark:topbar-box-shadow-dark flex flex-col z-50 ${className || ''} transition duration-300 ease-in-out`} {...props}>
+        className={cn([
+            'w-80 absolute rounded-2xl dark:text-grey top-16 lg:top-14 right-2 shadow-lg dark:topbar-box-shadow-dark flex flex-col z-50 transition duration-300 ease-in-out',
+            className && className
+        ])} {...props}>
             <div className='px-3 py-6 bg-primary rounded-t-2xl text-white dark:bg-dark-depth1 dark:text-primary'> 
                 <div className='flex items-center gap-4 px-3'> 
                 <p className='text-xl font-inter-semibold'> Notifikasi </p>

@@ -8,6 +8,7 @@ import Preloader from './Preloader'
 import { useTheme } from '@/hooks/ThemeContext'
 import { useSidebar } from '@/hooks/SidebarContext'
 import { BellIcon, BurgerIcon, KebabIcon, MoonIcon, SunIcon } from './HeaderIcon'
+import { cn } from '@/lib/utils'
 
 
 const Notification = dynamic(() => import('./Notification'), { ssr: false, loading: () => <Preloader/> });
@@ -51,7 +52,10 @@ const Header = () => {
    const ToggleThemeIcon = <span className='text-yellow-logo' dangerouslySetInnerHTML={{ __html: theme == 'light' ? SunIcon : MoonIcon }}/>
       
   return (
-   <header className={`header left-0 ${openSidebar ? 'lg:left-72' : 'lg:left-28 peer-hover:left-72'} bg-main dark:bg-dark-main transition-all duration-300`}>
+   <header className={cn([
+      'header left-0 bg-main dark:bg-dark-main transition-all duration-300',
+      openSidebar ? 'lg:left-72' : 'lg:left-28 peer-hover:left-72'
+   ])}>
       <div className='pl-4 pr-2 lg:pr-8 lg:py-8 py-1 flex justify-between items-center lg:mx-5 lg:bg-main bg-primary dark:bg-primary-800 dark:lg:bg-dark-main rounded-b-3xl'>
       <div className='flex flex-row gap-3'> 
 
@@ -67,7 +71,14 @@ const Header = () => {
 
       <div className='flex flex-row gap-4 items-center'> 
          <div className='relative'>
-            <Toolbar ref={notifRef} datacount={10} className={`btn-toolbar toolbar-notification ${showDropdownTopbar.notification ? 'active' : ''}`} onClick={() => toggleDropdownTopbar('notification')}> 
+            <Toolbar ref={notifRef} 
+               datacount={10} 
+               className={cn([
+                  'btn-toolbar toolbar-notification',
+                  showDropdownTopbar.notification && 'active'
+               ])} 
+               onClick={() => toggleDropdownTopbar('notification')}
+            > 
                <span dangerouslySetInnerHTML={{ __html: BellIcon }}/>
             </Toolbar>
 

@@ -6,7 +6,7 @@ import Layout from '@/components/Layout/Layout';
 
 export const metadata = {
   title: 'Silos Konsumer',
-  description: 'Webmin Silos Konsumer - Reborn',
+  description: 'Webmin Silos Konsumer',
 };
 
 export default function RootLayout({ children }) {
@@ -15,9 +15,9 @@ export default function RootLayout({ children }) {
       <InitialGlobalFont/>
       <ThemeProvider>
         <SidebarProvider>          
-            <Layout>
-              {children}
-            </Layout>
+          <Layout>
+            {children}
+          </Layout>
         </SidebarProvider>
       </ThemeProvider>
     </>

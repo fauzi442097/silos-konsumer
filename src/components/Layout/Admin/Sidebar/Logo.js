@@ -1,11 +1,11 @@
 import { useSidebar } from '@/hooks/SidebarContext';
 import { useTheme } from '@/hooks/ThemeContext';
 import Image from 'next/image'
-import React from 'react'
+import { cn } from '@/lib/utils';
 
-import logo_bank_kalteng from '../../../../../public/logo_bank_kalteng.png'
-import logo_bank_kalteng_trf from '../../../../../public/logo_bank_kalteng_transparent.png'
-import logo_bank_kalteng_simple from '../../../../../public/logo_bank_kalteng_simple.png'
+import logo_bank_kalteng from '/public/img/logo_bank_kalteng.png'
+import logo_bank_kalteng_trf from '/public/img/logo_bank_kalteng_transparent.png'
+import logo_bank_kalteng_simple from '/public/img/logo_bank_kalteng_simple.png'
 
 const Logo = () => {
 
@@ -18,7 +18,7 @@ const Logo = () => {
       <Image
          src={logoBrand}
          alt="logo bank kalteng"
-         className={`m-auto w-[160px] transition-all duration-300  ${openSidebar ? '' : 'hidden group-hover:block'}`}
+         className={cn(['m-auto w-[160px] transition-all duration-300', !openSidebar && 'hidden group-hover:block'])}
          priority={true}
          width="0"
          height="0"
@@ -28,7 +28,7 @@ const Logo = () => {
       <Image
          src={logo_bank_kalteng_simple}
          alt="logo bank kalteng"
-         className={`m-auto transition-all duration-300 ${openSidebar ? 'hidden' : 'group-hover:hidden'}`}
+         className={cn(['m-auto transition-all duration-300', openSidebar ? 'hidden' : 'group-hover:hidden'])}
          width={100}
          height={100}
          priority={true}

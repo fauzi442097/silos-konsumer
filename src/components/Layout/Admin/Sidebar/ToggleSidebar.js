@@ -21,7 +21,7 @@ const ToggleSidebar = ({ setShowSidebarMobile, btnRef }) => {
             default: { ease: "linear"},
             duration: 2
          }}
-         className='z-30  fixed inset-0 backdrop-header'>
+         className='z-30 fixed inset-0 backdrop-header'>
       </motion.div>
 
       {/* Menu */}

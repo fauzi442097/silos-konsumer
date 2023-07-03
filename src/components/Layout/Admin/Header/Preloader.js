@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from "framer-motion"
+import { cn } from '@/lib/utils'
 
 const Preloader = ({type}) => {
     return (
@@ -11,7 +12,10 @@ const Preloader = ({type}) => {
                  default: { ease: "linear"},
                  duration: 2
               }}
-              className={`${type == 'toggleSidebar' ? 'inset-0' : 'top-24 left-0 right-0 bottom-0'} fixed overflow-hidden backdrop-header flex justify-center items-center gap-2`}>
+              className={cn([
+               'fixed overflow-hidden backdrop-header flex justify-center items-center gap-2',
+               type == 'toggleSidebar' ? 'inset-0' : 'top-24 left-0 right-0 bottom-0'
+              ])}>
                <h3 className='mb-0'> Loading </h3> 
                <div role="status">
                   <svg aria-hidden="true" className="w-6 h-6 dark:text-white animate-spin text-primary  fill-white dark:fill-green-700" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
