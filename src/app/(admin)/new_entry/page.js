@@ -7,10 +7,11 @@ import Button from "@/components/Button";
 import MyDataTable from "@/components/Datatable/MyDatatable";
 import LoadingTable from "@/components/Datatable/LoadingTable";
 import { API } from "@/config/api";
-import { columns } from "./columns";
+// import { columns } from "./columns";
 import PageTitle from "@/components/PageTitle";
 import { useLoadingStore } from "@/stores/loading";
 import { useMySwal } from "@/hooks/useMySwal";
+import { columns } from "./columns";
 
 
 const Page = () => {

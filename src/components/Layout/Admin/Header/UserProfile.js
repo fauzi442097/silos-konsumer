@@ -23,9 +23,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
         router.push('/login')
     }
 
-    
-    console.log(auth)
-  
+
      return (
         <>
             <motion.div 

@@ -96,11 +96,11 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
    //       flexWrap: 'wrap'
 	// 	},
 	// },
-      responsiveWrapper: {
-         style: {
-            background: 'red'
-         },
-      },
+   // responsiveWrapper: {
+   //    style: {
+   //       background: 'red'
+   //    },
+   // },
     headCells: {
       style: {
          // override the cell padding for data cells
@@ -215,7 +215,7 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
 
 
   return (
-   <div className='relative block w-full overflow-x-auto'>
+   <div className='relative block w-full overflow-scroll'>
       {
          withFilter ? (
             <DataTableExtensions
