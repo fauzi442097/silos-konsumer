@@ -70,7 +70,6 @@ const Datatable = ({ data }) => {
                   selectableRows={false}
                   pagination={true}
                   paginationPerPage={10}
-                  responsive={false}
                   progressPending={false}
                   selectableRowsComponent={CheckboxTable}
                   progressComponent={<LoadingTable/>}

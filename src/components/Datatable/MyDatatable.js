@@ -84,7 +84,7 @@ createTheme('customDark', {
 
 
 
-const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ...props }) => {
+const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
 
   const { theme } = useTheme();
   const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
@@ -226,19 +226,17 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
                filterPlaceholder={'Cari Data'}
             >
                <DataTable
-                  dense={compactness}
                   theme={theme == 'dark' ? 'customDark' : 'customLight'}
                   customStyles={customStyles}
                   paginationServer={false}
                   pagination={true}
+                  responsive={false}
                   defaultSortAsc={false}
-                  expandableRowsComponent={ExpandedComponent}
                   defaultSortFieldId={1}
                   sortIcon={<span dangerouslySetInnerHTML={{ __html: ArrowDownIcon }} />}
                   striped={false}
                   highlightOnHover={true}
                   pointerOnHover={false}
-                  expandableRows
                   persistTableHead={true}
                   selectableRowsHighlight={true}
                   noDataComponent={"Data tidak tersedia"}
@@ -247,18 +245,17 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
             </DataTableExtensions>
          ) : (
             <DataTable
-               dense={compactness}
                columns={columns}
                data={data}
                theme={theme == 'dark' ? 'customDark' : 'customLight'}
                customStyles={customStyles}
                paginationServer={false}
                pagination={true}
-               expandableRowsComponent={ExpandedComponent}
                defaultSortAsc={false}
                defaultSortFieldId={1}
                sortIcon={<span dangerouslySetInnerHTML={{ __html: ArrowDownIcon }} />}
                striped={false}
+               responsive={false}
                highlightOnHover={true}
                pointerOnHover={false}
                persistTableHead={true}
