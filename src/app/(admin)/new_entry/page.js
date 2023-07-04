@@ -57,7 +57,7 @@ const Page = () => {
                         pagination={true}
                         paginationPerPage={10}
                         paginationServer
-                        responsive={true}
+                        responsive={false}
                         progressPending={loading}
                         onChangePage={handlePageChange}
                         progressComponent={<LoadingTable />}

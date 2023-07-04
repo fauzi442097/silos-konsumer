@@ -61,7 +61,7 @@ const Datatable = ({ data }) => {
               )}
             
               <MyDataTable
-                  compactness={true}
+                  compactness={false}
                   fixedHeader={true}
                   withFilter={false}
                   // fixedHeaderScrollHeight="500px"
@@ -70,7 +70,7 @@ const Datatable = ({ data }) => {
                   selectableRows={false}
                   pagination={true}
                   paginationPerPage={10}
-                  responsive={true}
+                  responsive={false}
                   progressPending={false}
                   selectableRowsComponent={CheckboxTable}
                   progressComponent={<LoadingTable/>}

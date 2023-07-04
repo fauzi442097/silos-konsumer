@@ -1,6 +1,50 @@
 import Button from "@/components/Button";
+import DropdownButton from "@/components/DropdownButton";
 
 const columns = [
+    {
+        name: 'Action',
+        cell: (row, index, column, id) => <DropdownButton>
+                <li>
+                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span className="ml-3">
+                            Ubah Data
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span className="ml-3">
+                            Slik
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span className="ml-3">
+                            Checklist Dokumen
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span className="ml-3">
+                            Edit Biaya Lainnya
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                        <span className="ml-3">
+                            Kirim Prospek
+                        </span>
+                    </a>
+                </li>
+            </DropdownButton>,
+        ignoreRowClick: true,
+        allowOverflow: true,
+        button: true,
+    },
     {
         name: 'Id',
         selector: (row) => row.id,
@@ -13,6 +57,7 @@ const columns = [
         selector: (row) => row.firstName,
         cellExport: row => row.firstName,
         sortable: true,
+        filterable: true,
         center: false
     },
     {
@@ -20,14 +65,16 @@ const columns = [
         selector: (row) => row.lastName,
         cellExport: row => row.lastName,
         sortable: true,
-        center: false
+        center: false,
     },
     {
         name: 'Email',
         selector: (row) => row.email,
         cellExport: row => row.email,
         sortable: true,
-        center: false
+        center: false,
+        wrap: true,
+        grow: 2
     },
     {
         name: 'Age',
@@ -57,13 +104,7 @@ const columns = [
         sortable: true,
         center: true
     },
-    {
-        name: 'Action',
-        cell: (row, index, column, id) => <Button className="btn-sm" onClick={() => router.push(`/users/${row.id}`)}> Detail </Button>,
-        ignoreRowClick: true,
-        allowOverflow: true,
-        button: true,
-    }
+    
   ];
 
 export default columns;

@@ -82,12 +82,25 @@ createTheme('customDark', {
   },
 });
 
+
+
 const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ...props }) => {
 
   const { theme } = useTheme();
   const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
 
   const customStyles = {
+   // tableWrapper: {
+	// 	style: {
+	// 		display: 'flex',
+   //       flexWrap: 'wrap'
+	// 	},
+	// },
+      responsiveWrapper: {
+         style: {
+            background: 'red'
+         },
+      },
     headCells: {
       style: {
          // override the cell padding for data cells
@@ -114,7 +127,12 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
          },
          margin: '2px',
       },
+      highlightOnHoverStyle: {
+         backgroundColor: defaultThemes[themeDataTable].highlightOnHover.default,
+         borderRadius: '0.75rem',
+      },
    },
+   
    header: {
       // Title 
       style: {
@@ -195,8 +213,9 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
    },
   }
 
+
   return (
-   <div className='relative'>
+   <div className='relative block w-full overflow-x-auto'>
       {
          withFilter ? (
             <DataTableExtensions
@@ -213,11 +232,13 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
                   paginationServer={false}
                   pagination={true}
                   defaultSortAsc={false}
+                  expandableRowsComponent={ExpandedComponent}
                   defaultSortFieldId={1}
                   sortIcon={<span dangerouslySetInnerHTML={{ __html: ArrowDownIcon }} />}
                   striped={false}
                   highlightOnHover={true}
                   pointerOnHover={false}
+                  expandableRows
                   persistTableHead={true}
                   selectableRowsHighlight={true}
                   noDataComponent={"Data tidak tersedia"}
@@ -233,6 +254,7 @@ const MyDataTable = ({ columns, data, withFilter = true, compactness = false, ..
                customStyles={customStyles}
                paginationServer={false}
                pagination={true}
+               expandableRowsComponent={ExpandedComponent}
                defaultSortAsc={false}
                defaultSortFieldId={1}
                sortIcon={<span dangerouslySetInnerHTML={{ __html: ArrowDownIcon }} />}
