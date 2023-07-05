@@ -129,6 +129,7 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
          margin: '5px 0',
          borderStyle: 'solid',
          borderWidth: '1px',
+         padding: '5px 0',
          borderColor: defaultThemes[themeDataTable].divider.default,
          borderRadius: '0.75rem',
       },

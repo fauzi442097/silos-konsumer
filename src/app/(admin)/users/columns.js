@@ -72,7 +72,8 @@ const columns = [
         selector: (row) => row.phone,
         cellExport: row => row.phone,
         sortable: true,
-        center: false
+        center: false,
+        wrap: true
     },
     {
         name: 'Birth Date',

@@ -11,6 +11,8 @@ const DropdownAction = () => {
             <DropdownItem href="/form"> Approve Pengajuan </DropdownItem>
             <DropdownItem href="/form"> Non Aktif User</DropdownItem>
             <DropdownItem href="/form"> Inquiry </DropdownItem>
+            <DropdownItem href="/form"> Slik </DropdownItem>
+            <DropdownItem href="/form"> Simulasi </DropdownItem>
         </Dropdown>
     )
 }
