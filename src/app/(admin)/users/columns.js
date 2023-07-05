@@ -1,46 +1,23 @@
-import Button from "@/components/Button";
-import DropdownButton from "@/components/DropdownButton";
+import Dropdown, { DropdownItem } from "@/components/Dropdown";
+
+const DropdownAction = () => {
+    return (
+        <Dropdown>
+            <DropdownItem href="/form"> Lihat Data </DropdownItem>
+            <DropdownItem href="/form"> Ubah Data </DropdownItem>
+            <DropdownItem href="/form"> Hapus </DropdownItem>
+            <DropdownItem href="/form"> Kirim Proses </DropdownItem>
+            <DropdownItem href="/form"> Approve Pengajuan </DropdownItem>
+            <DropdownItem href="/form"> Non Aktif User</DropdownItem>
+            <DropdownItem href="/form"> Inquiry </DropdownItem>
+        </Dropdown>
+    )
+}
 
 const columns = [
     {
         name: 'Action',
-        cell: (row, index, column, id) => <DropdownButton>
-                <li>
-                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span className="ml-3">
-                            Ubah Data
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span className="ml-3">
-                            Slik
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span className="ml-3">
-                            Checklist Dokumen
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span className="ml-3">
-                            Edit Biaya Lainnya
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" className="flex items-center px-3 py-3 text-sm text-gray-600 capitalize transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span className="ml-3">
-                            Kirim Prospek
-                        </span>
-                    </a>
-                </li>
-            </DropdownButton>,
+        cell: (row, index, column, id) => <DropdownAction/>,
         ignoreRowClick: true,
         allowOverflow: true,
         button: true,

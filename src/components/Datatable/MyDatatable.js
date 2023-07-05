@@ -36,7 +36,8 @@ createTheme('customLight', {
      text: '#0c0c0F',
   },
   divider: {
-     default: '#eff2f5',
+   //   default: '#eff2f5',
+     default: '#eaeaea',
   },
   action: {
      button: '#ff0d0d89',
@@ -120,12 +121,16 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
    },
    rows: {
       style: {
-         '&:not(:last-of-type)': {
-            borderBottomStyle: 'dashed',
-            borderBottomWidth: '1px',
-            borderBottomColor: defaultThemes[themeDataTable].divider.default,
-         },
-         margin: '2px',
+         // '&:not(:last-of-type)': {
+         //    borderBottomStyle: 'dashed',
+         //    borderBottomWidth: '1px',
+         //    borderBottomColor: defaultThemes[themeDataTable].divider.default,
+         // },
+         margin: '5px 0',
+         borderStyle: 'solid',
+         borderWidth: '1px',
+         borderColor: defaultThemes[themeDataTable].divider.default,
+         borderRadius: '0.75rem',
       },
       highlightOnHoverStyle: {
          backgroundColor: defaultThemes[themeDataTable].highlightOnHover.default,
@@ -215,7 +220,7 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
 
 
   return (
-   <div className='relative block w-full overflow-scroll'>
+   <div className='relative block w-full overflow-x-auto'>
       {
          withFilter ? (
             <DataTableExtensions

@@ -105,9 +105,11 @@ const Header = () => {
                alt='user' />
                <div className='flex flex-col items-start'>
                   <span className='selected-none font-inter-semibold dark:text-grey lg:text-[#5b5b5d] text-grey'> 
-                     {auth.user.uFirstName} 
+                     {/* {auth.user.uFirstName}  */}
+                     Fauzi
                   </span>
-                  <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> {auth.user.branch.branchName} </span>
+                  {/* <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> {auth.user.branch.branchName} </span> */}
+                  <span className='text-grey lg:text-primary text-sm lg:dark:text-primary font-inter-medium dark:text-grey'> fauzi@gmail.com </span>
                </div>
             </div>
 
