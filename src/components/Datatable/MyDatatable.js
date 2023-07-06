@@ -91,23 +91,21 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
   const themeDataTable = theme == 'dark' ? 'customDark' : 'customLight';
 
   const customStyles = {
-   // tableWrapper: {
-	// 	style: {
-	// 		display: 'flex',
-   //       flexWrap: 'wrap'
-	// 	},
-	// },
-   // responsiveWrapper: {
-   //    style: {
-   //       background: 'red'
-   //    },
-   // },
-    headCells: {
+   tableWrapper: {
+		style: {
+			display: 'table',
+		},
+	},
+	responsiveWrapper: {
+		style: {},
+	},
+   headCells: {
       style: {
          // override the cell padding for data cells
          fontSize: '1rem',
          lineHeight: '1.25rem',
          color: '#fff',
+         minHeight: '40px',
          backgroundColor: theme == 'dark' ? 'rgb(var(--color-dark-depth2))' : 'rgb(var(--color-primary))',  // bg-dark-dept-2
          '&:first-child': {
             borderTopLeftRadius: '0.75rem',
@@ -119,6 +117,21 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
          },
       },
    },
+   head: {
+      style: {
+         color: 'red',
+         fontSize: '10px',
+         fontWeight: 500,
+      },
+   },
+   headRow: {
+		style: {
+			borderBottom: 'none',
+		},
+		denseStyle: {
+			minHeight: '50px',
+		},
+	},
    rows: {
       style: {
          // '&:not(:last-of-type)': {
@@ -126,7 +139,7 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
          //    borderBottomWidth: '1px',
          //    borderBottomColor: defaultThemes[themeDataTable].divider.default,
          // },
-         margin: '5px 0',
+         margin: '3px 0',
          borderStyle: 'solid',
          borderWidth: '1px',
          padding: '5px 0',
@@ -144,8 +157,9 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
       style: {
          fontSize: '1rem',
          // margin: '1rem 0',
+         backgroundColor: 'red',
          marginBottom: '1rem',
-        padding: 0,
+         padding: 0,
       },
    },
    cells: {
@@ -181,14 +195,15 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
       },
    },
    pagination: {
-      style: {
+      style: {         
          color: defaultThemes[themeDataTable].text.primary,
          fontSize: '0.875rem', // text-sm
          lineHeight: '1.25rem',
-         minHeight: '56px',
-         borderTopStyle: 'solid',
-         borderTopWidth: '1px',
-         borderTopColor: defaultThemes[themeDataTable].divider.default
+         borderTop: 'none',
+         // minHeight: '56px',
+         // borderTopStyle: 'dashed',
+         // borderTopWidth: '1px',
+         // borderTopColor: defaultThemes[themeDataTable].divider.default
       },
       pageButtonsStyle: {
          borderRadius: '0.375rem',

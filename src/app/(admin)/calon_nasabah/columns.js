@@ -33,6 +33,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 2
     },
     {
         name: 'Nama Nasabah',
@@ -41,6 +42,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 3
     },
     {
         name: 'Produk',
@@ -49,6 +51,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 4
     },
     {
         name: 'Cabang',
@@ -57,6 +60,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 2
     },
     {
         name: 'Plafon',
@@ -65,6 +69,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 1
     },
     {
         name: 'Jangka Waktu',

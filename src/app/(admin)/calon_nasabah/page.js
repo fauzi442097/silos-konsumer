@@ -10,45 +10,35 @@ import Card from "@/components/Card";
 import MyDataTable from "@/components/Datatable/MyDatatable";
 import LoadingTable from "@/components/Datatable/LoadingTable";
 import PageTitle from "@/components/PageTitle";
+import useDataTable from "@/hooks/useDataTable";
+
 
 const Page = () => {
-    const [listCalonNasabah, setListCalonNasabah] = useState([]);
-    const { loading, setLoading } = useLoadingStore();
     const mySwal = useMySwal();
-
-    const getCalonNasabah = async (page) => {
-        setLoading(true);
-        const response = await API.GET(`/master/prospek/ao?param=complete&page=${page}`)
-        setLoading(false);
-        if(response.status !== 200) return mySwal.error(response.data.error);
-
-        let data = response.data;
-        console.log(data);
-        setListCalonNasabah(data);
-    }
+    const { data, loading, error, totalRows, getData } = useDataTable(`/master/prospek/ao?param=complete&page=1`)
+    const handlePageChange = async (page) => getData(page);
 
     useEffect(() => {
-        getCalonNasabah(1);
-    }, [])
-
-    const handlePageChange = async (page) => {
-        getCalonNasabah(page);
-    };
+        if ( error ) return mySwal[error.type](error.message)
+    }, [error])      
 
     return (
         <>
             <PageTitle title="Calon Nasabah" />
-            <Card>
+            <Card className={'without-filter'}>
                 <Card.Body>
                     <MyDataTable 
+                        dense={true}
                         withFilter={true}
-                        fixedHeader={true}
                         columns={columns}
-                        data={listCalonNasabah}
+                        data={data}
                         pagination={true}
+                        paginationComponentOptions={{ noRowsPerPage: true }}
                         paginationPerPage={10}
                         paginationServer
+                        noRowsPerPage={true}
                         progressPending={loading}
+                        paginationTotalRows={totalRows}
                         onChangePage={handlePageChange}
                         progressComponent={<LoadingTable />}
                     />
