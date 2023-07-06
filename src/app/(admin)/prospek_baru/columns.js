@@ -4,17 +4,11 @@ import { formatRupiah } from "@/lib/utils";
 const DropdownAction = () => {
     return (
         <Dropdown>
-            <DropdownItem href="/form"> Lihat Data </DropdownItem>
-            <DropdownItem href="/form"> Ubah Data </DropdownItem>
-            <DropdownItem href="/form"> Slik </DropdownItem>
-            <DropdownItem href="/form"> Upload Dokumen Slik </DropdownItem>
-            <DropdownItem href="/form"> Checklist Dokumen </DropdownItem>
-            <DropdownItem href="/form"> Edit Biaya Lainnya </DropdownItem>
-            <DropdownItem href="/form"> Kirim Prospek </DropdownItem>
+            <DropdownItem href="/lanjutkan"> Lanjutkan </DropdownItem>
+            <DropdownItem href="/batal_pengajuan_prospek"> Batalkan Pengajuan Prospek </DropdownItem>
         </Dropdown>
     )
 }
-
 
 export const columns = [
     {
@@ -46,7 +40,7 @@ export const columns = [
         cellExport: row => row.noIdentitas,
         sortable: true,
         center: false,
-        wrap: true
+        wrap: true,
     },
     {
         name: 'Produk',
@@ -54,32 +48,46 @@ export const columns = [
         cellExport: row => row.productName,
         sortable: true,
         center: false,
-        wrap: true
+        wrap: true,
+    },
+    {
+        name: 'Cabang',
+        selector: (row) => row.branchName,
+        cellExport: row => row.branchName,
+        sortable: true,
+        center: false,
+        wrap: true,
     },
     {
         name: 'Plafon',
         selector: (row) => formatRupiah(row.plafon),
-        cellExport: row => row.plafon,
-        // format: (row) => formatRupiah(row.plafon),
+        cellExport: row => formatRupiah(row.plafon),
         sortable: true,
-        right: true,
-        wrap: true
+        center: false,
+        wrap: true,
     },
     {
         name: 'Jangka Waktu (Bulan)',
         selector: (row) => row.jangkaWaktu,
         cellExport: row => row.jangkaWaktu,
         sortable: true,
-        right: true,
+        center: false,
         wrap: true,
     },
     {
         name: 'Angsuran',
-        selector: (row) => formatRupiah(row.totalAngsuran),
-        cellExport: row => row.totalAngsuran,
-        // format: (row) => formatRupiah(row.totalAngsuran),
+        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
+        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
         sortable: true,
-        right: true,
-        wrap: true
-    }
+        center: false,
+        wrap: true,
+    },
+    {
+        name: 'Angsuran Promo',
+        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranPromo) : '',
+        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranPromo) : '',
+        sortable: true,
+        center: false,
+        wrap: true,
+    },
 ];
