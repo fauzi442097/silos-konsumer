@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import axios from "axios";
 import Cookies from 'universal-cookie';
 
@@ -57,7 +58,7 @@ function POST(url, formData) {
     });
 }
 
-function GET(url) {
+function GET(url, datatable = false) { 
   let auth = cookies.get('auth')
   let token = auth.token
   return mainAPI
@@ -99,6 +100,13 @@ function GETWITHBODY(url,body) {
       let resData = [];
       resData['status'] = res.status;
       resData['data'] = res.data.data;
+
+      if ( datatable ) {
+        // Only For Get DataTablee
+        resData['meta'] = res.data.meta;
+        resData['data'] = res.data;
+      }
+
       return resData;
     })
     .catch(function (res) {
@@ -110,6 +118,7 @@ function GETWITHBODY(url,body) {
       }
       resData['status'] = error.status;
       resData['data'] = error.data;
+      resData['statusText'] = error.statusText;
       return resData;
     });
 }
