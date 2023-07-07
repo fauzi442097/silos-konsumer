@@ -23,7 +23,7 @@ const Page = () => {
         if(response.status !== 200) return mySwal.error(response.data.error);
 
         let data = response.data;
-        console.log(data);
+        // console.log(data);
         setListCalonNasabah(data);
     }
 
@@ -39,12 +39,16 @@ const Page = () => {
         <>
             <PageTitle title="Calon Nasabah" />
             <Card>
+                <Card.Header className={'flex justify-between flex-wrap items-center'}>
+                    <h3> Calon Nasabah </h3>
+                </Card.Header>
                 <Card.Body>
                     <MyDataTable 
                         withFilter={true}
                         fixedHeader={true}
                         columns={columns}
                         data={listCalonNasabah}
+                        dense={true}
                         pagination={true}
                         paginationPerPage={10}
                         paginationServer

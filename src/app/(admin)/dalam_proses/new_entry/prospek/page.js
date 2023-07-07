@@ -80,7 +80,7 @@ const FormProspek = () => {
                             <Button
                                 variant="secondary"
                                 size="sm"
-                                onClick={() => router.push(`/new_entry/form`)}>
+                                onClick={() => router.push(`/dalam_proses/new_entry/form`)}>
                                 <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256"><path fill="currentColor" d="M88.49 143.51a12 12 0 0 1-17 17l-48-48a12 12 0 0 1 0-17l48-48a12 12 0 0 1 17 17L49 104ZM128 92h-11l27.52-27.52a12 12 0 0 0-17-17l-48 48a12 12 0 0 0 0 17l48 48a12 12 0 0 0 17-17L117 116h11a84.09 84.09 0 0 1 84 84a12 12 0 0 0 24 0A108.12 108.12 0 0 0 128 92Z" /></svg>
                                 Kembali
                             </Button>
@@ -100,7 +100,7 @@ const FormProspek = () => {
                                 <Button
                                     variant="primary"
                                     size="sm"
-                                    onClick={() => router.push(`/new_entry`)}
+                                    onClick={() => router.push(`/dalam_proses/new_entry`)}
                                 >
                                     <svg className="w-4 h-4 mr-2 -ml-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M20 13V5.749a.6.6 0 0 0-.176-.425l-3.148-3.148A.6.6 0 0 0 16.252 2H4.6a.6.6 0 0 0-.6.6v18.8a.6.6 0 0 0 .6.6H14" /><path d="M16 2v3.4a.6.6 0 0 0 .6.6H20m-4 13h6m0 0l-3-3m3 3l-3 3" /></g></svg>
                                     Submit
