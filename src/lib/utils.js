@@ -8,3 +8,5 @@ export function cn(...inputs) {
 export function formatRupiah(value) {
    return new Intl.NumberFormat("id-ID").format(value);
 }
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
