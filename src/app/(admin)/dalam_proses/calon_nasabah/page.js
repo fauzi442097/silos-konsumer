@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { useMySwal } from "@/hooks/useMySwal";
 import { columns } from "./columns";
 
@@ -29,7 +29,10 @@ const Page = () => {
     return (
         <>
             <PageTitle title="Calon Nasabah" />
-            <Card className={'without-filter'}>
+            <Card>
+                <Card.Header className={'flex justify-between flex-wrap items-center'}>
+                    <h3> Calon Nasabah </h3>
+                </Card.Header>
                 <Card.Body>
                     <MyDataTable 
                         dense={true}

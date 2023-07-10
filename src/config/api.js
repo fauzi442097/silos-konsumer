@@ -11,25 +11,26 @@ export const API = {
   POST_PUBLIC,
   POST,
   GET,
+  GETWITHBODY,
 };
 
 function POST_PUBLIC(url, formData) {
   return mainAPI
     .post(url, formData)
     .then((res) => {
-        return {
-          status: res.status, 
-          statusText: res.statusText, 
-          data: res.data
-        }
+      return {
+        status: res.status,
+        statusText: res.statusText,
+        data: res.data
+      }
     })
     .catch(function (res) {
-        let error = res.response;
-        return {
-          status: error.status, 
-          statusText: error.statusText, 
-          data: error.data
-        }
+      let error = res.response;
+      return {
+        status: error.status,
+        statusText: error.statusText,
+        data: error.data
+      }
     });
 }
 
@@ -39,7 +40,7 @@ function POST(url, formData) {
   return mainAPI
     .post(url, formData, {
       headers: {
-        Authorization: "Bearer "+token,
+        Authorization: "Bearer " + token,
       },
     })
     .then((res) => {
@@ -63,14 +64,42 @@ function GET(url, datatable = false) {
   return mainAPI
     .get(url, {
       headers: {
-        Authorization: "Bearer "+ token,
+        Authorization: "Bearer " + token,
       },
     })
     .then((res) => {
       let resData = [];
       resData['status'] = res.status;
       resData['data'] = res.data.data;
+      return resData;
+    })
+    .catch(function (res) {
+      let error = res.response;
+      let resData = [];
 
+      if (error.status === 403) {
+        logout()
+      }
+      resData['status'] = error.status;
+      resData['data'] = error.data;
+      return resData;
+    });
+}
+
+function GETWITHBODY(url,body) {
+  let auth = cookies.get('auth')
+  let token = auth.token
+  console.log({url, body})
+  return mainAPI
+    .get(url, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      let resData = [];
+      resData['status'] = res.status;
+      resData['data'] = res.data.data;
       if ( datatable ) {
         // Only For Get DataTablee
         resData['meta'] = res.data.meta;

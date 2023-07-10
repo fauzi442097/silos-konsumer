@@ -45,6 +45,8 @@ const Page = () => {
       let token = data.data.token
       let user = data.data.user
       let authUser = {
+        userId: user.id,
+        role: user.userGroupId,
         username: user.username,
         uFirstName: user.uFirstName,
         uLastName: user.uLastName,

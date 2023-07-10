@@ -1,5 +1,6 @@
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
+import Badge from "@/components/Badge";
 
 const DropdownAction = () => {
     return (
@@ -7,6 +8,42 @@ const DropdownAction = () => {
             <DropdownItem href="#">Simulasi Calon Nasabah</DropdownItem>
             <DropdownItem href="#">Ubah Data</DropdownItem>
         </Dropdown>
+    )
+}
+
+const workflowStatus = (row) => {
+    let workflowStatus = '';
+
+    if (row.bicheck){
+        if(row.bicheck.biCheckStatusId){
+            workflowStatus = <Badge variant={'success'}>Completed</Badge>
+        } else {
+            if(row.bicheck.document.length > 0){
+                workflowStatus = <Badge variant={'warning'}>Uploaded</Badge>
+            } else {
+                workflowStatus = <Badge variant={'light'}>Progress Slik</Badge>
+            }
+        }
+    } else {
+        workflowStatus = <Badge variant={'success'}>SlikChecking</Badge>
+    }
+
+    return (
+        workflowStatus
+    )
+}
+
+const hasilAnalisa = (row) => {
+    let statusNasabah = '';
+
+    if(row.scoringRange && row.scoringRange.isLayak){
+        statusNasabah = <Badge variant={'success'}>Layak</Badge>
+    } else {
+        statusNasabah = <Badge variant={'danger'}>Tidak Layak</Badge>
+    }
+
+    return (
+        statusNasabah
     )
 }
 
@@ -28,7 +65,7 @@ export const columns = [
     },
     {
         name: 'Jenis Nasabah',
-        selector: (row) => row.idChannel === 2 ? <span className="bg-secondary text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-secondary dark:text-white">SIP</span> : <span className="bg-primary text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-primary dark:text-white">Calon Nasabah</span>,
+        selector: (row) => row.idChannel === 2 ? <Badge variant={'light'}>SIP</Badge> : <Badge variant={'success'}>Calon Nasabah</Badge>,
         cellExport: row => row.idChannel,
         sortable: true,
         center: false,
@@ -64,8 +101,8 @@ export const columns = [
     },
     {
         name: 'Plafon',
-        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
-        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
+        selector: (row) => formatRupiah(row.plafon),
+        cellExport: row => formatRupiah(row.plafon),
         sortable: true,
         center: false,
         wrap: true,
@@ -89,24 +126,24 @@ export const columns = [
     },
     {
         name: 'Angsuran Promo',
-        selector: (row) => row.nmProspek,
-        cellExport: row => row.nmProspek,
+        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranPromo) : formatRupiah(0),
+        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranPromo) : formatRupiah(0),
         sortable: true,
         center: false,
         wrap: true,
     },
     {
         name: 'Status',
-        selector: (row) => row.nmProspek,
-        cellExport: row => row.nmProspek,
+        selector: (row) => workflowStatus(row),
+        cellExport: row => row.id,
         sortable: true,
         center: false,
         wrap: true,
     },
     {
         name: 'Hasil Analisa',
-        selector: (row) => row.nmProspek,
-        cellExport: row => row.nmProspek,
+        selector: (row) => hasilAnalisa(row),
+        cellExport: row => row.id,
         sortable: true,
         center: false,
         wrap: true,
