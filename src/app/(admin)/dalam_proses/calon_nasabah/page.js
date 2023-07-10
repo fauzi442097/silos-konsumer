@@ -1,9 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from "react"
-import { useLoadingStore } from "@/stores/loading";
+import React, { useEffect } from "react"
 import { useMySwal } from "@/hooks/useMySwal";
-import { API } from "@/config/api";
 import { columns } from "./columns";
 
 import Card from "@/components/Card";
@@ -34,7 +32,7 @@ const Page = () => {
                         dense={true}
                         withFilter={true}
                         columns={columns}
-                        data={listCalonNasabah}
+                        data={data}
                         pagination={true}
                         paginationComponentOptions={{ noRowsPerPage: true }}
                         paginationPerPage={10}

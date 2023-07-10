@@ -89,18 +89,17 @@ function GET(url, datatable = false) {
 function GETWITHBODY(url,body) {
   let auth = cookies.get('auth')
   let token = auth.token
-  console.log({body, token, auth})
+  console.log({url, body})
   return mainAPI
     .get(url, body, {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((res) => {
       let resData = [];
       resData['status'] = res.status;
       resData['data'] = res.data.data;
-
       if ( datatable ) {
         // Only For Get DataTablee
         resData['meta'] = res.data.meta;

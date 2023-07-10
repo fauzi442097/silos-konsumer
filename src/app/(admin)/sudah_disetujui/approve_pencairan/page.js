@@ -20,13 +20,16 @@ const Page = () => {
     const mySwal = useMySwal();
 
     let auth = cookies.get('auth')
-    console.log(auth);
 
     const getPencairan = async (page) => {
         setLoading(true)
         let body = [
             {
-                "statusPembiayaan": 5,
+                userId: auth.user.userId,
+                branchId: auth.user.branch.id,
+                statusPembiayaan: [5],
+                page: page,
+                // 'search': keyword,
             }
         ];
         let url = `/master/nasabah/status?page=${page}`;
