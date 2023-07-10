@@ -127,6 +127,7 @@ const MyDataTable = ({ columns, data, withFilter = true, ...props }) => {
    headRow: {
 		style: {
 			borderBottom: 'none',
+         marginBottom: '3px'
 		},
 		denseStyle: {
 			minHeight: '50px',

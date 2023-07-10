@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
+    "@tanstack/react-query": "^4.29.19",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "chroma-js": "^2.4.2",
@@ -30,6 +31,7 @@
     "react-data-table-component-extensions": "^1.6.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.3",
+    "react-loading-skeleton": "^3.3.1",
     "react-popper": "^2.3.0",
     "react-tailwindcss-datepicker": "^1.6.1",
     "react-tailwindcss-select": "^1.8.5",

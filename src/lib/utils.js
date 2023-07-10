@@ -16,3 +16,5 @@ export function formatRupiah(value) {
 export function formatTanggal(value){
    return new moment(value).format('LL');
 }
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

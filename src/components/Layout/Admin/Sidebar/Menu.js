@@ -35,7 +35,7 @@ const MenuItem = ({ name, icon, url, className, subMenu, id}) => {
       <li className={cn(['menu-item', className, activeMenu && 'active'])}>
          {
             !subMenu ? 
-            (<Link href={url} id={id} onClick={() => {setOpenSideMenu(-1);setOpenSidebarMobile(false)}}>
+            (<Link prefetch={false} href={url} id={id} onClick={() => {setOpenSideMenu(-1);setOpenSidebarMobile(false)}}>
                <span className="menu-icon text-xs">
                   <span dangerouslySetInnerHTML={{ __html: icon }} />
                </span>
@@ -117,7 +117,7 @@ const SubMenu = ({ items }) => {
          {items.map((item, index) => {
             return (<motion.div variants={menuItemAnimation} key={index} custom={index}> 
                      <li className={cn(['sub-menu-item', pathname.startsWith(item.url) && 'active'])} key={item.id}>
-                        <Link href={item.url} onClick={() => setOpenSidebarMobile(false)}>
+                        <Link prefetch={false} href={item.url} onClick={() => setOpenSidebarMobile(false)}>
                            <span className="submenu-icon">
                               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M0 0h24v24H0z"/><path fill="currentColor" d="M12 7a5 5 0 1 1-4.995 5.217L7 12l.005-.217A5 5 0 0 1 12 7z"/></g></svg>
                            </span>
