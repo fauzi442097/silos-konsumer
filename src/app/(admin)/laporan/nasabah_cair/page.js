@@ -50,10 +50,7 @@ const Page = () => {
         <>
             <PageTitle title="Nasabah Cair" />
             <Card>
-                <Card.Header className="flex justify-between flex-wrap items-center">
-                    <h3> Nasabah Cair </h3>
-                </Card.Header>
-                <Card.Body>
+                <Card.Body className={'without-filter py-4'}>
                     <MyDataTable
                         dense={true}
                         withFilter={true}
