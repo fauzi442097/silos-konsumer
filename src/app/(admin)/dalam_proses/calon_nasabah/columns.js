@@ -139,6 +139,7 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 2
     },
     {
         name: 'Hasil Analisa',
@@ -147,5 +148,6 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
+        grow: 2
     },
 ]

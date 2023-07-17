@@ -1,10 +1,12 @@
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
 
-const DropdownAction = () => {
+const DropdownAction = ({row}) => {
+
+    console.log(row)
     return (
         <Dropdown>
-            <DropdownItem href="/form"> Lihat Data </DropdownItem>
+            <DropdownItem href={`/dalam_proses/new_entry/${row.id}`}> Lihat Data </DropdownItem>
             <DropdownItem href="/form"> Ubah Data </DropdownItem>
             <DropdownItem href="/form"> Slik </DropdownItem>
             <DropdownItem href="/form"> Upload Dokumen Slik </DropdownItem>
@@ -27,7 +29,7 @@ export const columns = [
     },
     {
         name: 'Aksi',
-        cell: (row, index, column, id) => <DropdownAction/>,
+        cell: (row, index, column, id) => <DropdownAction row={row}/>,
         ignoreRowClick: false,
         allowOverflow: true,
         button: true,

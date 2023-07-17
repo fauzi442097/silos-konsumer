@@ -7,7 +7,7 @@ const useDataTable = (key, url) => {
         queryFn: async () => {
             const res = await API.GET(url, true)
             if ( res.status != 200 )  return Promise.reject(new Error(res.statusText))
-            return res.data
+            return res
         },
         keepPreviousData : true
     })

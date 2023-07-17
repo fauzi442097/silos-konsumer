@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from "react"
+import React, { useState } from "react"
 import { useMySwal } from "@/hooks/useMySwal";
 import { columns } from "./columns";
 
@@ -20,6 +20,7 @@ const Page = () => {
 
     const [page, setPage] = useState(1)
     const { data, isLoading, isFetching, isPreviousData, isError, error } = useDataTable(['getCalonNasabah', page], `/master/prospek/ao?param=complete&page=${page}`)
+
     const handlePageChange = async (page) => setPage(page);
 
     if ( isError) throw new Error(error.message)
@@ -29,7 +30,7 @@ const Page = () => {
     return (
         <>
             <PageTitle title="Calon Nasabah" />
-            <Card>
+            <Card className={'without-filter'}>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}>
                     <h3> Calon Nasabah </h3>
                 </Card.Header>

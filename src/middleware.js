@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
+import { mainAPI } from "./config/api"
 
 export function middleware(request) {
-
    const isAuthenticated = request.cookies.has('auth')
    const route = request.nextUrl.pathname
    if ( route != '/login' && !isAuthenticated ) return NextResponse.redirect(new URL('/login', request.url))
