@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from "react"
+import React, { useState } from "react"
 import { useMySwal } from "@/hooks/useMySwal";
 import { columns } from "./columns";
 
@@ -9,21 +9,28 @@ import MyDataTable from "@/components/Datatable/MyDatatable";
 import LoadingTable from "@/components/Datatable/LoadingTable";
 import PageTitle from "@/components/PageTitle";
 import useDataTable from "@/hooks/useDataTable";
-
+import { FetchingDataError } from "@/lib/exceptions";
 
 const Page = () => {
     const mySwal = useMySwal();
-    const { data, loading, error, totalRows, getData } = useDataTable(`/master/prospek/ao?param=complete&page=1`)
-    const handlePageChange = async (page) => getData(page);
 
-    useEffect(() => {
-        if ( error ) return mySwal[error.type](error.message)
-    }, [error])      
+    const showMessage = () => {
+        mySwal.warning('Tes 123')
+    }
+
+    const [page, setPage] = useState(1)
+    const { data, isLoading, isFetching, isPreviousData, isError, error } = useDataTable(['getCalonNasabah', page], `/master/prospek/ao?param=complete&page=${page}`)
+
+    const handlePageChange = async (page) => setPage(page);
+
+    if ( isError) throw new Error(error.message)
+    if ( data && data?.rc != 200 ) throw new FetchingDataError(data?.rm)
+
 
     return (
         <>
             <PageTitle title="Calon Nasabah" />
-            <Card>
+            <Card className={'without-filter'}>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}>
                     <h3> Calon Nasabah </h3>
                 </Card.Header>
@@ -32,15 +39,15 @@ const Page = () => {
                         dense={true}
                         withFilter={true}
                         columns={columns}
-                        data={data}
+                        data={data?.data}
                         pagination={true}
                         paginationComponentOptions={{ noRowsPerPage: true }}
                         paginationPerPage={10}
                         paginationServer
                         noRowsPerPage={true}
-                        progressPending={loading}
-                        paginationTotalRows={totalRows}
+                        paginationTotalRows={data?.meta?.total}
                         onChangePage={handlePageChange}
+                        progressPending={isLoading}
                         progressComponent={<LoadingTable />}
                     />
                 </Card.Body>

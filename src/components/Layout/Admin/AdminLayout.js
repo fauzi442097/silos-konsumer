@@ -10,6 +10,8 @@ import Preloader from './Header/Preloader'
 import { Sidebar } from './Sidebar'
 import { cn } from '@/lib/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const MySwal = dynamic(() => import('../../../components/Swal/MySwal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
 const MyToast = dynamic(() => import('../../../components/Toast/MyToast'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'}/> });
@@ -41,6 +43,7 @@ const AdminLayout = ({ children }) => {
               </div>
             </div>
         </body>
+        <ReactQueryDevtools />
       </QueryClientProvider>
   )
 }

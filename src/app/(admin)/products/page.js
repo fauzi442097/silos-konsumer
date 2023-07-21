@@ -20,7 +20,6 @@ const Page = () => {
    const { data, isLoading, isError, error } = useDataTable(['getProduct', page], `${PUBLIC_DUMMY_API}/products?limit=10&skip=${page}`)
    const handlePageChange = (numPage) => setPage((numPage * 10) - 10)
 
-
  
   return (
     <>
