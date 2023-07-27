@@ -42,8 +42,8 @@ const AdminLayout = ({ children }) => {
                 </main>
               </div>
             </div>
+            <ReactQueryDevtools />
         </body>
-        <ReactQueryDevtools />
       </QueryClientProvider>
   )
 }

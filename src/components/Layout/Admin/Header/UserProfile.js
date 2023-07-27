@@ -70,7 +70,7 @@ const UserProfile = ({ setShowDropdownTopbar, divRef, className, ...props }) => 
                     </ItemUserProfileMenu>
                     <ItemUserProfileMenu>
                         <span dangerouslySetInnerHTML={{ __html: LogOutIcon }}/>
-                        <a href="" onClick={(e) => logOut(e)}> Logout </a>
+                        <a href="#" onClick={(e) => logOut(e)}> Logout </a>
                     </ItemUserProfileMenu>
                 </ul>
             </div>

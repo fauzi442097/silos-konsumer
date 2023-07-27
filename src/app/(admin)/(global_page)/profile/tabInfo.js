@@ -1,6 +1,7 @@
 import Skeleton from "react-loading-skeleton"
-import { Info } from "./page"
+
 import { formatRupiah, formatTanggal } from "@/lib/utils"
+import { Info } from "./[id]/page"
 
 export const TabProfile = ({dataProspek, isLoadingContent}) => {
 
@@ -8,7 +9,7 @@ export const TabProfile = ({dataProspek, isLoadingContent}) => {
         <div id="tab-profile">
             <div className="mb-8">
                 <p className="text-muted text-xl mt-4 mb-2 font-inter-medium"> Data Alamat </p>
-                <div className='grid grid-cols-3 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                     <Info className={'my-0'} label="Alamat KTP" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.alamat}/>
                     <Info className={'my-0'} label="Alamat Domisili" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.alamatDomisili}/>
                     <Info className={'my-0'} label="Kode POS" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.kodePos} />
@@ -27,7 +28,7 @@ export const TabProfile = ({dataProspek, isLoadingContent}) => {
                 dataProspek?.isMenikah ? (
                     <div>
                         <p className="text-muted text-xl mt-4 mb-2 font-inter-medium"> Data Pasangan </p>
-                        <div className='grid grid-cols-3 gap-4'>
+                        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                             <Info className={'my-0'} label="Nama" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.namaPasangan}/>
                             <Info className={'my-0'} label="No KTP" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.noKtpPasangan}/>
                             <Info className={'my-0'} label="Pekerjaan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.pekerjaanPasangan?.nmPekerjaan} />
@@ -44,25 +45,25 @@ export const TabProfile = ({dataProspek, isLoadingContent}) => {
 export const TabPekerjaan = ({ dataProspek, isLoadingContent}) => {
     return (
         <div id="tab-pekerjaan" className="my-4">
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <Info label="Pekerjaan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.pekerjaanName}/>
                 <Info label="Jabatan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.jabatanKerja.nmPekerjaan}/>
                 <Info label="NPWP" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.npwp || '-'}/>
             </div>
 
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <Info label="Nama Kantor" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.officeName}/>
                 <Info label="Alamat Kantor" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.officeAddress}/>
                 <Info label="Nama Pimpinan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.pimpinan || '-'}/>
             </div>
 
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <Info label="Sumber Pendapatan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.sumberPendapatan}/>
                 <Info label="Pendapatan Bulanan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.pendapatanBulan)}/>
                 <Info label="Penghasilan Lain" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.pendapatanLainnya)}/>
             </div>
 
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <Info label="ULP" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.pendapatanLainnya2)}/>
                 <Info label="Jenis Usaha Sampingan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.jenisUsahaSampingan}/>
             </div>
@@ -74,7 +75,7 @@ export const TabPekerjaan = ({ dataProspek, isLoadingContent}) => {
 export const TabPembiayaan = ({ dataProspek, isLoadingContent }) => {
     return (
         <div id="tab-pekerjaan" className="my-4">
-            <div className='grid grid-cols-3 gap-4'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                 <Info label="Produk" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.productName}/>
                 <Info label="Pekerjaan" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : dataProspek.pekerjaanName}/>
                 <Info label="Suku Bunga" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : `${dataProspek.rate}%`}/>
@@ -97,7 +98,7 @@ export const TabPembiayaan = ({ dataProspek, isLoadingContent }) => {
 
             <div className="mt-4">
                 <p className="text-muted text-xl font-inter-medium mb-2"> Data Biaya </p>
-                <div className='grid grid-cols-4 gap-4'>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
                     <Info label="Biaya Provisi" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.byProvisi)}/>
                     <Info label="Biaya Asuransi" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.byAsuransi)}/>
                     <Info label="Biaya Administrasi" value={isLoadingContent ? <Skeleton height={15} borderRadius={'0.5rem'}/>  : formatRupiah(dataProspek.byAdministrasi)}/>

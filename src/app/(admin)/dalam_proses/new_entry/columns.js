@@ -6,7 +6,7 @@ const DropdownAction = ({row}) => {
     console.log(row)
     return (
         <Dropdown>
-            <DropdownItem href={`/dalam_proses/new_entry/${row.id}`}> Lihat Data </DropdownItem>
+            <DropdownItem href={`/profile/${row.id}?type=prospect`}> Lihat Data </DropdownItem>
             <DropdownItem href="/form"> Ubah Data </DropdownItem>
             <DropdownItem href="/form"> Slik </DropdownItem>
             <DropdownItem href="/form"> Upload Dokumen Slik </DropdownItem>

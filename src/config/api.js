@@ -88,11 +88,14 @@ function GET(url, datatable = false) {
       let error = res.response;
       let resData = [];
 
+      console.log({error})
+
       if (error.status === 403) {
         logout()
       }
       resData['status'] = error.status;
       resData['data'] = error.data;
+      resData['statusText'] = error.statusText;
       return resData;
     });
 }
