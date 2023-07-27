@@ -38,7 +38,7 @@ const FormSelect = () => {
       <div className='w-full flex gap-4 my-4'>
          <div className='w-1/2'> 
             <label className='block mb-1.5'> Select </label>
-         <MySelect options={options} value={animal} onChange={handleChange}/>
+            <MySelect options={options} value={animal} onChange={handleChange}/>
          </div>
          <div className='w-1/2'> 
             <label className='block mb-1.5'> Select With Searching </label>

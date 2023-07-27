@@ -1,22 +1,6 @@
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
 
-const DropdownAction = ({row}) => {
-
-    console.log(row)
-    return (
-        <Dropdown>
-            <DropdownItem href={`/profile/${row.id}?type=prospect`}> Lihat Data </DropdownItem>
-            <DropdownItem href="/form"> Ubah Data </DropdownItem>
-            <DropdownItem href="/form"> Slik </DropdownItem>
-            <DropdownItem href="/form"> Upload Dokumen Slik </DropdownItem>
-            <DropdownItem href="/form"> Checklist Dokumen </DropdownItem>
-            <DropdownItem href="/form"> Edit Biaya Lainnya </DropdownItem>
-            <DropdownItem href="/form"> Kirim Prospek </DropdownItem>
-        </Dropdown>
-    )
-}
-
 
 export const columns = [
     {

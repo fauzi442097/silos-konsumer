@@ -12,6 +12,10 @@ import { useMySwal } from "@/hooks/useMySwal";
 import { columns } from "./columns";
 import useDataTable from "@/hooks/useDataTable";
 import { FetchingDataError } from "@/lib/exceptions";
+import ModalKirimProspek from "./modal";
+import Dropdown, { DropdownItem } from "@/components/Dropdown";
+import { formatRupiah } from "@/lib/utils";
+import useGet from "@/hooks/useGet";
 
 
 const Page = () => {
@@ -20,16 +24,101 @@ const Page = () => {
     const mySwal = useMySwal();
 
     const [ page, setPage ] = useState(1)
+    const [ showModalProspek, setShowModalProspek ] = useState(false)
+
+
+    const DropdownAction = ({row}) => {
+        return (
+            <Dropdown>
+                <button className="dropdown-item" onClick={() => setShowModalProspek(true)}> Kirim Prospek </button>
+                <DropdownItem href={`/profile/${row.id}?type=prospect`}> Lihat Data </DropdownItem>
+                <DropdownItem href="/form"> Ubah Data </DropdownItem>
+                <DropdownItem href="/form"> Slik </DropdownItem>
+                <DropdownItem href="/form"> Upload Dokumen Slik </DropdownItem>
+                <DropdownItem href="/form"> Checklist Dokumen </DropdownItem>
+                <DropdownItem href="/form"> Edit Biaya Lainnya </DropdownItem>
+            </Dropdown>
+        )
+    }
+
+    const columns = [
+        {
+            name: 'ID',
+            selector: (row) => row.id,
+            sortable: true,
+            center: true,
+            wrap: true,
+            omit: true
+        },
+        {
+            name: 'Aksi',
+            cell: (row, index, column, id) => <DropdownAction row={row}/>,
+            ignoreRowClick: false,
+            allowOverflow: true,
+            button: true,
+        },
+        {
+            name: 'Nama Nasabah',
+            selector: (row) => row.nmProspek,
+            cellExport: row => row.nmProspek,
+            sortable: true,
+            center: false,
+            wrap: true,
+        },
+        {
+            name: 'NIK',
+            selector: (row) => row.noIdentitas,
+            cellExport: row => row.noIdentitas,
+            sortable: true,
+            center: false,
+            wrap: true
+        },
+        {
+            name: 'Produk',
+            selector: (row) => row.productName,
+            cellExport: row => row.productName,
+            sortable: true,
+            center: false,
+            wrap: true
+        },
+        {
+            name: 'Plafon',
+            selector: (row) => formatRupiah(row.plafon),
+            cellExport: row => row.plafon,
+            sortable: true,
+            right: true,
+            wrap: true
+        },
+        {
+            name: 'Jangka Waktu (Bulan)',
+            selector: (row) => row.jangkaWaktu,
+            cellExport: row => row.jangkaWaktu,
+            sortable: true,
+            right: true,
+            wrap: true,
+        },
+        {
+            name: 'Angsuran',
+            selector: (row) => formatRupiah(row.totalAngsuran),
+            cellExport: row => row.totalAngsuran,
+            sortable: true,
+            right: true,
+            wrap: true
+        }
+    ];
+
+
     const { data, isLoading, isFetching, isError, error } = useDataTable(['getNewEntry', page], `/master/prospek?page=${page}`)
-
     const handlePageChange = async (page) => setPage(page);
-
     if ( isError) throw new Error(error.message)
     if ( data && data?.rc != 200 ) throw new FetchingDataError(data?.rm)
+
+    const branchQuery = useGet(['branch'], 'master/list/branch', {retry: 1,refetchOnWindowFocus: false})
 
     return (
         <>
             <PageTitle title={'New Entry'}/>
+            { showModalProspek && <ModalKirimProspek branchQuery={branchQuery} showModal={showModalProspek} setShowModal={setShowModalProspek} />}
             <Card>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}> 
                     <h3> Daftar Prospek Baru </h3>

@@ -11,10 +11,7 @@ import useGet from '@/hooks/useGet'
 import DataNotFound from '@/components/DataNotFound'
 import Button, { buttonVariants } from '@/components/Button'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-
-
 
 export const Info = ({label, value, className}) => {
   return (
