@@ -44,15 +44,7 @@ const Page = () => {
       if ( status != 200 ) return setAlert({show: true, rc: status, message: statusText})
       let token = data.data.token
       let user = data.data.user
-      let authUser = {
-        userId: user.id,
-        role: user.userGroupId,
-        username: user.username,
-        uFirstName: user.uFirstName,
-        uLastName: user.uLastName,
-        email: user.email,
-        branch: user.branch
-      }
+      let authUser = user
       setAuth(token,authUser)
       router.push('/')  
   }

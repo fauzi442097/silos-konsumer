@@ -16,21 +16,27 @@ import ModalKirimProspek from "./modal";
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
 import useGet from "@/hooks/useGet";
+import useAuth from "@/hooks/useAuth";
 
 
 const Page = () => {
 
     const router = useRouter();
-    const mySwal = useMySwal();
-
+    
     const [ page, setPage ] = useState(1)
     const [ showModalProspek, setShowModalProspek ] = useState(false)
+    const [ idProspectSelected, setIdProspectSelected ] = useState(null)
+
+    const handleShowModalProspek = (id) => {
+        setShowModalProspek(true)
+        setIdProspectSelected(id)
+    }
 
 
     const DropdownAction = ({row}) => {
         return (
             <Dropdown>
-                <button className="dropdown-item" onClick={() => setShowModalProspek(true)}> Kirim Prospek </button>
+                <button className="dropdown-item" onClick={() => handleShowModalProspek(row.id)}> Kirim Prospek </button>
                 <DropdownItem href={`/profile/${row.id}?type=prospect`}> Lihat Data </DropdownItem>
                 <DropdownItem href="/form"> Ubah Data </DropdownItem>
                 <DropdownItem href="/form"> Slik </DropdownItem>
@@ -113,12 +119,15 @@ const Page = () => {
     if ( isError) throw new Error(error.message)
     if ( data && data?.rc != 200 ) throw new FetchingDataError(data?.rm)
 
-    const branchQuery = useGet(['branch'], 'master/list/branch', {retry: 1,refetchOnWindowFocus: false})
+    // Get List Branch
+    const { auth } = useAuth()
+    const urlListBranch = auth.user.userGroupId == 1 ? `master/list/branch?idBranch=${auth.user.idBranch}` : 'master/list/branch'
+    const branchQuery = useGet(['branch'], urlListBranch, {retry: 1,refetchOnWindowFocus: false})
 
     return (
         <>
             <PageTitle title={'New Entry'}/>
-            { showModalProspek && <ModalKirimProspek branchQuery={branchQuery} showModal={showModalProspek} setShowModal={setShowModalProspek} />}
+            { showModalProspek && <ModalKirimProspek idProspect={idProspectSelected} branchQuery={branchQuery} showModal={showModalProspek} setShowModal={setShowModalProspek} />}
             <Card>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}> 
                     <h3> Daftar Prospek Baru </h3>

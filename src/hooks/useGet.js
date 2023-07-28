@@ -1,7 +1,5 @@
 import { API } from '@/config/api';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { useMySwal } from './useMySwal';
 
 const useGet = (key, url, config) => {
     const result = useQuery({

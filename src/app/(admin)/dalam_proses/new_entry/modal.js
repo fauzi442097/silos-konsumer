@@ -5,30 +5,57 @@ import Preloader from '@/components/Layout/Admin/Header/Preloader'
 import Modal from '@/components/Modal/ModalSection';
 import Button, { ButtonCloseModal } from '@/components/Button';
 import MySelect from '@/components/Form/Select';
+import { useMySwal } from '@/hooks/useMySwal';
+import { useQueryClient } from '@tanstack/react-query';
+import usePost from '@/hooks/usePost';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const MyModal = dynamic(() => import('../../../../components/Modal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'} /> })
 
-const options = [
-    { value: "fox", label: "Cabang Utama Kupang" },
-    { value: "Butterfly", label: "Butterfly" },
-    { value: "Honeybee", label: "Honeybee" }
-];
+const createListBranch = (branchQuery) => {
+    if ( branchQuery.isError ) {
+        return [{
+            value: '-',
+            label: branchQuery.error,
+            disabled: true
+        }]
+    }
 
-const createListBranch = (branch) => {
-    const lists = branch.map((item) => {
+    const branch = branchQuery.data?.data?.data
+    return branch.map((item) => {
         return {
             value: item.id,
             label: item.branchName
         }
     })
-    return lists
 }
 
-const ModalKirimProspek = ({ showModal, setShowModal, branchQuery}) => {
+const ModalKirimProspek = ({ showModal, setShowModal, branchQuery, idProspect}) => {
 
-   const branch = branchQuery.data?.data?.data
+    const queryClient = useQueryClient()
+
+   const branch = createListBranch(branchQuery)
    const [branchSelected, setBranchSelected] = useState(null);
    const [error, setError] = useState(false)
+   const [payload, setPayload] = useState(null)
+
+   const mutation = usePost(['pengajuan-prospect'], '/master/prospek/pengajuan', payload, {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.error(error.rm)
+        },
+        onSuccess: (data, variables, context) => {
+            setShowModal(false)
+            queryClient.invalidateQueries(['getNewEntry']);
+            let message = data.data.rm
+            mySwal.success(message, 'Sukses')
+            // mySwal.success('Data prospek berhasil dikirim', 'Sukses')
+            
+        },
+    });
+
+   const mySwal = useMySwal();
    
    const handleChange = value => {
         setBranchSelected(value);
@@ -37,6 +64,11 @@ const ModalKirimProspek = ({ showModal, setShowModal, branchQuery}) => {
 
    const kirimProspek = () => {
         if ( !branchSelected ) return setError(true)
+        setPayload({
+            id: idProspect,
+            branchId: branchSelected.value,
+        })
+        mutation.mutate(payload)
    }
 
   return (
@@ -50,13 +82,25 @@ const ModalKirimProspek = ({ showModal, setShowModal, branchQuery}) => {
                 <Modal.Body>
                     <div>
                         <p className='mb-2'> Cabang Proses </p>
-                        <MySelect selectInModal withSearch options={branch ? createListBranch(branch) : []} value={branchSelected} onChange={handleChange}/>
+                        <MySelect 
+                            selectInModal
+                             withSearch 
+                             options={branch} 
+                             value={branchSelected} 
+                             onChange={handleChange}
+                             placeholder='Pilih cabang proses'
+                        />
                         {error && <span className='mt-1 block text-sm form-invalid-message'> Pilih cabang proses </span>}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant={'clean'} onClick={() => setShowModal(prev => !prev)}> Batal </Button>
-                    <Button onClick={() => kirimProspek()}> Kirim Prospek </Button>
+                    <Button 
+                        onClick={() => kirimProspek()}
+                        className={`${mutation.isLoading && 'cursor-not-allowed'}`}> 
+                        {mutation.isLoading && <LoadingSpinner/>} 
+                        {mutation.isLoading ? 'Processing ...' : 'Kirim Prospek'} 
+                    </Button>
                 </Modal.Footer>
             </MyModal>
         }
