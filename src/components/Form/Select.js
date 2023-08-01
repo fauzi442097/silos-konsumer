@@ -1,12 +1,27 @@
 import React from 'react'
+import { forwardRef } from 'react';
 import Select from "react-tailwindcss-select";
 
-const MySelect = ({ selectInModal = false ,withSearch = false, disabled = false, ...props}) => {
+// eslint-disable-next-line react/display-name
+const MySelect = forwardRef(({ 
+   selectInModal = false,
+   withSearch = false, 
+   disabled = false, 
+   errors,
+   validation,
+   register, 
+   ...props
+}, ref) => {
+
+
   return (
-   <Select
+   <div>
+      <Select
          isSearchable={withSearch}
          isDisabled={disabled}
          isMultiple={props.isMultiple}
+         {...register && {...register(name, validation)} }
+         ref={null}
          classNames={{ 
             menuButton: ({ isDisabled }) => (
                   `flex text-sm py-0.5 px-4 border rounded rounded-xl my-0 transition duration-300 focus:outline-none enabled:focus:ring-1 enabled:focus:ring-primary ${
@@ -33,7 +48,9 @@ const MySelect = ({ selectInModal = false ,withSearch = false, disabled = false,
          primaryColor={"emerald"}
          {...props}
       />
+      {errors && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
+   </div>
   )
-}
+});
 
 export default MySelect

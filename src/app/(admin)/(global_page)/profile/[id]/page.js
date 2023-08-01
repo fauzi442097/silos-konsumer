@@ -22,13 +22,13 @@ export const Info = ({label, value, className}) => {
   )
 }
 
-export const InfoProfile = ({ label, value}) => {
+export const InfoProfile = ({ label, value, className, labelClass, valueClass}) => {
 
   return (
-    <div className='flex flex-wrap justify-between items-center my-2'>
-        <p className='text-muted flex-1'> {label} </p>
-        <p className='flex-1 text-right text-lg dark:text-grey'> {value} </p>
-      </div>
+    <div className={cn('flex flex-wrap justify-between items-center my-2', className)}>
+      <p className={cn('text-muted flex-1', labelClass)}> {label} </p>
+      <p className={cn('flex-1 text-right text-lg dark:text-grey', valueClass)}> {value} </p>
+    </div>
   )
 }
 

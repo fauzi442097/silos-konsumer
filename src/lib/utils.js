@@ -18,3 +18,8 @@ export function formatTanggal(value){
 }
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export const generateId = () => {
+   var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+   return randLetter + Date.now();
+}

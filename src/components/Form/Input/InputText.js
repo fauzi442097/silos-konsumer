@@ -8,6 +8,7 @@ const InputText = ({
   register, 
   ...props 
 }) => {
+
    return (
      <>
        <input 
