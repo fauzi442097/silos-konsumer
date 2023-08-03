@@ -694,15 +694,23 @@
   }
 
   .tab-nasabah {
-    @apply cursor-pointer px-4 py-2 rounded-tl-xl rounded-tr-xl
+    @apply cursor-pointer px-2 py-2 border-b-2 border-transparent
   }
 
   .tab-nasabah:hover {
-    @apply bg-light-primary dark:bg-dark-depth1
+    @apply text-primary dark:text-grey border-primary
   }
 
   .tab-nasabah.active {
-    @apply bg-primary text-white dark:bg-primary-800 dark:text-grey
+    @apply  border-primary dark:border-primary-600
+  }
+
+  .tab-nasabah .title-tab-nasabah {
+    @apply text-xl font-inter-medium text-gray-600 mb-0 flex flex-wrap gap-2 items-center dark:text-grey
+  }
+
+  .tab-nasabah.active .title-tab-nasabah {
+    @apply  dark:text-primary-600 text-primary
   }
 
 }

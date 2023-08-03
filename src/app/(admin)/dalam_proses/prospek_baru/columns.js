@@ -5,7 +5,8 @@ const DropdownAction = () => {
     return (
         <Dropdown>
             <DropdownItem href="/lanjutkan"> Lanjutkan </DropdownItem>
-            <DropdownItem href="/batal_pengajuan_prospek"> Batalkan Pengajuan Prospek </DropdownItem>
+            <DropdownItem href="/batal_pengajuan_prospek"> Batalkan Pengajuan </DropdownItem>
+            <button className="dropdown-item" onClick={() => handleShowModalProspek(row.id)}> Batalkan Pengajuan </button>
         </Dropdown>
     )
 }
@@ -30,14 +31,6 @@ export const columns = [
         name: 'Nama Nasabah',
         selector: (row) => row.nmProspek,
         cellExport: row => row.nmProspek,
-        sortable: true,
-        center: false,
-        wrap: true,
-    },
-    {
-        name: 'NIK',
-        selector: (row) => row.noIdentitas,
-        cellExport: row => row.noIdentitas,
         sortable: true,
         center: false,
         wrap: true,

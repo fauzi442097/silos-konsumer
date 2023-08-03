@@ -104,15 +104,34 @@ const DetailProfile = ({params}) => {
           </div>
 
           <div className='card bg-white dark:bg-dark-depth1 p-8 w-full md:flex-[3] self-start' style={boxShadowCardStyle}> 
-            <div className='flex flex-2 border-b gap-2 flex-wrap'>
+            <div className='flex flex-2 border-b gap-4 flex-wrap'>
               <div className={cn(['tab-nasabah', showTab.profile && 'active'])} onClick={() => handleActiveTab('profile')}> 
-                <p className='text-xl font-inter-medium mb-0 dark:text-grey'> Data Profile </p> 
+                <p className='title-tab-nasabah'> 
+                  <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" fillRule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0Zm0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5H8Z" clipRule="evenodd"/>
+                      </svg>
+                  </span>
+                  Data Profile 
+                </p> 
               </div>
               <div className={cn(['tab-nasabah', showTab.pekerjaan && 'active'])} onClick={() => handleActiveTab('pekerjaan')}> 
-                <p className='text-xl font-inter-medium mb-0 dark:text-grey'> Data Pekerjaan </p> 
+                <p className='title-tab-nasabah'> 
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" fillRule="evenodd" d="M11 3a3 3 0 0 0-3 3v1H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3h-3V6a3 3 0 0 0-3-3h-2zm3 4h-4V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1z" clipRule="evenodd"/>
+                    </svg>
+                  </span>
+                  Data Pekerjaan
+                </p> 
               </div>
               <div className={cn(['tab-nasabah', showTab.pembiayaan && 'active'])} onClick={() => handleActiveTab('pembiayaan')}> 
-                <p className='text-xl font-inter-medium mb-0 dark:text-grey' onClick={() => handleActiveTab('pembiayaan')}> Data Pembiayaan </p> 
+                <p className='title-tab-nasabah'> 
+                  <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="M2 8a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8zm9 4a1 1 0 1 1 2 0a1 1 0 0 1-2 0zm1-3a3 3 0 1 0 0 6a3 3 0 0 0 0-6z" clipRule="evenodd"/></svg>
+                  </span>
+                  Data Pembiayaan 
+                </p> 
               </div>
             </div>
 

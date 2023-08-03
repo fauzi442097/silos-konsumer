@@ -130,7 +130,7 @@ const Page = () => {
             { showModalProspek && <ModalKirimProspek idProspect={idProspectSelected} branchQuery={branchQuery} showModal={showModalProspek} setShowModal={setShowModalProspek} />}
             <Card>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}> 
-                    <h3> Daftar Prospek Baru </h3>
+                    <h3> New Entry </h3>
                     <Button 
                         variant="primary"
                         onClick={() => router.push(`/dalam_proses/new_entry/form`)}
