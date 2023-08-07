@@ -36,16 +36,17 @@ const Page = () => {
 
   useEffect(() => {
     getMonitoringSIP(1);
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-      <PageTitle title="Prospek Baru" />
+      <PageTitle title="Debitur Baru" />
       <Card>
         <Card.Header className={'flex justify-between flex-wrap items-center'}>
-          <h3> Prospek Baru </h3>
+          <h3> Debitur Baru </h3>
         </Card.Header>
-        <Card.Body>
+        <Card.Body className={'without-filter'}>
           <MyDataTable
             withFilter={true}
             fixedHeader={true}

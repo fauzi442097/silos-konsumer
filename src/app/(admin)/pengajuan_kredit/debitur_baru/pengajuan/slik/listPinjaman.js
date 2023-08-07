@@ -125,7 +125,7 @@ const ListPinjaman = ({
       <div className='my-8'> 
          <div className='flex flex-wrap justify-between items-center mb-3'>
             <p className='text-lg font-inter-medium'> List Pinjaman </p>
-            <Button size={'sm'} variant={'outline'} onClick={() => addLoan()}> Tambah Pinjaman </Button>
+            <Button variant={'outline'} onClick={() => addLoan()}> Tambah Pinjaman </Button>
          </div>
 
          <div>

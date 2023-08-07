@@ -328,7 +328,7 @@
   }
 
   .card {
-    @apply rounded-2xl
+    @apply rounded-2xl shadow-[3px_0px_25px_0px_rgba(199,205,201,0.41)] dark:shadow-none
   }
 
   .btn {

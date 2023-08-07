@@ -43,24 +43,6 @@
     },
     {
         "id": 3,
-        "name": "Prospek Baru",
-        "url": "#",
-        "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 48 48'><g fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='4'><path d='M10 44h28a2 2 0 0 0 2-2V14H30V4H10a2 2 0 0 0-2 2v36a2 2 0 0 0 2 2ZM30 4l10 10'/><path d='m17 29l6 5l9-11'/></g></svg>",
-        "subMenu": [
-            {
-                "id": 7,
-                "name": "Debitur Baru",
-                "url": "/prospek_baru/debitur_baru"
-            },
-            {
-                "id": 7,
-                "name": "Debitur Top Up",
-                "url": "/sudah_disetujui/approve_pencairan"
-            }
-        ]
-    },
-    {
-        "id": 4,
         "name": "Pengajuan Kredit",
         "url": "#",
         "icon": "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 48 48'><g fill='none' stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='4'><path d='M10 44h28a2 2 0 0 0 2-2V14H30V4H10a2 2 0 0 0-2 2v36a2 2 0 0 0 2 2ZM30 4l10 10'/><path d='m17 29l6 5l9-11'/></g></svg>",
@@ -68,12 +50,12 @@
             {
                 "id": 7,
                 "name": "Debitur Baru",
-                "url": "/sudah_disetujui/approve_pencairan"
+                "url": "/pengajuan_kredit/debitur_baru"
             },
             {
-                "id": 7,
+                "id": 8,
                 "name": "Debitur Top Up",
-                "url": "/sudah_disetujui/approve_pencairan"
+                "url": "/pengajuan_kredit/approve_pencairan"
             }
         ]
     },
@@ -85,13 +67,8 @@
         "subMenu": [
             {
                 "id": 7,
-                "name": "Debitur Baru",
-                "url": "/sudah_disetujui/approve_pencairan"
-            },
-            {
-                "id": 7,
-                "name": "Debitur Top Up",
-                "url": "/sudah_disetujui/approve_pencairan"
+                "name": "List Debitur",
+                "url": "/pencairan_kredit/list_debitur"
             }
         ]
     }

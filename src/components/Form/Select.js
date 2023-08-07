@@ -10,6 +10,7 @@ const MySelect = forwardRef(({
    errors,
    validation,
    register, 
+   name,
    ...props
 }, ref) => {
 
