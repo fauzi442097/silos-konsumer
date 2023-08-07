@@ -1,6 +1,14 @@
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
 
+const DropdownAction = () => {
+    return (
+        <Dropdown>
+            <DropdownItem href="#">Simulasi Calon Nasabah</DropdownItem>
+            <DropdownItem href="#">Ubah Data</DropdownItem>
+        </Dropdown>
+    )
+}
 
 export const columns = [
     {

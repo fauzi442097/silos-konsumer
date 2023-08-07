@@ -20,11 +20,13 @@ const Page = () => {
 
   const getMonitoringSIP = async (page) => {
     setLoading(true)
-    const response = await API.GET(`/master/prospek/others?page=${page}`)
+    const response = await API.GET(`master/prospek?page=${page}`)
+    
     setLoading(false)
     if (response.status != 200) return mySwal.error(response.data.error)
-
-    let data = response.data
+    
+    let data = response.data.data
+    console.log(data);
     setListMonitoringSIP(data)
   }
 
@@ -34,14 +36,14 @@ const Page = () => {
 
   useEffect(() => {
     getMonitoringSIP(1);
-  }, []);
+  });
 
   return (
     <>
-      <PageTitle title="Monitoring SIP" />
+      <PageTitle title="Prospek Baru" />
       <Card>
         <Card.Header className={'flex justify-between flex-wrap items-center'}>
-          <h3> Monitoring SIP </h3>
+          <h3> Prospek Baru </h3>
         </Card.Header>
         <Card.Body>
           <MyDataTable

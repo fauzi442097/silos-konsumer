@@ -44,7 +44,7 @@ const Page = () => {
 
     useEffect(() => {
         getPencairan(1);
-    }, []);
+    });
 
     const handlePageChange = async (page) => {
         getPencairan(page)

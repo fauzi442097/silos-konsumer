@@ -21,7 +21,7 @@
     "framer-motion": "^10.12.16",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "13.4.3",
+    "next": "^13.4.13-canary.4",
     "nextjs-toploader": "^1.4.2",
     "postcss": "8.4.23",
     "react": "^18.2.0",

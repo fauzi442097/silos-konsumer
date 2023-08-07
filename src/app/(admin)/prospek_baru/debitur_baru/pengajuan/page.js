@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation"
 import PageTitle from "@/components/PageTitle"
 import Card from "@/components/Card"
 import Button from "@/components/Button"
-import DataNasabah from "./dataNasabah"
-import DataPasangan from "./dataPasangan"
-import DataPekerjaan from "./dataPekerjaan"
-import DataPembiayaan from "./dataPembiayaan"
-import DataBiaya from "./dataBiaya"
+import DataNasabah from "./data_debitur/DataNasabah"
+import DataPasangan from "./data_debitur/DataPasangan"
+import DataPekerjaan from "./data_debitur/DataPekerjaan"
+import DataPembiayaan from "./data_debitur/DataPembiayaan"
+import DataBiaya from "./data_debitur/DataBiaya"
+import DataDokumen from "./data_debitur/DataDokumen"
 
 const FormProspek = () => {
     const router = useRouter();
@@ -59,6 +60,12 @@ const FormProspek = () => {
                                 Data Biaya
                             </a>
                         </li>
+                        <li>
+                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 6 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 6 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                                Checklist Dokumen
+                            </a>
+                        </li>
                     </ul>
                 </Card.Header>
                 <Card.Body>
@@ -69,7 +76,8 @@ const FormProspek = () => {
                                 step === 2 ? <DataPasangan /> :
                                     step === 3 ? <DataPekerjaan /> :
                                         step === 4 ? <DataPembiayaan /> :
-                                            <DataBiaya />
+                                            step === 5 ? <DataBiaya /> :
+                                            <DataDokumen />
                         }
                     </div>
 
@@ -96,7 +104,7 @@ const FormProspek = () => {
                                     Previous
                                 </Button>
                             )}
-                            {step == 5 && (
+                            {step == 6 && (
                                 <Button
                                     variant="primary"
                                     size="sm"
@@ -106,7 +114,7 @@ const FormProspek = () => {
                                     Submit
                                 </Button >
                             )}
-                            {step < 5 && (
+                            {step < 6 && (
                                 <Button
                                     variant="primary"
                                     size="sm"

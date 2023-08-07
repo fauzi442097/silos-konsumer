@@ -18,7 +18,7 @@ const sumberPendapatan = [
     { value: "Lainnya", label: "Lainnya"},
 ]
 
-const dataPekerjaan = () => {
+const DataPekerjaan = () => {
     const [pekerjaan, setPekerjaan] = useState(null);
     const [pendapatan, setPendapatan] = useState(null);
 
@@ -33,59 +33,59 @@ const dataPekerjaan = () => {
     return (
         <>
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Pekerjaan </label>
                     <MySelect withSearch placeholder="Isikan pekerjaan" name="pekerjaan" id="pekerjaan" options={pekerjaanOptions} value={pekerjaan} onChange={handlePekerjaan} />
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Kantor </label>
                     <Input.Text placeholder="Isikan nama kantor" id="namaKantor" name="namaKantor"/>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor Telepon Kantor </label>
                     <Input.Number placeholder="Isikan nomor telepon kantor" id="noTelpKantor" name="noTelpKantor" />
                 </div>
             </div>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Jabatan </label>
                     <Input.Text placeholder="Isikan jabatan" id="jabatan" name="jabatan"/>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Pimpinan </label>
                     <Input.Text placeholder="Isikan nama pimpinan" id="namaPimpinan" name="namaPimpinan"/>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className="block mb-3"> TUK/NRP/NIP/NPP/NOTAS </label>
                     <Input.Text placeholder="Isikan TUK/NRP/NIP/NPP/NOTAS" id="tuk" name="tuk" />
                 </div>
             </div>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className="block mb-3">Alamat Kantor</label>
                     <Textarea placeholder="Isikan alamat kantor" id="alamatKantor" name="wilayahKantor" />
                 </div>
-                <div style={{ width: "530px" }}>
+                <div style={{ width: "950px" }}>
                     <label className="block mb-3">Cari Wilayah Kantor</label>
                     <Textarea placeholder="Isikan cari wilayah kantor" id="wilayahKantor" name="wilayahKantor"/>
                 </div>
             </div>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Sumber Pendapatan </label>
                     <MySelect withSearch placeholder="Isikan sumber pendapatan" name="sumberPendapatan" id="sumberPendapatan" options={sumberPendapatan} value={pendapatan} onChange={handlePendapatan} />
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                 </div>
             </div>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Pendapatan Bulanan Pokok </label>
                     <Input.Currency 
                         placeholder="Isikan pendapatan bulanan pokok"
@@ -94,7 +94,7 @@ const dataPekerjaan = () => {
                         allowDecimals={false}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Penghasilan Lain </label>
                     <Input.Currency 
                         placeholder="Isikan penghasilan lain" 
@@ -103,7 +103,7 @@ const dataPekerjaan = () => {
                         allowDecimals={false}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
-                <div style={{ width: "250px" }}>
+                <div style={{ width: "450px" }}>
                     <label className='block mb-3'> ULP </label>
                     <Input.Currency 
                         placeholder="Isikan ULP" 
@@ -118,4 +118,4 @@ const dataPekerjaan = () => {
     )
 } 
 
-export default dataPekerjaan
+export default DataPekerjaan
