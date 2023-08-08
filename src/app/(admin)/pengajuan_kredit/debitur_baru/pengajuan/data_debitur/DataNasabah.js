@@ -7,6 +7,11 @@ import Button from "@/components/Button";
 import Radio from "@/components/Form/Radio";
 import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
+import TabAction from "../tabAction";
+import { formDataNasabahSchema } from "../formValidation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -25,13 +30,20 @@ const statusMenikah = [
     { value: "3", label: "Duda / Janda" }
 ]
 
-const DataNasabah = () => {
+const DataNasabah = ({
+    onSubmit
+}) => {
     const [statKTP, setStatKTP] = useState(null);
     const [produk, setProduk] = useState(null);
     const [menikah, setMenikah] = useState(null);
 
     const [dataNikah, setDataNikah] = useState([]);
     // const [menikah, setMenikah] = useState(null);
+
+    const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
+        resolver: yupResolver(formDataNasabahSchema),
+        mode: 'all'
+    });
 
     const handleChangeKTP = value => {
         setStatKTP(value);
@@ -43,6 +55,11 @@ const DataNasabah = () => {
 
     const handleChangeMenikah = value => {
         setMenikah(value);
+    }
+
+    const storeDataNasabah = (data) => {
+        console.log(data)
+        onSubmit()
     }
 
     // const getMenikah = async () => {
@@ -74,7 +91,12 @@ const DataNasabah = () => {
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Nasabah </label>
-                    <Input.Text placeholder="Isikan nama nasabah" id="namaNasabah" name="namaNasabah" />
+                    <Input.Text 
+                        register={register}
+                        errors={errors.nama_nasabah}
+                        maxLength={50}
+                        name='nama_nasabah'
+                    />
                 </div>
                 <div className="mt-10" style={{ width: "450px" }}>
                     <div className='flex gap-2'>
@@ -105,9 +127,10 @@ const DataNasabah = () => {
                     <Input.Group
                         append
                         useButton
-                        inputElement={<Input.Text name='noKTP' placeholder='Isikan nomor KTP' />}
+                        inputElement={<Input.Number maxLength={16} placeholder='Isikan nomor KTP' register={register} name='no_identitas' errors={errors.no_identitas} hideError/>}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
                     />
+                    {errors.no_identitas && <span className='mt-1 block text-sm form-invalid-message'>{errors.no_identitas.message}</span>}
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Status KTP </label>
@@ -154,6 +177,8 @@ const DataNasabah = () => {
                 <div style={{ width: "450px" }}>
                 </div>
             </div>
+
+            <TabAction onSubmit={handleSubmit(storeDataNasabah)}/>
         </>
     )
 }

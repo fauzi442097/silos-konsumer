@@ -3,6 +3,10 @@
 import React, { useState } from "react"
 import MySelect from "@/components/Form/Select"
 import Input from "@/components/Form/Input"
+import TabAction from "../tabAction";
+import { formDataPasangan } from "../formValidation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const pekerjaanPasangan = [
     { value: "Pegawai Swasta", label: "Pegawai Swasta"},
@@ -10,11 +14,21 @@ const pekerjaanPasangan = [
     { value: "TNI", label: "TNI"}
 ];
 
-const DataPasangan = () => {
+const DataPasangan = ({ prevAction, onSubmit }) => {
     const [pekerjaan, setPekerjaan] = useState(null);
+
+    const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
+        resolver: yupResolver(formDataPasangan),
+        mode: 'all'
+    });
 
     const handlePekerjaan = value => {
         setPekerjaan(value)
+    }
+
+    const storeDataPasangan = (data) => {
+        console.log(data)
+        onSubmit()
     }
 
     return (
@@ -22,7 +36,7 @@ const DataPasangan = () => {
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama </label>
-                    <Input.Text placeholder="Isikan nama pasangan" id="namaPasangan" name="namaPasangan"/>
+                    <Input.Text placeholder="Isikan nama pasangan" name="nama_pasangan" register={register} errors={errors.nama_pasangan}/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor KTP </label>
@@ -46,6 +60,8 @@ const DataPasangan = () => {
                 <div style={{ width: "450px" }}>
                 </div>
             </div>
+
+            <TabAction onSubmit={handleSubmit(storeDataPasangan)} prevAction={prevAction}/>
         </>
     )
 } 

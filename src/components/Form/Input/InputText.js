@@ -5,7 +5,8 @@ const InputText = ({
   errors, 
   name, 
   validation, 
-  register, 
+  register,
+  hideError = false, 
   ...props 
 }) => {
 
@@ -16,7 +17,7 @@ const InputText = ({
          className={`form-control ${errors ? 'form-invalid' : ''} ${className || ''}`}
          {...register && {...register(name, validation)} }
          {...props} />
-       {errors && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
+       {(errors && !hideError) && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
      </>
    )
  }

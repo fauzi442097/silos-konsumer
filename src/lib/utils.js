@@ -23,3 +23,7 @@ export const generateId = () => {
    var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
    return randLetter + Date.now();
 }
+
+export const getKeyOfObject = (obj, value) => {
+   return Object.keys(obj).find(k=>obj[k]===value);
+}

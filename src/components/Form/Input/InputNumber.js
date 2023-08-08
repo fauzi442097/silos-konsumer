@@ -6,17 +6,28 @@ const InputNumber = ({
     name, 
     validation, 
     register, 
+    hideError = false, 
+    maxLength = 0,
     ...props 
 }) => {
+
+  const setMaxLength = (e) => {
+    console.log(e.target.value.length)
+    if ( maxLength != 0 && e.target.value.length > maxLength ) {
+      e.target.value = e.target.value.slice(0, maxLength)
+    }
+  }
+
    return (
       <>
         <input 
           type={'number'} 
           onWheel={(e) => e.target.blur()} 
+          onInput={setMaxLength}
           className={`form-control ${errors ? 'form-invalid' : ''} ${className || ''}`} 
           {...register && {...register(name, validation)} }
           {...props} />
-        {errors && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
+        {(errors && !hideError) && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
       </>
    )
 }
