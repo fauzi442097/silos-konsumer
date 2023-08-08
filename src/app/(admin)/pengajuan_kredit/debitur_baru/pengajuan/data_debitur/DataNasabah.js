@@ -127,7 +127,14 @@ const DataNasabah = ({
                     <Input.Group
                         append
                         useButton
-                        inputElement={<Input.Number maxLength={16} placeholder='Isikan nomor KTP' register={register} name='no_identitas' errors={errors.no_identitas} hideError/>}
+                        inputElement={<Input.Number 
+                            maxLength={16} 
+                            placeholder='Isikan nomor KTP' 
+                            register={register} 
+                            name='no_identitas' 
+                            pattern="^[0-9]"
+                            errors={errors.no_identitas} 
+                            hideError/>}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
                     />
                     {errors.no_identitas && <span className='mt-1 block text-sm form-invalid-message'>{errors.no_identitas.message}</span>}

@@ -12,9 +12,8 @@ const InputNumber = ({
 }) => {
 
   const setMaxLength = (e) => {
-    console.log(e.target.value.length)
     if ( maxLength != 0 && e.target.value.length > maxLength ) {
-      e.target.value = e.target.value.slice(0, maxLength)
+      e.target.value = Math.abs(e.target.value.slice(0, maxLength))
     }
   }
 
