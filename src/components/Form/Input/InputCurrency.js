@@ -8,6 +8,7 @@ const InputCurrency = ({
     register, 
     errors, 
     onChange, 
+    hideError = false, 
     ...props 
 }) => {
    return (
@@ -20,7 +21,7 @@ const InputCurrency = ({
           {...register && {...register(name, validation)} }
           {...props}
         />
-        {errors && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
+        {(errors && !hideError) && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
      </>
    )
  }

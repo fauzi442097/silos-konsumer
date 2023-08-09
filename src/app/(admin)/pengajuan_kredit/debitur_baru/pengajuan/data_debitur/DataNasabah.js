@@ -127,12 +127,14 @@ const DataNasabah = ({
                     <Input.Group
                         append
                         useButton
-                        inputElement={<Input.Number 
-                            maxLength={16} 
+                        inputElement={<Input.Currency 
+                            disableGroupSeparators
+                            allowNegativeValue={false}
+                            allowDecimals={false}
+                            maxLength={16}
                             placeholder='Isikan nomor KTP' 
                             register={register} 
-                            name='no_identitas' 
-                            pattern="^[0-9]"
+                            name='no_identitas'
                             errors={errors.no_identitas} 
                             hideError/>}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
