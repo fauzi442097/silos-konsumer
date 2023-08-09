@@ -1,15 +1,6 @@
 import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
 
-const DropdownAction = () => {
-    return (
-        <Dropdown>
-            <DropdownItem href="#">Simulasi Calon Nasabah</DropdownItem>
-            <DropdownItem href="#">Ubah Data</DropdownItem>
-        </Dropdown>
-    )
-}
-
 export const columns = [
     {
         name: 'ID',
@@ -20,14 +11,7 @@ export const columns = [
         omit: true
     },
     {
-        name: 'Aksi',
-        cell: (row, index, column, id) => <DropdownAction row={row}/>,
-        ignoreRowClick: false,
-        allowOverflow: true,
-        button: true,
-    },
-    {
-        name: 'Nama Nasabah',
+        name: 'Angsuran Ke',
         selector: (row) => row.nmProspek,
         cellExport: row => row.nmProspek,
         sortable: true,
@@ -35,7 +19,7 @@ export const columns = [
         wrap: true,
     },
     {
-        name: 'NIK',
+        name: 'Sisa Pokok',
         selector: (row) => row.noIdentitas,
         cellExport: row => row.noIdentitas,
         sortable: true,
@@ -43,7 +27,7 @@ export const columns = [
         wrap: true
     },
     {
-        name: 'Produk',
+        name: 'Angsuran Pokok',
         selector: (row) => row.productName,
         cellExport: row => row.productName,
         sortable: true,
@@ -51,27 +35,17 @@ export const columns = [
         wrap: true
     },
     {
-        name: 'Plafon',
+        name: 'Angsuran Bunga',
         selector: (row) => formatRupiah(row.plafon),
         cellExport: row => row.plafon,
-        // format: (row) => formatRupiah(row.plafon),
         sortable: true,
         right: true,
         wrap: true
     },
     {
-        name: 'Jangka Waktu (Bulan)',
-        selector: (row) => row.jangkaWaktu,
-        cellExport: row => row.jangkaWaktu,
-        sortable: true,
-        right: true,
-        wrap: true,
-    },
-    {
         name: 'Angsuran',
         selector: (row) => formatRupiah(row.totalAngsuran),
         cellExport: row => row.totalAngsuran,
-        // format: (row) => formatRupiah(row.totalAngsuran),
         sortable: true,
         right: true,
         wrap: true
