@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 import Radio from "@/components/Form/Radio";
 import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
-import { formDataNasabahSchema } from "../formValidation";
+import { formDataNasabahSchema } from "../../formValidation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -29,9 +29,7 @@ const statusMenikah = [
     { value: "3", label: "Duda / Janda" }
 ]
 
-const DataNasabah = ({
-    onSubmit
-}) => {
+const DataNasabah = ({ onSubmit }) => {
     const [statKTP, setStatKTP] = useState(null);
     const [produk, setProduk] = useState(null);
     const [menikah, setMenikah] = useState(null);
@@ -43,7 +41,7 @@ const DataNasabah = ({
         resolver: yupResolver(formDataNasabahSchema),
         mode: 'all'
     });
-
+    
     const handleChangeKTP = value => {
         setStatKTP(value);
     };
@@ -83,6 +81,10 @@ const DataNasabah = ({
 
     return (
         <>
+
+            <strong className="text-3xl text-primary font-sans">Data Nasabah</strong>
+            <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Produk </label>
@@ -90,12 +92,10 @@ const DataNasabah = ({
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Nasabah </label>
-                    <Input.Text 
-                        register={register}
-                        errors={errors.nama_nasabah}
+                    <Input.Text register={register}
+                        errors={errors.namaNasabah}
                         maxLength={50}
-                        name='nama_nasabah'
-                    />
+                        placeholder="Isikan nama nasabah" id="namaNasabah" name="namaNasabah" />
                 </div>
                 <div className="mt-10" style={{ width: "450px" }}>
                     <div className='flex gap-2'>
@@ -126,17 +126,9 @@ const DataNasabah = ({
                     <Input.Group
                         append
                         useButton
-                        inputElement={<Input.Number 
-                            maxLength={16} 
-                            placeholder='Isikan nomor KTP' 
-                            register={register} 
-                            name='no_identitas' 
-                            pattern="^[0-9]"
-                            errors={errors.no_identitas} 
-                            hideError/>}
+                        inputElement={<Input.Text name='noKTP' placeholder='Isikan nomor KTP' />}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
                     />
-                    {errors.no_identitas && <span className='mt-1 block text-sm form-invalid-message'>{errors.no_identitas.message}</span>}
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Status KTP </label>

@@ -1,15 +1,11 @@
 'use client'
 import React, { useState } from "react"
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-
-import Columns from './columns'
-
 import PageTitle from "@/components/PageTitle";
 import Button, { ButtonCloseModal } from "@/components/Button";
 import Card from "@/components/Card";
-import ModalHasilSimulasi from "@/components/HasilSimulasi/ModalHasilSimulasi";
-import Simulasi from "@/components/Simulasi";
+import Simulasi from "@/components/WizardPage/Simulasi";
+
 
 // import MyDataTable from '@/components/Datatable/MyDatatable'
 // import LoadingTable from "@/components/Datatable/LoadingTable";

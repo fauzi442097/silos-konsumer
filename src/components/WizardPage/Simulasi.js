@@ -12,6 +12,7 @@ import Button from "./Button";
 import ModalHasilSimulasi from "./HasilSimulasi/ModalHasilSimulasi";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessageForm from "./Form/ErrorMessageForm";
+import TabAction from "../TabAction";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -28,13 +29,13 @@ export const formSimulasiSchema = yup.object({
     tanggal_lahir: yup.string().required('Wajib diisi')
 })
 
-const Simulasi = () => {
-    
-    const [ showModal, setShowModal ] = useState(false)
 
+
+const Simulasi = ({ onSubmit }) => {
     const [dataProduk, setDataProduk] = useState([]);
     const [produk, setProduk] = useState(null);
 
+    const [ showModal, setShowModal ] = useState(false)
     const suku_bunga = useRef(null)
     console.log(suku_bunga)
     
@@ -136,6 +137,12 @@ const Simulasi = () => {
         setMenikah(value);
     }
 
+
+    const storeDataSimulasi = (data) => {
+        setShowModal(true)
+        console.log(data);
+        onSubmit();
+    }
 
     useEffect(() => {
         getProduk();
@@ -352,10 +359,6 @@ const Simulasi = () => {
                 </div>
             </div>
 
-            <div className="my-8 text-right">
-                <Button onClick={handleSubmit(processSimulation)}> Simulasi </Button>
-            </div>
-
             
             {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={closeModal}/>}
 
@@ -369,6 +372,10 @@ const Simulasi = () => {
                 <div style={{ width: "450px" }}>
                 </div>
             </div> */}
+
+            <div className="my-8 text-right">
+                <TabAction onSubmit={storeDataSimulasi}/>
+            </div>
         </>
     )
 };
