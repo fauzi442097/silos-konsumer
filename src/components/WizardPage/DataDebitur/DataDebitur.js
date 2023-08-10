@@ -6,7 +6,7 @@ import DataPasangan from './DataPasangan'
 import DataPekerjaan from './DataPekerjaan'
 import DataPembiayaan from './DataPembiayaan'
 import DataBiaya from './DataBiaya'
-import TabAction from '../../TabAction'
+import TabAction from '@/components/TabAction'
 
 const DataDebitur = ({ prevAction, onSubmit }) => {
 
@@ -22,7 +22,6 @@ const DataDebitur = ({ prevAction, onSubmit }) => {
             <DataPekerjaan />
             <DataPembiayaan />
             <DataBiaya />
-
             <TabAction onSubmit={storeDataDebitur} prevAction={prevAction}/>
         </>
     )

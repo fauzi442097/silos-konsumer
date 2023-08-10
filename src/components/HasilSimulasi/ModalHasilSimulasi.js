@@ -37,12 +37,7 @@ const ModalHasilSimulasi = ({ setShowModal, closeModal }) => {
             <div>
                 <h2 className='font-bold mb-1'> Hasil Simulasi Pinjaman </h2>
             </div>
-            <ButtonCloseModal onClick={() =>
-                setShowModal((prev) => ({
-                    ...prev,
-                    lg: false,
-                }))
-            } />
+            <ButtonCloseModal onClick={closeModal} />
         </Modal.Header>
         <Modal.Body>
 

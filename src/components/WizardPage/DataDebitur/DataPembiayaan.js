@@ -3,7 +3,6 @@
 import React, { useState } from "react"
 import Input from "@/components/Form/Input"
 import MySelect from "@/components/Form/Select"
-import TabAction from "../../TabAction"
 
 const penggunaanData = [
     { value: "Biaya Pendidikan", label: "Biaya Pendidikan" },
@@ -30,10 +29,8 @@ const DataPembiayaan = ({onSubmit}) => {
 
     return (
         <>
-            <div className="mt-20">
-                <strong className="text-3xl text-primary font-sans">Data Pembiayaan</strong>
-                <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
-            </div>
+            <hr class="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+            <p className="text-xl text-muted font-inter-medium mb-8 mt-6"> Data Pembiayaan </p>
 
             <div className="flex flex-row justify-left gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>

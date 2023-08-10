@@ -1,18 +1,17 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from "react"
-import moment from 'moment';
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
 import MySwal from "@/components/Swal/MySwal";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
-import Button from "./Button";
-import ModalHasilSimulasi from "./HasilSimulasi/ModalHasilSimulasi";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ErrorMessageForm from "./Form/ErrorMessageForm";
-import TabAction from "../TabAction";
+import ModalHasilSimulasi from "../HasilSimulasi/ModalHasilSimulasi";
+import ErrorMessageForm from "../Form/ErrorMessageForm";
+import TabAction from '@/components/TabAction';
+import Button from "../Button";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -25,6 +24,7 @@ export const formSimulasiSchema = yup.object({
     cif: yup.string().max('15', 'Maksimal diisi 15 digit angka'),
     produk: yup.string().required('Pilih produk'),
     jangka_waktu: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
+    jangka_waktu_promo: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
     pekerjaan: yup.string().required('Pilih pekerjaan'),
     tanggal_lahir: yup.string().required('Wajib diisi')
 })
@@ -37,7 +37,6 @@ const Simulasi = ({ onSubmit }) => {
 
     const [ showModal, setShowModal ] = useState(false)
     const suku_bunga = useRef(null)
-    console.log(suku_bunga)
     
     const [dataPekerjaan, setDataPekerjaan] = useState([]);
     const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
@@ -55,10 +54,6 @@ const Simulasi = ({ onSubmit }) => {
         resolver: yupResolver(formSimulasiSchema),
         mode: 'all'
     });
-
-    const closeModal = () => {
-        setShowModal((prev) => !prev)
-    }
 
     const processSimulation = (data) => {
         setShowModal(true)
@@ -139,9 +134,8 @@ const Simulasi = ({ onSubmit }) => {
 
 
     const storeDataSimulasi = (data) => {
+        // onSubmit();
         setShowModal(true)
-        console.log(data);
-        onSubmit();
     }
 
     useEffect(() => {
@@ -158,15 +152,23 @@ const Simulasi = ({ onSubmit }) => {
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> CIF </label>
-                    <Input.Currency 
-                        disableGroupSeparators
-                        allowNegativeValue={false}
-                        allowDecimals={false}
-                        maxLength={15}
-                        register={register} 
-                        name='cif'
-                        errors={errors.cif} 
+
+                    <Input.Group
+                        append
+                        useButton
+                        inputElement={<Input.Currency 
+                            disableGroupSeparators
+                            allowNegativeValue={false}
+                            allowDecimals={false}
+                            maxLength={15}
+                            register={register} 
+                            name='cif'
+                            errors={errors.cif} 
+                        />}
+                        inputGroupText={<Button className={'rounded-tl-none rounded-bl-none py-2'}> Inquiry </Button>}
                     />
+
+                    
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Debitur </label>
@@ -282,12 +284,31 @@ const Simulasi = ({ onSubmit }) => {
            
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Bunga Promo (%) </label>
-                    <Input.Text id="bungaPromo" name="bungaPromo" placeholder="Isukan bunga promo" />
+                    <label className='block mb-3'> Bunga Promo </label>
+                    <Input.Group
+                        append
+                        inputGroupText={'%'}
+                        inputElement={<Input.Text name="bunga_promo" />}
+                    />
+
                 </div>
                 <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Jangka Waktu Promo (bulan) </label>
-                    <Input.Text id="tanggalLahir" name="tanggalLahir" placeholder="Isikan jangka waktu promo" />
+                    <label className='block mb-3'> Jangka Waktu Promo </label>
+                    <Input.Group
+                        append
+                        inputGroupText={'Bulan'}
+                        inputElement={<Input.Currency 
+                            disableGroupSeparators
+                            allowNegativeValue={false}
+                            allowDecimals={false}
+                            maxLength={3}
+                            hideError 
+                            register={register} 
+                            name='jangka_waktu_promo'
+                            errors={errors.jangka_waktu_promo} 
+                        />}
+                    />
+                    {errors.jangka_waktu_promo && <ErrorMessageForm>{errors.jangka_waktu_promo.message}</ErrorMessageForm>}                    
                 </div>
                 <div style={{ width: "450px" }}>
                 </div>
@@ -307,60 +328,83 @@ const Simulasi = ({ onSubmit }) => {
             <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Gaji </label>
-                    <Input.Currency
-                        id="penghasilan"
-                        name="penghasilan"
-                        placeholder="Isikan gaji"
-                        allowDecimals={true}
-                        allowNegativeValue={false}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)}
-                    />
+                    <Input.Group
+                        inputGroupText={'Rp'}
+                        inputElement={<Input.Currency
+                            name="gaji"
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            decimalSeparator={','}
+                            groupSeparator={'.'}
+                            onChange={(value, name) => console.log(value, name)}
+                        />}
+                    />                    
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Penghasilan Lain </label>
-                    <Input.Currency
-                        id="penghasilanLain"
-                        name="penghasilanLain"
-                        placeholder="Isikan penghasilan lain"
-                        allowDecimals={true}
-                        allowNegativeValue={false}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)}
-                    />
+                    <Input.Group
+                        inputGroupText={'Rp'}
+                        inputElement={<Input.Currency
+                            name="penghasilan_lain"
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            decimalSeparator={','}
+                            groupSeparator={'.'}
+                            onChange={(value, name) => console.log(value, name)}
+                        />}
+                    />         
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> ULP </label>
-                    <Input.Currency
-                        id="ulp"
-                        name="ulp"
-                        placeholder="Isikan ULP"
-                        allowDecimals={true}
-                        allowNegativeValue={false}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)}
-                    />
+                    <Input.Group
+                        inputGroupText={'Rp'}
+                        inputElement={<Input.Currency
+                            name="ulp"
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            decimalSeparator={','}
+                            groupSeparator={'.'}
+                            onChange={(value, name) => console.log(value, name)}
+                        />}
+                    />     
                 </div>
             </div>
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Total Penghasilan </label>
-                    <Input.Text readOnly/>
+                    <Input.Group
+                        inputGroupText={'Rp'}
+                        inputElement={<Input.Currency
+                            name="total_penghasilan"
+                            readOnly
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            decimalSeparator={','}
+                            groupSeparator={'.'}
+                            onChange={(value, name) => console.log(value, name)}
+                        />}
+                    />     
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Plafon</label>
-                    <Input.Text id="plafon" name="plafon" placeholder="Isikan plafon" />
+                    <Input.Group
+                        inputGroupText={'Rp'}
+                        inputElement={<Input.Currency
+                            name="plafon"
+                            allowDecimals={true}
+                            allowNegativeValue={false}
+                            decimalSeparator={','}
+                            groupSeparator={'.'}
+                            onChange={(value, name) => console.log(value, name)}
+                        />}
+                    />     
                 </div>
                 <div style={{ width: "450px" }}>
                     
                 </div>
             </div>
 
-            
-            {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={closeModal}/>}
+            {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
 
             {/* <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
@@ -374,7 +418,7 @@ const Simulasi = ({ onSubmit }) => {
             </div> */}
 
             <div className="my-8 text-right">
-                <TabAction onSubmit={storeDataSimulasi}/>
+                <TabAction onSubmit={handleSubmit(storeDataSimulasi)}/>
             </div>
         </>
     )

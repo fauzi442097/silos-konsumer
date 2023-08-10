@@ -2,15 +2,8 @@
 import React, { useState } from "react"
 import { useRouter } from 'next/navigation';
 import PageTitle from "@/components/PageTitle";
-import Button, { ButtonCloseModal } from "@/components/Button";
 import Card from "@/components/Card";
 import Simulasi from "@/components/WizardPage/Simulasi";
-
-
-// import MyDataTable from '@/components/Datatable/MyDatatable'
-// import LoadingTable from "@/components/Datatable/LoadingTable";
-// import useDataTable from '@/hooks/useDataTable'
-// import { PUBLIC_DUMMY_API } from '@/config/env'
 
 const FormNewEntry = () => {
     const router = useRouter();
