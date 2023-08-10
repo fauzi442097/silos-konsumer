@@ -44,7 +44,7 @@ const Page = () => {
 
     useEffect(() => {
         getNasabahCair(1);
-    });
+    }, []);
 
     return (
         <>

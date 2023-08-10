@@ -50,10 +50,7 @@ const FormNewEntry = () => {
                     <div dir="rtl">
                         <div class="relative h-12 w-full ...">
                             <div class="absolute h-14 w-[120px] top-0 start-0 ...">
-                                <Button
-                                    variant="primary"
-                                    size="sm"
-                                    onClick={() => showModalDialog('lg')}> Simulasi
+                                <Button onClick={() => showModalDialog('lg')}> Simulasi
                                 </Button>
                             </div>
                         </div>

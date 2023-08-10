@@ -1,19 +1,21 @@
 'use client'
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 
 import PageTitle from "@/components/PageTitle"
 import Card from "@/components/Card"
-import Button from "@/components/Button"
-import DataNasabah from "@/components/DataDebitur/DataNasabah"
-import DataPasangan from "@/components/DataDebitur/DataPasangan"
-import DataPekerjaan from "@/components/DataDebitur/DataPekerjaan"
-import DataPembiayaan from "@/components/DataDebitur/DataPembiayaan"
-import DataBiaya from "@/components/DataDebitur/DataBiaya"
-import DataDokumen from "@/components/DataDebitur/DataDokumen"
+import Simulasi from "@/components/WizardPage/Simulasi"
+import DataDebitur from "@/components/WizardPage/DataDebitur/DataDebitur"
+import ChecklistDokumen from "@/components/WizardPage/ChecklistDokumen"
+import Slik from "@/components/WizardPage/Slik/Slik"
+import Agunan from "@/components/WizardPage/Agunan/Agunan"
+import ScoringKredit from "@/components/WizardPage/ScoringKredit/ScoringKredit"
+import Approval from "@/components/WizardPage/Approval/Approval"
+
+import { getKeyOfObject } from "@/lib/utils"
 
 export const REF_STEP = {
-    SIMULASI_KREDIT : 1,
+    SIMULASI_KREDIT: 1,
     DATA_DEBITUR: 2,
     CEKLIS_DOKUMEN: 3,
     SLIK: 4,
@@ -24,10 +26,10 @@ export const REF_STEP = {
 
 export const REF_TAB_GROUP = {
     SIMULASI_KREDIT: 'simulasi_kredit',
-    DATA_DEBITUR : 'data_debitur',
-    CEKLIS_DOKUMEN : 'data_pasangan',
+    DATA_DEBITUR: 'data_debitur',
+    CEKLIS_DOKUMEN: 'checklist_dokumen',
     SLIK: 'slik',
-    DOKUMEN_AGUNAN: 'dokumen_kredit',
+    DOKUMEN_AGUNAN: 'dokumen_agunan',
     SCORING_KREDIT: 'scoring_kredit',
     APPROVAL: 'approval'
 }
@@ -47,7 +49,7 @@ const FormProspek = () => {
     }, [currentTab])
 
     let tabExists = Object.values(REF_TAB_GROUP).includes(currentTab);
-    if ( !tabExists ) return <DataNotFound message={'Halaman tidak ditemukan'}/>
+    if (!tabExists) return <DataNotFound message={'Halaman tidak ditemukan'} />
 
     const handleNext = () => {
         let nextStep = step + 1;
@@ -70,44 +72,51 @@ const FormProspek = () => {
                 <Card.Header>
                     <ul className="flex flex-wrap items-center justify-center text-sm font-medium text-center text-gray-500 dark:text-gray-400" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
                         <li className="mr-2" role="presentation">
-                            <a href="#dataNasabah" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 1 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 1 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>
+                            <a href="#simulasiKredit" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 1 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 1 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Simulasi Kredit
                             </a>
                         </li>
                         <li className="mr-2">
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 2 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg xmlns="http://www.w3.org/2000/svg" className={`w-5 h-5 mr-2 ${step === 2 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} width="32" height="32" viewBox="0 0 32 32"><path fill="currentColor" d="M8 9a4 4 0 1 1 4-4a4 4 0 0 1-4 4zm0-6a2 2 0 1 0 2 2a2 2 0 0 0-2-2zm16 6a4 4 0 1 1 4-4a4 4 0 0 1-4 4zm0-6a2 2 0 1 0 2 2a2 2 0 0 0-2-2zm2 27h-4a2 2 0 0 1-2-2v-7h2v7h4v-9h2v-6a1 1 0 0 0-1-1h-6.42L16 20l-4.58-8H5a1 1 0 0 0-1 1v6h2v9h4v-7h2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1-2-2v-6a3 3 0 0 1 3-3h7.58L16 16l3.42-6H27a3 3 0 0 1 3 3v6a2 2 0 0 1-2 2v7a2 2 0 0 1-2 2z" /></svg>
+                            <a href="#dataDebitur" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 2 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 2 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Data Debitur
                             </a>
                         </li>
                         <li className="mr-2">
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 3 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg className={`w-5 h-5 mr-2 ${step === 3 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14.96 11.7a1.98 1.98 0 0 0-.8-1.3l-5-3.57c-.7-.5-1.63-.5-2.32 0l-5 3.57c-.53.38-.84.98-.84 1.63V19c0 1.1.9 2 2 2h3v-6h4v6h1.68c-.43-.91-.68-1.92-.68-3a6.99 6.99 0 0 1 3.96-6.3zM23 13.11V4.97C23 3.88 22.12 3 21.03 3h-9.06C10.88 3 10 3.88 10 4.97l.02.05c.1.06.21.11.3.18l5 3.57c.79.56 1.34 1.4 1.56 2.32c.37-.05.74-.09 1.12-.09c1.96 0 3.73.81 5 2.11zM17 7h2v2h-2V7z" /><path fill="currentColor" d="M23 18c0-2.76-2.24-5-5-5s-5 2.24-5 5s2.24 5 5 5s5-2.24 5-5zm-5.5 3v-2.5H15v-1h2.5V15h1v2.5H21v1h-2.5V21h-1z" /></svg>
+                            <a href="#checklistDokumen" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 3 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 3 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Checklist Dokumen
                             </a>
                         </li>
                         <li className="mr-2">
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 4 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 4 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                            <a href="#slik" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 4 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 4 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Slik
                             </a>
                         </li>
                         <li>
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 5 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 5 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                            <a href="#dokumenAgunan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 5 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 5 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Dokumen Agunan
                             </a>
                         </li>
                         <li>
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 6 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 6 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                            <a href="#scoringKredit" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 6 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 6 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Scoring Kredit
                             </a>
                         </li>
                         <li>
-                            <a href="#dataPasangan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 6 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
-                                <svg aria-hidden="true" className={`w-5 h-5 mr-2 ${step === 6 ? "text-primary dark:text-white" : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"} `} fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path></svg>
+                            <a href="#approval" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 7 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 7 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
                                 Approval
                             </a>
                         </li>
@@ -116,18 +125,25 @@ const FormProspek = () => {
                 <Card.Body>
 
                     <div className="row-span-6 col-span-3 mt-10">
-                        {
+                        {/* {
                             step === 1 ? <DataNasabah /> :
                                 step === 2 ? <DataPasangan /> :
                                     step === 3 ? <DataPekerjaan /> :
                                         step === 4 ? <DataPembiayaan /> :
                                             step === 5 ? <DataBiaya /> :
                                             <DataDokumen />
-                        }
+                        } */}
+                        {step == REF_STEP.SIMULASI_KREDIT && <Simulasi onSubmit={handleNext} />}
+                        {step == REF_STEP.DATA_DEBITUR && <DataDebitur prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.CEKLIS_DOKUMEN && <ChecklistDokumen prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.SLIK && <Slik prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.DOKUMEN_AGUNAN && <Agunan prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.SCORING_KREDIT && <ScoringKredit prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.APPROVAL && <Approval prevAction={handleBack} onSubmit={handleNext} />}
                     </div>
 
                 </Card.Body>
-                <Card.Footer>
+                {/* <Card.Footer>
                     <div className="flex justify-between border-t mt-15 pt-10">
                         <div className="order-first">
                             <Button
@@ -170,7 +186,7 @@ const FormProspek = () => {
                             )}
                         </div>
                     </div>
-                </Card.Footer>
+                </Card.Footer> */}
             </Card>
         </>
     )

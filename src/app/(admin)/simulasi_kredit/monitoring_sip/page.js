@@ -34,7 +34,7 @@ const Page = () => {
 
   useEffect(() => {
     getMonitoringSIP(1);
-  });
+  }, []);
 
   return (
     <>

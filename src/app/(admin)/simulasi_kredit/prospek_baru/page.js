@@ -31,7 +31,7 @@ const Page = () => {
 
     useEffect(() => {
         getProspekBaru(1);
-    });
+    }, []);
 
     const handlePageChange = async (page) => {
         getProspekBaru(page);

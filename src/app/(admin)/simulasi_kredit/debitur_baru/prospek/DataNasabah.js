@@ -30,9 +30,6 @@ const DataNasabah = () => {
     const [produk, setProduk] = useState(null);
     const [menikah, setMenikah] = useState(null);
 
-    const [dataNikah, setDataNikah] = useState([]);
-    // const [menikah, setMenikah] = useState(null);
-
     const handleChangeKTP = value => {
         setStatKTP(value);
     };

@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from "react"
-import moment from 'moment';
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
 import MySwal from "@/components/Swal/MySwal";
+import TabAction from "../TabAction";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -13,7 +13,7 @@ const options = [
     { value: "Honeybee", label: "Honeybee" }
 ];
 
-const Simulasi = () => {
+const Simulasi = ({ onSubmit }) => {
     const [dataProduk, setDataProduk] = useState([]);
     const [produk, setProduk] = useState(null);
 
@@ -79,6 +79,11 @@ const Simulasi = () => {
 
     const handleTanggalLahir = value => {
         setTanggalLahir(value);
+    }
+
+    const storeDataSimulasi = (data) => {
+        console.log(data);
+        onSubmit();
     }
 
     useEffect(() => {
@@ -224,16 +229,8 @@ const Simulasi = () => {
                 <div style={{ width: "450px" }}>
                 </div>
             </div>
-            {/* <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Plafon</label>
-                    <Input.Text id="plafon" name="plafon" placeholder="Isikan plafon" />
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-            </div> */}
+
+            <TabAction onSubmit={storeDataSimulasi}/>
         </>
     )
 };
