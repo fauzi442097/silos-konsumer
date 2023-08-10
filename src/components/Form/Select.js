@@ -33,7 +33,7 @@ const MySelect = forwardRef(({
             ),
             menu: `${!selectInModal && 'absolute z-50'} bg-white dark:bg-dark-depth2 shadow-lg dark:shadow-none dark:border-dark-depth2 border rounded-xl py-2 mt-1.5 transition duration-300 w-full`,
             searchContainer: 'px-3 my-4',
-            searchBox: 'rounded-lg border w-full px-9 py-2 focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-primary-800 dark:bg-[#575b5f] dark:border-[#575b5f] dark:focus:ring-primary-800',
+            searchBox: `rounded-lg border w-full px-9 py-2 focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-primary-800 dark:bg-[#575b5f] dark:border-[#575b5f] dark:focus:ring-primary-800`,
             listItem: ({ isSelected }) => (
                `block transition dark:text-grey duration-200 px-2 py-2 cursor-pointer my-2 rounded-lg select-none truncate rounded ${
                    isSelected

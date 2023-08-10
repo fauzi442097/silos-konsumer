@@ -4,10 +4,10 @@ const nextConfig = {
     swcMinify: true,
     async rewrites() {
         return [
-        {
-            source: '/api/:path*',
-            destination: 'http://localhost:4511/:path*',
-        },
+            {
+                source: '/api/:path*',
+                destination: 'https://api-silos-konsumer.basys.co.id//:path*',
+            },
         ]
     },
 }

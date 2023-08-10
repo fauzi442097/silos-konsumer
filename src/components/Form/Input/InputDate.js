@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import Datepicker from "react-tailwindcss-datepicker";
 
-const InputDate = ({
+// eslint-disable-next-line react/display-name
+const InputDate = forwardRef(({
    className, 
    useRange = false, 
    format = 'DD/MM/YYYY', 
@@ -12,7 +13,7 @@ const InputDate = ({
    register,
    errors,
    ...props
-}) => {
+}, ref) => {
 
    const [value, setValue] = useState({
       startDate: null,
@@ -29,12 +30,12 @@ const InputDate = ({
             primaryColor={"emerald"}
             useRange={useRange}
             asSingle={!useRange}
-            value={value}
             displayFormat={format}
             separator={"-"} 
+            {...register && {...register(name, validation)} }
+            ref={null}
             showShortcuts={useRange} 
             showFooter={useRange} 
-            onChange={handleValueChange}
             readOnly={true} 
             popoverDirection="bottom" 
             configs={{
@@ -52,12 +53,11 @@ const InputDate = ({
             }} 
             inputClassName={`form-control ${errors ? 'form-invalid' : ''} read-only:bg-white dark:read-only:bg-dark-depth2 read-only:cursor-pointer`}
             {...props}
-            {...register && {...register(name, validation)} }
          />
       {errors && <span className='mt-1 block text-sm form-invalid-message'>{errors.message}</span>}
     </>
    )
 
-}
+})
 
 export default InputDate

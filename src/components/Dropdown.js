@@ -9,7 +9,9 @@ export const DropdownItem = ({ className, href, children, ...props }) => {
 
 const Dropdown = ({ 
   position = "right-start",
+  className,
   offset = { horizontal: 10, vertical: 10 },
+  text = null,
   children
 }) => {
 
@@ -56,10 +58,10 @@ const Dropdown = ({
   return (
     <>
       <button 
-        className="relative z-5 block p-2 text-gray-700 bg-white border rounded-md  focus:ring-primary focus:ring-1 dark:border-[#5a5b5e] dark:bg-transparent dark:focus:ring-primary-800 focus:outline-none group"
+        className={cn("relative z-5 block p-2 text-gray-700 bg-white border rounded-md  focus:ring-primary focus:ring-1 dark:border-[#5a5b5e] dark:bg-transparent dark:focus:ring-primary-800 focus:outline-none group", className)}
         ref={referenceRef} 
         onClick={handleDropdownClick}>
-        <svg className="w-6 h-6 group-focus:text-primary dark:text-grey dark:group:focus:text-primary-800" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+        { text ? text : <svg className="w-6 h-6 group-focus:text-primary dark:text-grey dark:group:focus:text-primary-800" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg> }
       </button>
       <div ref={popperRef} style={styles.popper} {...attributes.popper} className="z-50">
         <div 
