@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useMemo } from "react"
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
@@ -13,7 +13,8 @@ import ErrorMessageForm from "../Form/ErrorMessageForm";
 import TabAction from '@/components/TabAction';
 import Button from "../Button";
 import FormGroup from "../Form/FormGroup";
-import useGet from '@/hooks/useGet'
+import useGet from "@/hooks/useGet";
+import { useMySwal } from "@/hooks/useMySwal";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -22,19 +23,25 @@ const options = [
 ];
 
 export const formSimulasiSchema = yup.object({
-    nama_debitur: yup.string().required('Wajib diisi').max('30', 'Maksimal 30 karakter'),
+    nama_debitur: yup.string().required('Wajib diisi').max('30', 'Maksimal diisi 30 karakter'),
     cif: yup.string().max('15', 'Maksimal diisi 15 digit angka'),
     produk: yup.string().required('Pilih produk'),
     jangka_waktu: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
     jangka_waktu_promo: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
     pekerjaan: yup.string().required('Pilih pekerjaan'),
-    gaji: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 karakter'),
+    gaji: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
+    penghasilan_lain: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
+    ulp: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
+    plafon: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
     tanggal_lahir: yup.string().required('Wajib diisi')
 })
 
 
 
 const Simulasi = ({ onSubmit }) => {
+
+    // const mySwal = useMySwal();
+
     const [dataProduk, setDataProduk] = useState([]);
     const [produk, setProduk] = useState(null);
 
@@ -53,10 +60,15 @@ const Simulasi = ({ onSubmit }) => {
     const [tanggalLahir, setTanggalLahir] = useState(null);
     const [usia, setUsia] = useState(null);
 
-    const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
+    const { register, control, handleSubmit, reset, watch, getValues, formState: { errors }  } = useForm({
         resolver: yupResolver(formSimulasiSchema),
-        mode: 'all'
+        mode: "all"
     });
+
+    const [ totalPenghasilan, setTotalPenghasilan ] = useState()
+    const refGaji = useRef(0)
+    const refULP = useRef(0)
+    const refPenghasilanLain = useRef(0)
 
     const processSimulation = (data) => {
         setShowModal(true)
@@ -92,8 +104,8 @@ const Simulasi = ({ onSubmit }) => {
 
     const getProduk = async () => {
         const arr = [];
-        const response = await API.GET(`master/list/product`);
-        console.log(response);
+        const response = await API.GET(`/master/list/product`);
+        console.log(response)
         if (response.status != 200) return MySwal.error(response.data.error)
         let result = response.data.data;
         result.map((item) => {
@@ -148,6 +160,14 @@ const Simulasi = ({ onSubmit }) => {
         setShowModal(true)
     }
 
+    const calculateTotalPenghasilan = (value, name) => {
+        if ( name == 'gaji' ) refGaji.current = value || 0
+        if ( name == 'ulp' ) refULP.current = value || 0
+        if ( name == 'penghasilan_lain' ) refPenghasilanLain.current = value || 0
+        let total = Number(refGaji.current) + Number(refULP.current) + Number(refPenghasilanLain.current)
+        setTotalPenghasilan(total)
+    }    
+
     useEffect(() => {
         getProduk();
         getMenikah();
@@ -177,9 +197,8 @@ const Simulasi = ({ onSubmit }) => {
                         />}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none py-2'}> Inquiry </Button>}
                     />
-
-                    
                 </div>
+
                 <div>
                     <label className='block mb-3'> Nama Debitur </label>
                     <Input.Text name="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30}/>
@@ -233,11 +252,11 @@ const Simulasi = ({ onSubmit }) => {
                         label={<label className='dark:text-grey'> Suku Bunga </label>} 
                         input={
                             <>
-                            <Input.Group
-                                append
-                                inputGroupText={'%'}
-                                inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
-                            />
+                                <Input.Group
+                                    append
+                                    inputGroupText={'%'}
+                                    inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
+                                />
                             </>
                         }
                     />
@@ -344,12 +363,12 @@ const Simulasi = ({ onSubmit }) => {
 
                 <div>
                     <label className='block mb-3'> Usia </label>
-                    <Input.Text id="usia" name="usia" value={usia} placeholder="Isikan usia" readOnly/>
+                    <Input.Text id="usia" name="usia" value={usia} readOnly/>
                 </div>
             </div>
 
             
-            <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7'>
+            {/* <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7'>
                 <div>
                     <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500 mt-7 mb-1 ">Maks tenor pekerjaan: {maxTenor} bulan</p>
                     <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500">Jangka waktu melebihi maksimal tenor pekerjaan</p>
@@ -359,57 +378,96 @@ const Simulasi = ({ onSubmit }) => {
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                 </div>
-            </div>
+            </div> */}
 
             
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Gaji </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={<Input.Currency
-                            name="gaji"
-                            allowDecimals={true}
-                            register={register}
-                            errors={errors.gaji} 
-                            allowNegativeValue={false}
-                            decimalSeparator={','}
-                            groupSeparator={'.'}
-                            onChange={(value, name) => console.log(value, name)}
-                        />}
-                    />                    
+            <div className="grid grid-cols-3 gap-8 my-8">
+
+                <div>
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Gaji </label>} 
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="gaji"
+                                        ref={refGaji}
+                                        allowDecimals={true}
+                                        register={register}
+                                        errors={errors.gaji}
+                                        maxLength={11} 
+                                        hideError
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
+                                    />}
+                                />     
+                                {errors.gaji && <ErrorMessageForm>{errors.gaji.message}</ErrorMessageForm>}                    
+                            </>
+                        }
+                    />
                 </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Penghasilan Lain </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={<Input.Currency
-                            name="penghasilan_lain"
-                            allowDecimals={true}
-                            allowNegativeValue={false}
-                            decimalSeparator={','}
-                            groupSeparator={'.'}
-                            onChange={(value, name) => console.log(value, name)}
-                        />}
-                    />         
+
+                <div>
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Penghasilan Lain </label>} 
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="penghasilan_lain"
+                                        allowDecimals={true}
+                                        register={register}
+                                        errors={errors.penghasilan_lain}
+                                        maxLength={11} 
+                                        hideError
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
+                                    />}
+                                />     
+                                {errors.penghasilan_lain && <ErrorMessageForm>{errors.penghasilan_lain.message}</ErrorMessageForm>}                    
+                            </>
+                        }
+                    />
                 </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> ULP </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={<Input.Currency
-                            name="ulp"
-                            allowDecimals={true}
-                            allowNegativeValue={false}
-                            decimalSeparator={','}
-                            groupSeparator={'.'}
-                            onChange={(value, name) => console.log(value, name)}
-                        />}
+
+                <div>
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> ULP </label>} 
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="ulp"
+                                        allowDecimals={true}
+                                        register={register}
+                                        errors={errors.ulp}
+                                        maxLength={11} 
+                                        hideError
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
+                                    />}
+                                />     
+                                {errors.ulp && <ErrorMessageForm>{errors.ulp.message}</ErrorMessageForm>}                    
+                            </>
+                        }
                     />     
                 </div>
             </div>
-            <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
+
+            <div className="grid grid-cols-3 gap-8">
+                <div>
                     <label className='block mb-3'> Total Penghasilan </label>
                     <Input.Group
                         inputGroupText={'Rp'}
@@ -420,11 +478,12 @@ const Simulasi = ({ onSubmit }) => {
                             allowNegativeValue={false}
                             decimalSeparator={','}
                             groupSeparator={'.'}
+                            value={totalPenghasilan}
                             onChange={(value, name) => console.log(value, name)}
                         />}
                     />     
                 </div>
-                <div style={{ width: "450px" }}>
+                <div>
                     <label className='block mb-3'> Plafon</label>
                     <Input.Group
                         inputGroupText={'Rp'}
@@ -445,16 +504,6 @@ const Simulasi = ({ onSubmit }) => {
 
             {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
 
-            {/* <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Plafon</label>
-                    <Input.Text id="plafon" name="plafon" placeholder="Isikan plafon" />
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-            </div> */}
 
             <div className="my-8 text-right">
                 <TabAction onSubmit={handleSubmit(storeDataSimulasi)}/>
