@@ -13,6 +13,7 @@ import ErrorMessageForm from "../Form/ErrorMessageForm";
 import TabAction from '@/components/TabAction';
 import Button from "../Button";
 import FormGroup from "../Form/FormGroup";
+import useGet from '@/hooks/useGet'
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -83,9 +84,16 @@ const Simulasi = ({ onSubmit }) => {
         }
     };
 
+    const id = 4;
+    const refAgunan = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null });
+    const refDataProduk = useGet(['refProduct'], `master/list/product`, { retry: 1, refetchOnWindowFocus: false });
+    console.log(refDataProduk.data);
+    console.log(refAgunan.data);
+
     const getProduk = async () => {
         const arr = [];
-        const response = await API.GET(`/master/list/product`);
+        const response = await API.GET(`master/list/product`);
+        console.log(response);
         if (response.status != 200) return MySwal.error(response.data.error)
         let result = response.data.data;
         result.map((item) => {
@@ -121,7 +129,7 @@ const Simulasi = ({ onSubmit }) => {
 
     const getMenikah = async () => {
         const arrMenikah = [];
-        const response = await API.GET(`/master/list/status-kawin`);
+        const response = await API.GET(`master/list/status-kawin`);
         let getDataMenikah = response.data.data;
         getDataMenikah.map((item) => {
             return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })

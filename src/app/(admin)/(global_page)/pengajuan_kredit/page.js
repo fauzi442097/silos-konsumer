@@ -11,6 +11,7 @@ import Slik from "@/components/WizardPage/Slik/Slik"
 import Agunan from "@/components/WizardPage/Agunan/Agunan"
 import ScoringKredit from "@/components/WizardPage/ScoringKredit/ScoringKredit"
 import Approval from "@/components/WizardPage/Approval/Approval"
+import PencairanKredit from "@/components/WizardPage/PencairanKredit"
 
 import { getKeyOfObject } from "@/lib/utils"
 import DataNotFound from "@/components/DataNotFound"
@@ -23,6 +24,7 @@ export const REF_STEP = {
     DOKUMEN_AGUNAN: 5,
     SCORING_KREDIT: 6,
     APPROVAL: 7,
+    UPDATE_PENCAIRAN: 8,
 }
 
 export const REF_TAB_GROUP = {
@@ -32,7 +34,8 @@ export const REF_TAB_GROUP = {
     SLIK: 'slik',
     DOKUMEN_AGUNAN: 'dokumen_agunan',
     SCORING_KREDIT: 'scoring_kredit',
-    APPROVAL: 'approval'
+    APPROVAL: 'approval',
+    UPDATE_PENCAIRAN: 'update_pencairan'
 }
 
 const FormProspek = () => {
@@ -121,6 +124,13 @@ const FormProspek = () => {
                                 Approval
                             </a>
                         </li>
+                        <li>
+                            <a href="#updatePencairan" className={`inline-flex p-4 border-b-2 rounded-t-lg ${step === 7 ? "text-primary border-b-2 border-primary rounded-t-lg active dark:text-white dark:border-primary" : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"} group`}>
+                                {step === 8 ? <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 12 12"><path fill="currentColor" d="M2 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Zm2-.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4Z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 mr-2 text-primary dark:text-white" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fillRule="evenodd" d="M7 2a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm8.73 8.684a1 1 0 1 0-1.46-1.368l-3.083 3.29l-1.523-1.353a1 1 0 0 0-1.328 1.494l2.25 2a1 1 0 0 0 1.393-.063l3.75-4Z" clip-rule="evenodd" /></svg>
+                                }
+                                Pencairan
+                            </a>
+                        </li>
                     </ul>
                 </Card.Header>
                 <Card.Body>
@@ -133,6 +143,7 @@ const FormProspek = () => {
                         {step == REF_STEP.DOKUMEN_AGUNAN && <Agunan prevAction={handleBack} onSubmit={handleNext} />}
                         {step == REF_STEP.SCORING_KREDIT && <ScoringKredit prevAction={handleBack} onSubmit={handleNext} />}
                         {step == REF_STEP.APPROVAL && <Approval prevAction={handleBack} onSubmit={handleNext} />}
+                        {step == REF_STEP.UPDATE_PENCAIRAN && <PencairanKredit prevAction={handleBack} onSubmit={handleNext} />}
                     </div>
 
                 </Card.Body>

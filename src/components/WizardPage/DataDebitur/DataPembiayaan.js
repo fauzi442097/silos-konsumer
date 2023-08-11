@@ -15,7 +15,7 @@ const asuransiOptions = [
     { value: "PT. JAMKRIDA", label: "PT. JAMKRIDA" }
 ]
 
-const DataPembiayaan = ({onSubmit}) => {
+const DataPembiayaan = () => {
     const [penggunaan, setPenggunaan] = useState(null);
     const [asuransi, setAsuransi] = useState(null);
 
