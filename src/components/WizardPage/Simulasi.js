@@ -12,6 +12,7 @@ import ModalHasilSimulasi from "../HasilSimulasi/ModalHasilSimulasi";
 import ErrorMessageForm from "../Form/ErrorMessageForm";
 import TabAction from '@/components/TabAction';
 import Button from "../Button";
+import FormGroup from "../Form/FormGroup";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -26,6 +27,7 @@ export const formSimulasiSchema = yup.object({
     jangka_waktu: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
     jangka_waktu_promo: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
     pekerjaan: yup.string().required('Pilih pekerjaan'),
+    gaji: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 karakter'),
     tanggal_lahir: yup.string().required('Wajib diisi')
 })
 
@@ -145,12 +147,12 @@ const Simulasi = ({ onSubmit }) => {
 
     return (
         <>
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
+            <div className='grid grid-cols-3 gap-8 my-8'>
+                <div>
                     <label className='block mb-3'> Jenis Debitur </label>
                     <Input.Text value="Debitur Baru" disabled/>
                 </div>
-                <div style={{ width: "450px" }}>
+                <div>
                     <label className='block mb-3'> CIF </label>
 
                     <Input.Group
@@ -170,14 +172,14 @@ const Simulasi = ({ onSubmit }) => {
 
                     
                 </div>
-                <div style={{ width: "450px" }}>
+                <div>
                     <label className='block mb-3'> Nama Debitur </label>
                     <Input.Text name="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30}/>
                 </div>
             </div>
             
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
+            <div className='grid grid-cols-3 gap-8 my-8'>
+                <div>
                     <label className='block mb-3'> Produk </label>
                     <Controller
                         control={control}
@@ -195,7 +197,7 @@ const Simulasi = ({ onSubmit }) => {
                             )}
                     />
                 </div>
-                <div style={{ width: "450px" }}>
+                <div>
                     <label className='block mb-3'> Pekerjaan </label>
                     <Controller
                         control={control}
@@ -216,17 +218,54 @@ const Simulasi = ({ onSubmit }) => {
                     />
 
                 </div>
-                <div style={{ width: "450px" }}>
-                    
+                <div className="flex gap-8">
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Suku Bunga </label>} 
+                        input={
+                            <>
+                            <Input.Group
+                                append
+                                inputGroupText={'%'}
+                                inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
+                            />
+                            </>
+                        }
+                    />
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Jangka Waktu </label>} 
+                        input={
+                            <>
+                            <Input.Group
+                                append
+                                inputGroupText={'Bulan'}
+                                inputElement={<Input.Currency 
+                                    disableGroupSeparators
+                                    allowNegativeValue={false}
+                                    allowDecimals={false}
+                                    maxLength={3}
+                                    hideError 
+                                    register={register} 
+                                    name='jangka_waktu'
+                                    errors={errors.jangka_waktu} 
+                                />}
+                            />
+                            {errors.jangka_waktu && <ErrorMessageForm>{errors.jangka_waktu.message}</ErrorMessageForm>}
+                            </>
+                        }
+                    />
                 </div>
             </div>
             
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
+            <div className='grid grid-cols-3 gap-8 my-8'>
+                <div>
                     <label className='block mb-3'> Status Debitur </label>
                     <MySelect withSearch id="statusDebitur" name="statusDebitur" placeholder="Isikan status debitur" options={dataMenikah} value={menikah} onChange={handleChangeMenikah}/>
                 </div>
-                <div style={{ width: "450px" }}>
+                <div>
                     <label className='block mb-3'> Tanggal Lahir </label>
                     <Controller
                         control={control}
@@ -242,41 +281,68 @@ const Simulasi = ({ onSubmit }) => {
                             )}
                     />
                 </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Usia </label>
-                    <Input.Text id="usia" name="usia" value={usia} placeholder="Isikan usia"/>
-                </div>
-            </div>
-            
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Suku Bunga </label>
-                    <Input.Group
-                        append
-                        inputGroupText={'%'}
-                        inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
+
+                <div className="flex gap-8">
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Bunga Promo </label>} 
+                        input={
+                            <>
+                            <Input.Group
+                                append
+                                inputGroupText={'%'}
+                                inputElement={<Input.Text name="bunga_promo" />}
+                            />
+                            </>
+                        }
                     />
 
-                </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Jangka Waktu </label>
-                    <Input.Group
-                        append
-                        inputGroupText={'Bulan'}
-                        inputElement={<Input.Currency 
-                            disableGroupSeparators
-                            allowNegativeValue={false}
-                            allowDecimals={false}
-                            maxLength={3}
-                            hideError 
-                            register={register} 
-                            name='jangka_waktu'
-                            errors={errors.jangka_waktu} 
-                        />}
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey'> Jangka Waktu Promo </label>} 
+                        input={
+                            <>
+                                <Input.Group
+                                    append
+                                    inputGroupText={'Bulan'}
+                                    inputElement={<Input.Currency 
+                                        disableGroupSeparators
+                                        allowNegativeValue={false}
+                                        allowDecimals={false}
+                                        maxLength={3}
+                                        hideError 
+                                        register={register} 
+                                        name='jangka_waktu_promo'
+                                        errors={errors.jangka_waktu_promo} 
+                                    />}
+                                />
+                                {errors.jangka_waktu_promo && <ErrorMessageForm>{errors.jangka_waktu_promo.message}</ErrorMessageForm>}                    
+                            </>
+                        }
                     />
-                    {errors.jangka_waktu && <ErrorMessageForm>{errors.jangka_waktu.message}</ErrorMessageForm>}                    
                 </div>
-                <div style={{ width: "450px" }}>
+                
+            </div>
+
+            <div className="grid grid-cols-3 gap-8">
+                <div>
+                    <label className='block mb-3'> Asuransi </label>
+                    <MySelect withSearch id="asuransi" name="asuransi" options={options} placeholder="Isikan Asuransi"/>
+                </div>
+                <div>
+                    <label className='block mb-3'> Rate Asuransi </label>
+                    <Input.Text id="rateAsuransi" name="rateAsuransi" placeholder="Isikan rate asuransi" />
+                </div>
+
+                <div>
+                    <label className='block mb-3'> Usia </label>
+                    <Input.Text id="usia" name="usia" value={usia} placeholder="Isikan usia" readOnly/>
+                </div>
+            </div>
+
+            
+            <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7'>
+                <div>
                     <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500 mt-7 mb-1 ">Maks tenor pekerjaan: {maxTenor} bulan</p>
                     <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500">Jangka waktu melebihi maksimal tenor pekerjaan</p>
                 </div>
@@ -284,47 +350,10 @@ const Simulasi = ({ onSubmit }) => {
            
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Bunga Promo </label>
-                    <Input.Group
-                        append
-                        inputGroupText={'%'}
-                        inputElement={<Input.Text name="bunga_promo" />}
-                    />
+                </div>
+            </div>
 
-                </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Jangka Waktu Promo </label>
-                    <Input.Group
-                        append
-                        inputGroupText={'Bulan'}
-                        inputElement={<Input.Currency 
-                            disableGroupSeparators
-                            allowNegativeValue={false}
-                            allowDecimals={false}
-                            maxLength={3}
-                            hideError 
-                            register={register} 
-                            name='jangka_waktu_promo'
-                            errors={errors.jangka_waktu_promo} 
-                        />}
-                    />
-                    {errors.jangka_waktu_promo && <ErrorMessageForm>{errors.jangka_waktu_promo.message}</ErrorMessageForm>}                    
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-            </div>
-            <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Asuransi </label>
-                    <MySelect withSearch id="asuransi" name="asuransi" options={options} placeholder="Isikan Asuransi"/>
-                </div>
-                <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Rate Asuransi </label>
-                    <Input.Text id="rateAsuransi" name="rateAsuransi" placeholder="Isikan rate asuransi" />
-                </div>
-                <div style={{ width: "450px" }}>
-                </div>
-            </div>
+            
             <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Gaji </label>
@@ -333,6 +362,8 @@ const Simulasi = ({ onSubmit }) => {
                         inputElement={<Input.Currency
                             name="gaji"
                             allowDecimals={true}
+                            register={register}
+                            errors={errors.gaji} 
                             allowNegativeValue={false}
                             decimalSeparator={','}
                             groupSeparator={'.'}
