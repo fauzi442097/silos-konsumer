@@ -87,7 +87,6 @@ function GET(url, datatable = false) {
     .catch(function (res) {
       let error = res.response;
       let resData = [];
-
       if (error.status === 403) {
         logout()
       }

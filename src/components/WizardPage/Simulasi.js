@@ -96,6 +96,12 @@ const Simulasi = ({ onSubmit }) => {
         }
     };
 
+    const id = 4;
+    const refAgunan = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null });
+    const refDataProduk = useGet(['refProduct'], `master/list/product`, { retry: 1, refetchOnWindowFocus: false });
+    console.log(refDataProduk.data);
+    console.log(refAgunan.data);
+
     const getProduk = async () => {
         const arr = [];
         const response = await API.GET(`/master/list/product`);
@@ -135,7 +141,7 @@ const Simulasi = ({ onSubmit }) => {
 
     const getMenikah = async () => {
         const arrMenikah = [];
-        const response = await API.GET(`/master/list/status-kawin`);
+        const response = await API.GET(`master/list/status-kawin`);
         let getDataMenikah = response.data.data;
         getDataMenikah.map((item) => {
             return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })

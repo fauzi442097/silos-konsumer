@@ -10,6 +10,7 @@ import Checkbox from "@/components/Form/Checkbox";
 import { formDataNasabahSchema } from "../../formValidation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useGet from '@/hooks/useGet';
 
 
 const options = [
@@ -34,14 +35,14 @@ const DataNasabah = ({ onSubmit }) => {
     const [produk, setProduk] = useState(null);
     const [menikah, setMenikah] = useState(null);
 
-    const [dataNikah, setDataNikah] = useState([]);
-    // const [menikah, setMenikah] = useState(null);
-
     const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
         resolver: yupResolver(formDataNasabahSchema),
         mode: 'all'
     });
-    
+
+    const { data, isLoading, isError, error, isFetching, refetch } = useGet(['refDataProduk'], `/master/list/product`, { retry: 1, refetchOnWindowFocus: false })
+    console.log(data);
+
     const handleChangeKTP = value => {
         setStatKTP(value);
     };
@@ -58,26 +59,6 @@ const DataNasabah = ({ onSubmit }) => {
         console.log(data)
         onSubmit()
     }
-
-    // const getMenikah = async () => {
-    //     const arrMenikah = [];
-    //     const response = await API.GET(`/master/list/status-kawin`);
-
-    //     let getDataMenikah = response.data.data;
-    //     getDataMenikah.map((item) => {
-    //         return arrMenikah.push({ value: item.idPekerjaan, label: item.nmPekerjaan })
-    //     })
-
-    //     setDataNikah(arrMenikah);
-    // }
-
-    // const handleChangeMenikah = value => {
-    //     setMenikah(value);
-    // };
-
-    // useEffect(() => {
-    //     getMenikah();
-    // }, []);
 
     return (
         <>
