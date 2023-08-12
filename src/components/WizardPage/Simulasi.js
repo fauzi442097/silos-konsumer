@@ -6,15 +6,15 @@ import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
 import MySwal from "@/components/Swal/MySwal";
 import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import ModalHasilSimulasi from "../HasilSimulasi/ModalHasilSimulasi";
 import ErrorMessageForm from "../Form/ErrorMessageForm";
-import TabAction from '@/components/TabAction';
 import Button from "../Button";
 import FormGroup from "../Form/FormGroup";
 import useGet from "@/hooks/useGet";
 import { useMySwal } from "@/hooks/useMySwal";
+import TabAction from "@/components/TabAction";
+import { FormRules } from "@/lib/formRules";
+import moment from "moment";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -22,25 +22,24 @@ const options = [
     { value: "Honeybee", label: "Honeybee" }
 ];
 
-export const formSimulasiSchema = yup.object({
-    nama_debitur: yup.string().required('Wajib diisi').max('30', 'Maksimal diisi 30 karakter'),
-    cif: yup.string().max('15', 'Maksimal diisi 15 digit angka'),
-    produk: yup.string().required('Pilih produk'),
-    jangka_waktu: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
-    jangka_waktu_promo: yup.string().required('Wajib diisi').max('3', 'Maksimal diisi 3 digit angka'),
-    pekerjaan: yup.string().required('Pilih pekerjaan'),
-    gaji: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
-    penghasilan_lain: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
-    ulp: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
-    plafon: yup.string().required('Wajib diisi').max('11', 'Maksimal diisi 11 digit angka'),
-    tanggal_lahir: yup.string().required('Wajib diisi')
-})
 
-
+const formValidation = {
+    nama_debitur: {maxLength: FormRules.MaxLength(30),  pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf')},
+    cif: {maxLength: FormRules.MaxLength(15, 'Maksimal diisi 15 digit Angka')},
+    produk: {required: FormRules.Required('Pilih produk')},
+    pekerjaan: {required: FormRules.Required('Pilih pekerjaan')},
+    jangka_waktu: {required: FormRules.Required()},
+    tanggal_lahir: {required: FormRules.Required()},
+    bunga_promo: {max: FormRules.MaxNumber(100, 'Maksimal diisi 100')},
+    gaji: {required: FormRules.Required(), maxLength: FormRules.MaxLength(11)},
+    penghasilan_lain: {maxLength: FormRules.MaxLength(11)},
+    ulp: {maxLength: FormRules.MaxLength(11)},
+    plafon: {required: FormRules.Required(), maxLength: FormRules.MaxLength(13)},
+    status_debitur: {required: FormRules.Required()}
+}
 
 const Simulasi = ({ onSubmit }) => {
 
-    // const mySwal = useMySwal();
 
     const [dataProduk, setDataProduk] = useState([]);
     const [produk, setProduk] = useState(null);
@@ -58,17 +57,18 @@ const Simulasi = ({ onSubmit }) => {
     const [menikah, setMenikah] = useState(null);
 
     const [tanggalLahir, setTanggalLahir] = useState(null);
-    const [usia, setUsia] = useState(null);
 
-    const { register, control, handleSubmit, reset, watch, getValues, formState: { errors }  } = useForm({
-        resolver: yupResolver(formSimulasiSchema),
-        mode: "all"
-    });
+    const { register, control, handleSubmit, formState: { errors }  } = useForm({ mode: "all" });
+
+    const minAge = moment().subtract(17, 'years');
+
+ 
 
     const [ totalPenghasilan, setTotalPenghasilan ] = useState()
     const refGaji = useRef(0)
     const refULP = useRef(0)
     const refPenghasilanLain = useRef(0)
+    const refUsia = useRef('')
 
     const processSimulation = (data) => {
         setShowModal(true)
@@ -90,6 +90,9 @@ const Simulasi = ({ onSubmit }) => {
                 onChange(value)
             break;
             case 'tglLahir' :
+                let tglLahir = e.startDate
+                let age = moment().diff(tglLahir, 'years', false);
+                refUsia.current = `${age} Tahun`
                 setTanggalLahir(e)
                 onChange(e.startDate)
             break;
@@ -177,12 +180,11 @@ const Simulasi = ({ onSubmit }) => {
         <>
             <div className='grid grid-cols-3 gap-8 my-8'>
                 <div>
-                    <label className='block mb-3'> Jenis Debitur </label>
-                    <Input.Text value="Debitur Baru" disabled/>
+                    <label className='block mb-2' htmlFor="jenis_debitur"> Jenis Debitur </label>
+                    <Input.Text value="Debitur Baru" disabled id='jenis_debitur'/>
                 </div>
                 <div>
-                    <label className='block mb-3'> CIF </label>
-
+                    <label className='block mb-2' htmlFor="cif"> CIF </label>
                     <Input.Group
                         append
                         useButton
@@ -193,52 +195,61 @@ const Simulasi = ({ onSubmit }) => {
                             maxLength={15}
                             register={register} 
                             name='cif'
+                            id='cif'
                             errors={errors.cif} 
+                            validation={formValidation.cif}
+                            hideError
                         />}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none py-2'}> Inquiry </Button>}
                     />
                 </div>
 
                 <div>
-                    <label className='block mb-3'> Nama Debitur </label>
-                    <Input.Text name="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30}/>
+                    <label className='block mb-2' htmlFor="nama_debitur"> Nama Debitur </label>
+                    <Input.Text name="nama_debitur" id="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30} validation={formValidation.nama_debitur}/>
                 </div>
             </div>
             
             <div className='grid grid-cols-3 gap-8 my-8'>
                 <div>
-                    <label className='block mb-3'> Produk </label>
+                    <label className='block mb-2' htmlFor="produk"> Produk </label>
                     <Controller
                         control={control}
                         name="produk"
+                        id="produk"
                         render={({ field: { onChange } }) => (
                                 <MySelect
                                     withSearch
+                                    id="produk"
                                     name={'produk'} 
                                     register={register} 
                                     errors={errors.produk} 
                                     options={dataProduk} 
                                     value={produk} 
+                                    validation={formValidation.produk}
                                     onChange={(e) => handleChange(e, 'produk', onChange)}
                                 />
                             )}
                     />
                 </div>
                 <div>
-                    <label className='block mb-3'> Pekerjaan </label>
+                    <label className='block mb-2' htmlFor="pekerjaan"> Pekerjaan </label>
                     <Controller
                         control={control}
                         name="pekerjaan"
+                        id="pekerjaan"
                         render={({ field: { onChange } }) => (
                                 <MySelect
                                     withSearch
                                     loading={loadingPekerjaan}
                                     isDisabled={loadingPekerjaan}
                                     name={'pekerjaan'} 
+                                    id="pekerjaan"
                                     register={register} 
                                     errors={errors.pekerjaan} 
                                     options={dataPekerjaan} 
                                     value={pekerjaan} 
+                                    validation={formValidation.pekerjaan}
                                     onChange={(e) => handleChange(e, 'pekerjaan', onChange)}
                                 />
                             )}
@@ -249,12 +260,13 @@ const Simulasi = ({ onSubmit }) => {
 
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Suku Bunga </label>} 
+                        label={<label className='dark:text-grey' htmlFor="suku_bunga"> Suku Bunga </label>} 
                         input={
                             <>
                                 <Input.Group
                                     append
                                     inputGroupText={'%'}
+                                    id="suku_bunga"
                                     inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
                                 />
                             </>
@@ -263,7 +275,7 @@ const Simulasi = ({ onSubmit }) => {
 
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Jangka Waktu </label>} 
+                        label={<label className='dark:text-grey' htmlFor="jangka_waktu"> Jangka Waktu </label>} 
                         input={
                             <>
                             <Input.Group
@@ -273,11 +285,13 @@ const Simulasi = ({ onSubmit }) => {
                                     disableGroupSeparators
                                     allowNegativeValue={false}
                                     allowDecimals={false}
+                                    id="jangka_waktu"
                                     maxLength={3}
                                     hideError 
                                     register={register} 
                                     name='jangka_waktu'
                                     errors={errors.jangka_waktu} 
+                                    validation={formValidation.jangka_waktu}
                                 />}
                             />
                             {errors.jangka_waktu && <ErrorMessageForm>{errors.jangka_waktu.message}</ErrorMessageForm>}
@@ -289,44 +303,87 @@ const Simulasi = ({ onSubmit }) => {
             
             <div className='grid grid-cols-3 gap-8 my-8'>
                 <div>
-                    <label className='block mb-3'> Status Debitur </label>
-                    <MySelect withSearch id="statusDebitur" name="statusDebitur" placeholder="Isikan status debitur" options={dataMenikah} value={menikah} onChange={handleChangeMenikah}/>
-                </div>
-                <div>
-                    <label className='block mb-3'> Tanggal Lahir </label>
+                    <label className='block mb-2' htmlFor="status_debitur"> Status Debitur </label>
                     <Controller
                         control={control}
-                        name="tanggal_lahir"
+                        name="status_debitur"
+                        id="status_debitur"
                         render={({ field: { onChange } }) => (
-                                <Input.Date
-                                    name={'tanggal_lahir'} 
+                                <MySelect
+                                    withSearch
+                                    name={'status_debitur'} 
+                                    id="status_debitur"
                                     register={register} 
-                                    errors={errors.tanggal_lahir} 
-                                    value={tanggalLahir} 
-                                    onChange={(e) => handleChange(e, 'tglLahir', onChange)}
+                                    errors={errors.status_debitur} 
+                                    options={options} 
+                                    value={menikah}
+                                    validation={formValidation.status_debitur}
+                                    onChange={handleChangeMenikah}
                                 />
                             )}
+                    />
+
+                </div>
+
+                <div className="flex gap-8">
+
+                    <FormGroup  
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="tanggal_lahir"> Tanggal lahir </label>}
+                        input={<Controller
+                            control={control}
+                            name="tanggal_lahir"
+                            id="tanggal_lahir"
+                            render={({ field: { onChange } }) => (
+                                    <Input.Date
+                                        name={'tanggal_lahir'} 
+                                        id="tanggal_lahir"
+                                        maxDate={minAge}
+                                        startFrom={minAge}  
+                                        register={register} 
+                                        errors={errors.tanggal_lahir} 
+                                        value={tanggalLahir} 
+                                        validation={formValidation.tanggal_lahir}
+                                        onChange={(e) => handleChange(e, 'tglLahir', onChange)}
+                                    />
+                                )}
+                        />}
+                    />
+                  
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="usia"> Usia </label>} 
+                        input={<Input.Text id="usia" name="usia" value={refUsia.current} readOnly/>}
                     />
                 </div>
 
                 <div className="flex gap-8">
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Bunga Promo </label>} 
-                        input={
-                            <>
-                            <Input.Group
-                                append
-                                inputGroupText={'%'}
-                                inputElement={<Input.Text name="bunga_promo" />}
-                            />
-                            </>
-                        }
+                        label={<label className='dark:text-grey' htmlFor="bunga_promo"> Bunga Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
+                        input={<>
+                                <Input.Group
+                                    append
+                                    inputGroupText={'%'}
+                                    inputElement={<Input.Currency 
+                                        disableGroupSeparators
+                                        allowNegativeValue={false}
+                                        allowDecimals={false}
+                                        maxLength={3}
+                                        hideError 
+                                        validation={formValidation.bunga_promo}
+                                        register={register} 
+                                        id="bunga_promo"
+                                        name='bunga_promo'
+                                        errors={errors.bunga_promo} 
+                                    />}
+                                />
+                        </>}
                     />
 
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Jangka Waktu Promo </label>} 
+                        label={<label className='dark:text-grey'> Jangka Waktu Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={
                             <>
                                 <Input.Group
@@ -351,57 +408,60 @@ const Simulasi = ({ onSubmit }) => {
                 
             </div>
 
-            <div className="grid grid-cols-3 gap-8">
-                <div>
-                    <label className='block mb-3'> Asuransi </label>
-                    <MySelect withSearch id="asuransi" name="asuransi" options={options} placeholder="Isikan Asuransi"/>
-                </div>
-                <div>
-                    <label className='block mb-3'> Rate Asuransi </label>
-                    <Input.Text id="rateAsuransi" name="rateAsuransi" placeholder="Isikan rate asuransi" />
-                </div>
-
-                <div>
-                    <label className='block mb-3'> Usia </label>
-                    <Input.Text id="usia" name="usia" value={usia} readOnly/>
-                </div>
-            </div>
-
-            
-            {/* <div className='flex flex-row gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7'>
-                <div>
-                    <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500 mt-7 mb-1 ">Maks tenor pekerjaan: {maxTenor} bulan</p>
-                    <p className="italic text-sm font-bold text-red-500 font-inter-extralight dark:text-red-500">Jangka waktu melebihi maksimal tenor pekerjaan</p>
-                </div>
-            </div>
-           
-            <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "450px" }}>
-                </div>
-            </div> */}
-
-            
             <div className="grid grid-cols-3 gap-8 my-8">
 
-                <div>
+                <div className="flex gap-8">
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey'> Asuransi </label>}
+                        input={<MySelect withSearch id="asuransi" name="asuransi" options={options} placeholder="Isikan Asuransi"/>}
+                    />
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="rate_asuransi"> Rate Asuransi </label>} 
+                        input={<>
+                                <Input.Group
+                                    append
+                                    inputGroupText={'%'}
+                                    inputElement={<Input.Currency 
+                                        disableGroupSeparators
+                                        allowNegativeValue={false}
+                                        allowDecimals={false}
+                                        maxLength={3}
+                                        hideError 
+                                        validation={formValidation.rate_asuransi}
+                                        register={register} 
+                                        id="rate_asuransi"
+                                        name='rate_asuransi'
+                                        errors={errors.bunga_promo} 
+                                    />}
+                                />
+                        </>}
+                    />
+                </div>
+
+                <div className="flex gap-8">
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Gaji </label>} 
+                        label={<label className='dark:text-grey' htmlFor="gaji"> Gaji </label>} 
                         input={
                             <>
                                 <Input.Group
                                     inputGroupText={'Rp'}
                                     inputElement={<Input.Currency
                                         name="gaji"
+                                        id="gaji"
                                         ref={refGaji}
                                         allowDecimals={true}
                                         register={register}
                                         errors={errors.gaji}
-                                        maxLength={11} 
+                                        maxLength={9} 
                                         hideError
                                         allowNegativeValue={false}
                                         decimalSeparator={','}
                                         groupSeparator={'.'}
+                                        validation={formValidation.gaji}
                                         onChange={(value, name) => calculateTotalPenghasilan(value, name)}
                                     />}
                                 />     
@@ -409,12 +469,10 @@ const Simulasi = ({ onSubmit }) => {
                             </>
                         }
                     />
-                </div>
 
-                <div>
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> Penghasilan Lain </label>} 
+                        label={<label className='dark:text-grey'> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>} 
                         input={
                             <>
                                 <Input.Group
@@ -424,11 +482,12 @@ const Simulasi = ({ onSubmit }) => {
                                         allowDecimals={true}
                                         register={register}
                                         errors={errors.penghasilan_lain}
-                                        maxLength={11} 
+                                        maxLength={9} 
                                         hideError
                                         allowNegativeValue={false}
                                         decimalSeparator={','}
                                         groupSeparator={'.'}
+                                        validation={formValidation.penghasilan_lain}
                                         onChange={(value, name) => calculateTotalPenghasilan(value, name)}
                                     />}
                                 />     
@@ -438,20 +497,24 @@ const Simulasi = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div>
+                
+                <div className="flex gap-8">
+
                     <FormGroup
                         className={'mb-2 flex-col gap-2'}
-                        label={<label className='dark:text-grey'> ULP </label>} 
+                        label={<label className='dark:text-grey' htmlFor="ulp"> ULP <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={
                             <>
                                 <Input.Group
                                     inputGroupText={'Rp'}
                                     inputElement={<Input.Currency
                                         name="ulp"
+                                        id="ulp"
                                         allowDecimals={true}
                                         register={register}
+                                        validation={formValidation.ulp}
                                         errors={errors.ulp}
-                                        maxLength={11} 
+                                        maxLength={9} 
                                         hideError
                                         allowNegativeValue={false}
                                         decimalSeparator={','}
@@ -463,49 +526,63 @@ const Simulasi = ({ onSubmit }) => {
                             </>
                         }
                     />     
-                </div>
-            </div>
 
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2'}
+                        label={<label className='dark:text-grey' htmlFor="total_penghasilan"> Total Penghasilan </label>} 
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="total_penghasilan"
+                                        readOnly
+                                        allowDecimals={true}
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        value={totalPenghasilan}
+                                    />}
+                                />   
+                            </>
+                        }
+                    />
+                </div>
+            
+            </div>
+    
             <div className="grid grid-cols-3 gap-8">
-                <div>
-                    <label className='block mb-3'> Total Penghasilan </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={<Input.Currency
-                            name="total_penghasilan"
-                            readOnly
-                            allowDecimals={true}
-                            allowNegativeValue={false}
-                            decimalSeparator={','}
-                            groupSeparator={'.'}
-                            value={totalPenghasilan}
-                            onChange={(value, name) => console.log(value, name)}
-                        />}
-                    />     
-                </div>
-                <div>
-                    <label className='block mb-3'> Plafon</label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={<Input.Currency
-                            name="plafon"
-                            allowDecimals={true}
-                            allowNegativeValue={false}
-                            decimalSeparator={','}
-                            groupSeparator={'.'}
-                            onChange={(value, name) => console.log(value, name)}
-                        />}
-                    />     
-                </div>
-                <div style={{ width: "450px" }}>
-                    
-                </div>
+                <FormGroup
+                    className={'mb-2 flex-col gap-2 w-1/2 pr-4'}
+                    label={<label className='dark:text-grey' htmlFor="plafon"> Plafon </label>} 
+                    input={
+                        <>
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={<Input.Currency
+                                    name="plafon"
+                                    id="plafon"
+                                    allowDecimals={true}
+                                    register={register}
+                                    validation={formValidation.plafon}
+                                    errors={errors.plafon}
+                                    maxLength={10} 
+                                    hideError
+                                    allowNegativeValue={false}
+                                    decimalSeparator={','}
+                                    groupSeparator={'.'}
+                                />}
+                            />     
+                            {errors.plafon && <ErrorMessageForm>{errors.plafon.message}</ErrorMessageForm>}                    
+                        </>
+                    }
+                />    
             </div>
 
             {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
 
 
-            <div className="my-8 text-right">
+            <div className="text-right">
                 <TabAction onSubmit={handleSubmit(storeDataSimulasi)}/>
             </div>
         </>
