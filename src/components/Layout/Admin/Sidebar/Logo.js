@@ -14,25 +14,32 @@ const Logo = () => {
    const logoBrand = theme == 'light' ? logo_bank_kalteng : logo_bank_kalteng_trf;
 
   return (
-   <div className="mb-12 py-8 app-brand bg-[#D5EBE1] dark:bg-dark-depth1 w-full m-auto">
-      <Image
-         src={logoBrand}
-         alt="logo bank kalteng"
-         className={cn(['m-auto w-[160px] transition-all duration-300', !openSidebar && 'hidden group-hover:block'])}
-         priority={true}
-         width="0"
-         height="0"
-         sizes="100vw"
-      />
+   <div className="mb-12 py-8 app-brand bg-[#D5EBE1] dark:bg-dark-depth1 w-full m-auto relative">
 
-      <Image
-         src={logo_bank_kalteng_simple}
-         alt="logo bank kalteng"
-         className={cn(['m-auto transition-all duration-300', openSidebar ? 'hidden' : 'group-hover:hidden'])}
-         width={100}
-         height={100}
-         priority={true}
-      />
+      <div className={cn(['m-auto relative', !openSidebar ? 'w-[100px]' : 'w-[160px]' ])}>
+         <Image
+            src={logoBrand}
+            alt="logo bank kalteng"
+            className={cn(['m-auto transition-all duration-300', !openSidebar && 'hidden group-hover:block'])}
+            priority={true}
+            width={0}
+            height={0}
+            sizes="100vw"
+         />
+
+         <Image
+            src={logo_bank_kalteng_simple}
+            alt="logo bank kalteng"
+            className={cn(['m-auto transition-all object-cover duration-300', openSidebar ? 'hidden' : 'group-hover:hidden'])}
+            width={0}
+            height={0}
+            priority={true}
+         />
+      </div>
+
+      
+
+      
    </div>
   )
 }
