@@ -12,9 +12,9 @@ import Button from "../Button";
 import FormGroup from "../Form/FormGroup";
 import useGet from "@/hooks/useGet";
 import { useMySwal } from "@/hooks/useMySwal";
-import TabAction from "@/components/TabAction";
 import { FormRules } from "@/lib/formRules";
 import moment from "moment";
+import TabAction from "../TabAction";
 
 const options = [
     { value: "fox", label: "Fox" },
@@ -159,7 +159,7 @@ const Simulasi = ({ onSubmit }) => {
 
 
     const storeDataSimulasi = (data) => {
-        // onSubmit();
+        onSubmit();
         setShowModal(true)
     }
 
@@ -178,7 +178,7 @@ const Simulasi = ({ onSubmit }) => {
 
     return (
         <>
-            <div className='grid grid-cols-3 gap-8 my-8'>
+            <div className='grid sm:grid-cols-2 xl:grid-cols-3 gap-8 my-8'>
                 <div>
                     <label className='block mb-2' htmlFor="jenis_debitur"> Jenis Debitur </label>
                     <Input.Text value="Debitur Baru" disabled id='jenis_debitur'/>
@@ -208,9 +208,7 @@ const Simulasi = ({ onSubmit }) => {
                     <label className='block mb-2' htmlFor="nama_debitur"> Nama Debitur </label>
                     <Input.Text name="nama_debitur" id="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30} validation={formValidation.nama_debitur}/>
                 </div>
-            </div>
-            
-            <div className='grid grid-cols-3 gap-8 my-8'>
+
                 <div>
                     <label className='block mb-2' htmlFor="produk"> Produk </label>
                     <Controller
@@ -232,6 +230,7 @@ const Simulasi = ({ onSubmit }) => {
                             )}
                     />
                 </div>
+
                 <div>
                     <label className='block mb-2' htmlFor="pekerjaan"> Pekerjaan </label>
                     <Controller
@@ -256,10 +255,10 @@ const Simulasi = ({ onSubmit }) => {
                     />
 
                 </div>
-                <div className="flex gap-8">
 
+                <div className="flex gap-8 flex-wrap sm:flex-nowrap">
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="suku_bunga"> Suku Bunga </label>} 
                         input={
                             <>
@@ -274,7 +273,7 @@ const Simulasi = ({ onSubmit }) => {
                     />
 
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="jangka_waktu"> Jangka Waktu </label>} 
                         input={
                             <>
@@ -299,9 +298,7 @@ const Simulasi = ({ onSubmit }) => {
                         }
                     />
                 </div>
-            </div>
-            
-            <div className='grid grid-cols-3 gap-8 my-8'>
+
                 <div>
                     <label className='block mb-2' htmlFor="status_debitur"> Status Debitur </label>
                     <Controller
@@ -325,7 +322,7 @@ const Simulasi = ({ onSubmit }) => {
 
                 </div>
 
-                <div className="flex gap-8">
+                <div className="flex gap-8 flex-wrap sm:flex-nowrap">
 
                     <FormGroup  
                         className={'mb-2 flex-col gap-2 w-full'}
@@ -357,9 +354,9 @@ const Simulasi = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div className="flex gap-8">
+                <div className="flex gap-8 flex-wrap xl:flex-nowrap">
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="bunga_promo"> Bunga Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={<>
                                 <Input.Group
@@ -382,7 +379,7 @@ const Simulasi = ({ onSubmit }) => {
                     />
 
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey'> Jangka Waktu Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={
                             <>
@@ -405,12 +402,8 @@ const Simulasi = ({ onSubmit }) => {
                         }
                     />
                 </div>
-                
-            </div>
 
-            <div className="grid grid-cols-3 gap-8 my-8">
-
-                <div className="flex gap-8">
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey'> Asuransi </label>}
@@ -441,9 +434,9 @@ const Simulasi = ({ onSubmit }) => {
                     />
                 </div>
 
-                <div className="flex gap-8">
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="gaji"> Gaji </label>} 
                         input={
                             <>
@@ -471,7 +464,7 @@ const Simulasi = ({ onSubmit }) => {
                     />
 
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey'> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>} 
                         input={
                             <>
@@ -498,10 +491,9 @@ const Simulasi = ({ onSubmit }) => {
                 </div>
 
                 
-                <div className="flex gap-8">
-
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="ulp"> ULP <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={
                             <>
@@ -528,7 +520,7 @@ const Simulasi = ({ onSubmit }) => {
                     />     
 
                     <FormGroup
-                        className={'mb-2 flex-col gap-2'}
+                        className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="total_penghasilan"> Total Penghasilan </label>} 
                         input={
                             <>
@@ -548,12 +540,9 @@ const Simulasi = ({ onSubmit }) => {
                         }
                     />
                 </div>
-            
-            </div>
-    
-            <div className="grid grid-cols-3 gap-8">
+
                 <FormGroup
-                    className={'mb-2 flex-col gap-2 w-1/2 pr-4'}
+                    className={'mb-2 flex-col gap-2 w-full 2xl:w-1/2 2xl:pr-4'}
                     label={<label className='dark:text-grey' htmlFor="plafon"> Plafon </label>} 
                     input={
                         <>
@@ -582,7 +571,7 @@ const Simulasi = ({ onSubmit }) => {
             {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
 
 
-            <div className="text-right">
+            <div className="text-right ">
                 <TabAction onSubmit={handleSubmit(storeDataSimulasi)}/>
             </div>
         </>

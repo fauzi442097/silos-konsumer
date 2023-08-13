@@ -41,12 +41,12 @@ const ModalHasilSimulasi = ({ setShowModal, closeModal }) => {
         </Modal.Header>
         <Modal.Body>
 
-            <div className='flex flex-wrap gap-6 mb-8 border-b'>
+            <div className='flex flex-wrap gap-6 mb-8 border-b dark:border-b-[#2f3237]'>
                 <div onClick={() => handleActiveTab('rincian_pinjaman')} className={cn('py-2 cursor-pointer border-b border-transparent rounded-tl-md rounded-tr-md', showTab.rincian_pinjaman && 'border-primary border-b-2')}> 
-                    <p className={cn('mb-0 text-lg', showTab.rincian_pinjaman && 'text-primary font-inter-medium')}> Rincian Pinjaman </p>
+                    <p className={cn('mb-0 text-lg', showTab.rincian_pinjaman && 'text-primary font-inter-semibold')}> Rincian Pinjaman </p>
                 </div>
                 <div onClick={() => handleActiveTab('jadwal_angsur')} className={cn('py-2 cursor-pointer border-b border-transparent', showTab.jadwal_angsur && 'border-primary border-b-2')}>
-                    <p className={cn('mb-0 text-lg', showTab.jadwal_angsur && 'text-primary font-inter-medium')}> Jadwal Angsur </p>
+                    <p className={cn('mb-0 text-lg', showTab.jadwal_angsur && 'text-primary font-inter-semibold')}> Jadwal Angsur </p>
                 </div>
             </div>
 

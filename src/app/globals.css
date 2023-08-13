@@ -713,5 +713,25 @@
     @apply  dark:text-primary-600 text-primary
   }
 
+  /* width */
+  ::-webkit-scrollbar {
+      width: 6px;
+  }
+    
+  /* Track */
+  ::-webkit-scrollbar-track {
+      @apply bg-grey rounded-lg dark:bg-transparent
+  }
+    
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      @apply bg-primary rounded-lg dark:bg-primary-800
+  }
+    
+  /* Handle on hover */
+  /* ::-webkit-scrollbar-thumb:hover {
+      @apply bg-blue-600
+  } */
+
 }
 
