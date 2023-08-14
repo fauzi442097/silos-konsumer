@@ -11,7 +11,7 @@ import Preloader from '../Layout/Admin/Header/Preloader';
 
 const MyModal = dynamic(() => import('../../components/Modal'), { ssr: false, loading: () => <Preloader type={'toggleSidebar'} /> })
 
-const ModalHasilSimulasi = ({ setShowModal, closeModal }) => {
+const ModalHasilSimulasi = ({ setShowModal, closeModal, data }) => {
 
   const [ showTab, setShowTab ] = useState({
     rincian_pinjaman: true,
@@ -50,7 +50,7 @@ const ModalHasilSimulasi = ({ setShowModal, closeModal }) => {
                 </div>
             </div>
 
-            { showTab.rincian_pinjaman && <RincianPinjaman/>}
+            { showTab.rincian_pinjaman && <RincianPinjaman closeModal={closeModal} data={data}/>}
             { showTab.jadwal_angsur && <JadwalAngsur/>}
             
         </Modal.Body>

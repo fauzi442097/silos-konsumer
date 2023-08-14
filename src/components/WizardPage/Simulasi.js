@@ -4,33 +4,31 @@ import React, { useState, useEffect, useRef, useMemo } from "react"
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
-import MySwal from "@/components/Swal/MySwal";
 import { Controller, useForm } from "react-hook-form";
 import ModalHasilSimulasi from "../HasilSimulasi/ModalHasilSimulasi";
 import ErrorMessageForm from "../Form/ErrorMessageForm";
 import Button from "../Button";
 import FormGroup from "../Form/FormGroup";
 import useGet from "@/hooks/useGet";
-import { useMySwal } from "@/hooks/useMySwal";
 import { FormRules } from "@/lib/formRules";
 import moment from "moment";
 import TabAction from "../TabAction";
-
-const options = [
-    { value: "fox", label: "Fox" },
-    { value: "Butterfly", label: "Butterfly" },
-    { value: "Honeybee", label: "Honeybee" }
-];
-
+import { useMySwal } from "@/hooks/useMySwal";
+import { clearFormatRupiah } from "@/lib/utils";
+import usePost from "@/hooks/usePost";
+import LoadingSpinner from "../LoadingSpinner";
 
 const formValidation = {
     nama_debitur: {maxLength: FormRules.MaxLength(30),  pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf')},
     cif: {maxLength: FormRules.MaxLength(15, 'Maksimal diisi 15 digit Angka')},
     produk: {required: FormRules.Required('Pilih produk')},
     pekerjaan: {required: FormRules.Required('Pilih pekerjaan')},
-    jangka_waktu: {required: FormRules.Required()},
+    jangka_waktu: {required: FormRules.Required(), valueAsNumber: true},
+    jangka_waktu_promo: {valueAsNumber: true},
     tanggal_lahir: {required: FormRules.Required()},
-    bunga_promo: {max: FormRules.MaxNumber(100, 'Maksimal diisi 100')},
+    asuransi: {required: FormRules.Required()},
+    rate_asuransi: {required: FormRules.Required(), max: FormRules.MaxNumber(100, 'Maksimal diisi 100'), valueAsNumber: true},
+    bunga_promo: {valueAsNumber: true},
     gaji: {required: FormRules.Required(), maxLength: FormRules.MaxLength(11)},
     penghasilan_lain: {maxLength: FormRules.MaxLength(11)},
     ulp: {maxLength: FormRules.MaxLength(11)},
@@ -40,54 +38,165 @@ const formValidation = {
 
 const Simulasi = ({ onSubmit }) => {
 
+    const mySwal = useMySwal()
+    const { register, control, handleSubmit, getValues, setValue, formState: { errors }  } = useForm({ mode: "all", defaultValues: {
+        rate_asuransi: 0
+    } });
 
+    
     const [dataProduk, setDataProduk] = useState([]);
-    const [produk, setProduk] = useState(null);
+    const [produk, setProduk] = useState({value: -1, label: 'Pilih produk', disabled: true});
 
     const [ showModal, setShowModal ] = useState(false)
-    const suku_bunga = useRef(null)
-    
-    const [dataPekerjaan, setDataPekerjaan] = useState([]);
-    const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
-    const [pekerjaan, setPekerjaan] = useState(null);
 
-    const [maxTenor, setMaxTenor] = useState(false);
+    const [dataAsuransi, setDataAsuransi] = useState([])
+    const [asuransi, setAsuransi] = useState({value: -1, label: 'Pilih asuransi', disabled: true})
+
+    const [dataPekerjaan, setDataPekerjaan] = useState([]);
+    const [pekerjaan, setPekerjaan] = useState({value: -1, label: 'Pilih pekerjaan', disabled: true});
+    const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
 
     const [dataMenikah, setDataMenikah] = useState([]);
-    const [menikah, setMenikah] = useState(null);
+    const [menikah, setMenikah] = useState({value: -1, label: 'Pilih status debitur', disabled: true});
 
-    const [tanggalLahir, setTanggalLahir] = useState(null);
+    const [tanggalLahir, setTanggalLahir] = useState(undefined);
+    const [totalPenghasilan, setTotalPenghasilan] = useState(undefined)
 
-    const { register, control, handleSubmit, formState: { errors }  } = useForm({ mode: "all" });
+    const [dataSimulasi, setDataSimulasi] = useState({})
+
+    
+    let payload = []
+    const hitSimulasi = usePost(['simulasi'], '/v2/master/simulasi', payload, {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning(error.rm)
+        },
+        onSuccess: (data, variables, context) => {
+            let resData = data.data.data
+            let collectData = {...resData, totalPenghasilan}
+            setDataSimulasi(collectData)
+
+            let angsuranBulan = resData.promo ? resData.promo.angsuranPromo : resData.angsuranBulan
+            let payloadBiayaLainnya = {
+                productId: variables.productId,
+                idPekerjaan: variables.idPekerjaan,
+                jangkaWaktu: variables.jangkaWaktu,
+                rate: variables.rate,
+                plafon: variables.plafon,
+                asuransiId: getValues('asuransi'),
+                angsuran: angsuranBulan,
+                idProspek: null,
+                rateAsuransi: getValues('rate_asuransi')
+            }
+            hitBiayaLainnya.mutate(payloadBiayaLainnya)
+            
+
+            // productId: productId,
+            // idPekerjaan: idPekerjaan,
+            // jangkaWaktu: jangkaWaktu,
+            // rate: rate,
+            // plafon: plafon,
+            // asuransiId: asuransi,
+            // angsuran: angsuranBulan,
+            // idProspek: null,
+            // rateAsuransi: rateAsuransi
+            
+            // setShowModal(false)
+            // queryClient.invalidateQueries(['getNewEntry']);
+            // let message = data.data.rm
+            // mySwal.success(message, 'Sukses')
+        },
+    });
+
+    const hitBiayaLainnya = usePost(['biaya-lainnya'], 'v2/master/kalkulasi-biaya', payload, {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning(error.rm)
+        },
+        onSuccess: (data, variables, context) => {
+            let resData = data.data.data
+            let collectData = {...dataSimulasi, dataBiaya: resData}
+            setDataSimulasi(collectData)
+            setShowModal(true)
+
+            // setDataAsuransi((prev) => ({...prev, dataBiaya: resData}))
+            
+
+            // console.log({variables})
+            // console.log({context})
+            
+            // let resData = data.data.data
+            // let collectData = {...resData, totalPenghasilan}
+            // setDataSimulasi(collectData)
+
+            // setShowModal(false)
+            // queryClient.invalidateQueries(['getNewEntry']);
+            // let message = data.data.rm
+            // mySwal.success(message, 'Sukses')
+        },
+    })
+
+    // url: '{{ route('post_data') }}',
+    // data: {
+    //     act_url: 'v2/master/kalkulasi-biaya',
+    //     productId: productId,
+    //     idPekerjaan: idPekerjaan,
+    //     jangkaWaktu: jangkaWaktu,
+    //     rate: rate,
+    //     plafon: plafon,
+    //     asuransiId: asuransi,
+    //     angsuran: angsuranBulan,
+    //     idProspek: null,
+    //     rateAsuransi: rateAsuransi
+    // },
+
+    // typeJadwalId = jika ada promo type = 1 else 2
+    // $response = $this->postAPIClient('master/jadwal-angsur', [
+    //     "idProduct" => $request->get('productId')?$request->get('productId'):$request->get('prodId'),
+    //     "totalAngsuran" => $request->get('angsuranBulan')?str_replace('.','',$request->get('angsuranBulan')):str_replace('.','',$request->get('angsuranNew')),
+    //     "plafon" => str_replace('.','',$request->get('plafon')),
+    //     "jangkaWaktu" => $request->get('jangkaWaktu'),
+    //     "rate" => $request->get('rate'),
+    //     "typeJadwalId" => $request->get('typeJadwalId'),
+    //     "promo" => [
+    //         "angsuranPromo"=> $request->get('angsuranPromo'),
+    //         "plafonPromo"=> $request->get('plafonPromo'),
+    //         "tenorPromo"=> $request->get('tenorPromo'),
+    //         "ratePromo"=> $request->get('ratePromo'),
+    //         "bulanPromo"=> $request->get('bulanPromo'),
+    //         "angsuranNormal"=> $request->get('angsuranNormal'),
+    //         "plafonNormal"=> $request->get('plafonNormal'),
+    //         "tenorNormal"=> $request->get('tenorNormal'),
+    //         "rateNormal"=> $request->get('rateNormal')
+    //     ],
+    // ])->json();
 
     const minAge = moment().subtract(17, 'years');
-
- 
-
-    const [ totalPenghasilan, setTotalPenghasilan ] = useState()
     const refGaji = useRef(0)
     const refULP = useRef(0)
+    const suku_bunga = useRef(undefined)
     const refPenghasilanLain = useRef(0)
     const refUsia = useRef('')
+    const refRateAsuransi = useRef(0)
 
-    const processSimulation = (data) => {
-        setShowModal(true)
-    }
-
-    const handleChange = (e, type, onChange) => {
+    const handleChange = async (e, type, onChange) => {
         let value = e.value   
         switch (type)  {
             case 'produk': 
+                onChange(value)
                 let produkSelected = dataProduk.find((item, i) => item.value == value)
                 suku_bunga.current = produkSelected.eqRate
                 setProduk(produkSelected)
-                getPekerjaan(value);
-                onChange(value)
+                getPekerjaan(value)
+                register('bunga_promo', {max: {value: Number(produkSelected.eqRate), message: `Tidak boleh lebih dari suku bunga normal`}, valueAsNumber: true})
             break;
             case 'pekerjaan' :
                 let pekerjaanSelected = dataPekerjaan.find((item, i) => item.value == value)
                 setPekerjaan(pekerjaanSelected)
                 onChange(value)
+                register('jangka_waktu', {max: {value: pekerjaanSelected.tenor, message: `Maksimal diisi ${pekerjaanSelected.tenor} bulan`}, valueAsNumber: true})
             break;
             case 'tglLahir' :
                 let tglLahir = e.startDate
@@ -96,71 +205,110 @@ const Simulasi = ({ onSubmit }) => {
                 setTanggalLahir(e)
                 onChange(e.startDate)
             break;
+            case 'statusDebitur' :
+                onChange(value)
+                let statusSelected = dataMenikah.find((item, i) => item.value == value)
+                setMenikah(statusSelected)
+            break;
+            case 'asuransi' :
+                onChange(value)
+                let asuransiSelected = dataAsuransi.find((item, i) => item.value == value)
+                let produkId = getValues('produk')
+                let tglLahirSelected = getValues('tanggal_lahir')
+                let idPekerjaan = getValues('pekerjaan')
+                let tenor = getValues('jangka_waktu')
+                let asuransiId = asuransiSelected.value
+
+                if ( produkId && tglLahirSelected && idPekerjaan && tenor && asuransiId ) {
+                    let rateAsuransi = await getAsuransi(asuransiId, tenor, produkId, tglLahirSelected, idPekerjaan, 'rate-asuransi')
+                    refRateAsuransi.current = rateAsuransi
+                }
+
+                setAsuransi(asuransiSelected)
+            break;
         }
     };
 
-    // const id = 4;
-    // const refAgunan = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null });
-    const refDataProduk = useGet(['refProduct'], `master/list/product`, { retry: 1, refetchOnWindowFocus: false });
-    // console.log(refDataProduk.data);
-    // console.log(refAgunan.data);
-
-    // const getProduk = async () => {
-    //     const arr = [];
-    //     const response = await API.GET(`master/list/product`);
-    //     console.log(response)
-    //     if (response.status != 200) return MySwal.error(response.data.error)
-    //     let result = response.data.data;
-    //     result.map((item) => {
-    //         return arr.push({ 
-    //             value: item.id, 
-    //             label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
-    //             eqRate: item.eqRate,
-    //             eqRateReal: item.eqRateReal
-    //         })
-    //     })
-        
-    //     setDataProduk(arr)
-    // }
-
-    // const getPekerjaan = async (idProduk) => {
-    //     setLoadingPekerjaan(true)
-    //     const arrPekerjaan = [];
-    //     const response = await API.GET(`master/list/pekerjaan?idProduct=${idProduk}`)
-    //     setLoadingPekerjaan(false)
-            
-    //     let getDataPekerjaan = response.data.data;
-    //     getDataPekerjaan.map((item) => {
-    //         return arrPekerjaan.push({ 
-    //             value: item.idPekerjaan, 
-    //             label: item.nmPekerjaan + ' - Max Tenor. ' + item.tenor + ' Bln', 
-    //             tenor: item.tenor, 
-    //             masaKerja: item.masaKerjaUmur
-    //         })
-    //     })
-
-    //     setDataPekerjaan(arrPekerjaan);
-    // }
-
-    // const getMenikah = async () => {
-    //     const arrMenikah = [];
-    //     const response = await API.GET(`master/list/status-kawin`);
-    //     let getDataMenikah = response.data.data;
-    //     getDataMenikah.map((item) => {
-    //         return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
-    //     })
-
-    //     setDataMenikah(arrMenikah);
-    // }
-
-    const handleChangeMenikah = value => {
-        // setMenikah(value);
+    const getProduk = async () => {
+        const response = await API.GET(`/master/list/product`);
+        if (response.status != 200) return mySwal.error(response.data.error)
+        const arr = [];
+        let result = response.data.data;        
+        result.map((item) => {
+            return arr.push({ 
+                value: item.id, 
+                label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
+                eqRate: item.eqRate,
+                eqRateReal: item.eqRateReal
+            })
+        })
+        setDataProduk(arr)
     }
 
+    const getPekerjaan = async (idProduk) => {
+        setLoadingPekerjaan(true)
+        const arrPekerjaan = [];
+        const response = await API.GET(`master/list/pekerjaan?idProduct=${idProduk}`)
+        if (response.status != 200) return mySwal.error(response.data.error)
+        setLoadingPekerjaan(false)
+        let getDataPekerjaan = response.data.data;
+        getDataPekerjaan.map((item) => {
+            return arrPekerjaan.push({ 
+                value: item.idPekerjaan, 
+                label: item.nmPekerjaan + ' - Max Tenor. ' + item.tenor + ' Bln', 
+                tenor: item.tenor, 
+                masaKerja: item.masaKerjaUmur
+            })
+        })
+        setDataPekerjaan(arrPekerjaan);
+    }
+
+    const getMenikah = async () => {
+        const response = await API.GET(`master/list/status-kawin`);
+        if (response.status != 200) return mySwal.error(response.data.error)
+        const arrMenikah = [];
+        let getDataMenikah = response.data.data;
+        getDataMenikah.map((item) => {
+            return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
+        })
+        setDataMenikah(arrMenikah);
+    }
+
+    const getAsuransi = async (asuransiId = null, jangkaWaktu, idProduct, tglLahir, idPekerjaan, type = 'list-asuransi') => {
+        const response = await API.POST(`v2/master/calc-asuransi-list/${asuransiId}?jangkaWaktu=${jangkaWaktu}&idProduct=${idProduct}&${tglLahir}&idPekerjaan=${idPekerjaan}`);            
+        if (response.status != 200) return mySwal.error(response.data.error)
+        const refAsuransi = response.data.data.list
+        if ( type == 'rate-asuransi' ) return response.data.data.rate
+        const arrAsuransi = []
+        refAsuransi.map((item, index) => arrAsuransi.push({value: item.asuransiId, label: item.definition}))
+        setDataAsuransi(arrAsuransi)    
+    }
+
+    
 
     const storeDataSimulasi = (data) => {
-        onSubmit();
-        setShowModal(true)
+        if ( (data.jangka_waktu_promo && !data.bunga_promo) || (!data.jangka_waktu_promo && data.bunga_promo) ) {
+            mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
+        }
+        
+        const dataFormatted = {
+            productId: data.produk,
+            idPekerjaan: data.pekerjaan,
+            pendapatanBulan: clearFormatRupiah(data.gaji),
+            pendapatanLainnya: clearFormatRupiah(data.penghasilan_lain), // Penghasilan lain
+            pendapatanLainnya2: clearFormatRupiah(data.ulp), // ULP
+            jangkaWaktu: data.jangka_waktu,
+            tglLahir: data.tanggal_lahir,
+            isMenikah: data.status_debitur,
+            plafon: clearFormatRupiah(data.plafon),
+            rate: Number(suku_bunga.current),
+            pengeluaran: 0,
+            totalAngsuranLain: 0,
+            ratePromo: data.bunga_promo,
+            bulanPromo: Number(data.jangka_waktu_promo),
+        }
+        hitSimulasi.mutate(dataFormatted)
+        // onSubmit();
     }
 
     const calculateTotalPenghasilan = (value, name) => {
@@ -172,8 +320,9 @@ const Simulasi = ({ onSubmit }) => {
     }    
 
     useEffect(() => {
-        // getProduk();
-        // getMenikah();
+        getProduk();
+        getMenikah();
+        getAsuransi(null,120,4,'2000-12-22',8)
     }, []);
 
     return (
@@ -287,6 +436,7 @@ const Simulasi = ({ onSubmit }) => {
                                     id="jangka_waktu"
                                     maxLength={3}
                                     hideError 
+                                    onChange={(value, name) => register('jangka_waktu_promo', {max: {value: value, message: `Tidak boleh lebih dari jangka waktu normal`}, valueAsNumber: true})}
                                     register={register} 
                                     name='jangka_waktu'
                                     errors={errors.jangka_waktu} 
@@ -312,10 +462,10 @@ const Simulasi = ({ onSubmit }) => {
                                     id="status_debitur"
                                     register={register} 
                                     errors={errors.status_debitur} 
-                                    options={options} 
+                                    options={dataMenikah} 
                                     value={menikah}
                                     validation={formValidation.status_debitur}
-                                    onChange={handleChangeMenikah}
+                                    onChange={(e) => handleChange(e, 'statusDebitur', onChange)}
                                 />
                             )}
                     />
@@ -357,7 +507,7 @@ const Simulasi = ({ onSubmit }) => {
                 <div className="flex gap-8 flex-wrap xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="bunga_promo"> Bunga Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
+                        label={<label className='dark:text-grey' htmlFor="bunga_promo"> Suku Bunga Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={<>
                                 <Input.Group
                                     append
@@ -365,8 +515,9 @@ const Simulasi = ({ onSubmit }) => {
                                     inputElement={<Input.Currency 
                                         disableGroupSeparators
                                         allowNegativeValue={false}
-                                        allowDecimals={false}
-                                        maxLength={3}
+                                        allowDecimals={true}
+                                        maxLength={4}
+                                        decimalsLimit={1}
                                         hideError 
                                         validation={formValidation.bunga_promo}
                                         register={register} 
@@ -375,6 +526,7 @@ const Simulasi = ({ onSubmit }) => {
                                         errors={errors.bunga_promo} 
                                     />}
                                 />
+                                {errors.bunga_promo && <ErrorMessageForm>{errors.bunga_promo.message}</ErrorMessageForm>}
                         </>}
                     />
 
@@ -406,8 +558,27 @@ const Simulasi = ({ onSubmit }) => {
                 <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey'> Asuransi </label>}
-                        input={<MySelect withSearch id="asuransi" name="asuransi" options={options} placeholder="Isikan Asuransi"/>}
+                        label={<label className='dark:text-grey' htmlFor="asuransi"> Asuransi </label>}
+                        input={<Controller
+                            control={control}
+                            name="asuransi"
+                            id="asuransi"
+                            render={({ field: { onChange } }) => (
+                                    <MySelect
+                                        withSearch
+                                        // loading={loadingPekerjaan}
+                                        // isDisabled={loadingPekerjaan}
+                                        name={'asuransi'} 
+                                        id="asuransi"
+                                        register={register} 
+                                        errors={errors.asuransi} 
+                                        options={dataAsuransi} 
+                                        value={asuransi} 
+                                        validation={formValidation.asuransi}
+                                        onChange={(e) => handleChange(e, 'asuransi', onChange)}
+                                    />
+                                )}
+                        />}
                     />
 
                     <FormGroup
@@ -420,16 +591,19 @@ const Simulasi = ({ onSubmit }) => {
                                     inputElement={<Input.Currency 
                                         disableGroupSeparators
                                         allowNegativeValue={false}
-                                        allowDecimals={false}
-                                        maxLength={3}
+                                        allowDecimals={true}
+                                        maxLength={6}
+                                        decimalsLimit={4}
                                         hideError 
+                                        value={refRateAsuransi.current}
                                         validation={formValidation.rate_asuransi}
                                         register={register} 
                                         id="rate_asuransi"
                                         name='rate_asuransi'
-                                        errors={errors.bunga_promo} 
+                                        errors={errors.rate_asuransi} 
                                     />}
                                 />
+                                {errors.rate_asuransi && <ErrorMessageForm>{errors.rate_asuransi.message}</ErrorMessageForm>}                    
                         </>}
                     />
                 </div>
@@ -568,11 +742,15 @@ const Simulasi = ({ onSubmit }) => {
                 />    
             </div>
 
-            {showModal && <ModalHasilSimulasi setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
+            {showModal && <ModalHasilSimulasi data={dataSimulasi} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
 
-
-            <div className="text-right ">
-                <TabAction onSubmit={handleSubmit(storeDataSimulasi)}/>
+            <div className="text-right pb-6">
+                <Button 
+                    onClick={handleSubmit(storeDataSimulasi)}
+                    className={`${hitBiayaLainnya.isLoading && 'cursor-not-allowed'}`}> 
+                    {hitBiayaLainnya.isLoading && <LoadingSpinner/>} 
+                    {hitBiayaLainnya.isLoading ? 'Processing ...' : 'Simulasi'}
+                </Button>
             </div>
         </>
     )

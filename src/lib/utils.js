@@ -27,3 +27,7 @@ export const generateId = () => {
 export const getKeyOfObject = (obj, value) => {
    return Object.keys(obj).find(k=>obj[k]===value);
 }
+
+export const clearFormatRupiah = (value) => {
+   return Number(value.replaceAll('.', ''))
+}
