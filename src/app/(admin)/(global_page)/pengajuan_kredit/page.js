@@ -50,6 +50,7 @@ const FormProspek = () => {
         router.replace(`${pathname}?tab=${currentTab}`)
         let keyTabGroup = getKeyOfObject(REF_TAB_GROUP, currentTab)
         setStep(REF_STEP[keyTabGroup])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTab])
 
     let tabExists = Object.values(REF_TAB_GROUP).includes(currentTab);

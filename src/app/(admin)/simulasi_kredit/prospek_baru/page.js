@@ -31,6 +31,7 @@ const Page = () => {
 
     useEffect(() => {
         getProspekBaru(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handlePageChange = async (page) => {

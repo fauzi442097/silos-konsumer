@@ -13,30 +13,30 @@ const JadwalAngsur = () => {
             </Button>
         </div>
         
-        <div className="relative overflow-x-auto shadow rounded-lg max-h-[45rem]">
+        <div className="relative overflow-x-auto shadow max-h-[45rem]">
             <table className="w-full text-left">
-                <thead className="bg-gray-100 sticky top-0">
+                <thead className="bg-gray-100 dark:bg-dark-depth2 sticky top-0">
                     <tr>
-                        <th scope="col" className="px-6 py-4 font-inter-medium">
+                        <td scope="col" className="px-6 py-4 font-inter-medium rounded-tl-lg rounded-bl-lg">
                             Angsuran Ke
-                        </th>
-                        <th scope="col" className="px-6 py-4 font-inter-medium">
+                        </td>
+                        <td scope="col" className="px-6 py-4 font-inter-medium">
                             Sisa Pokok 
-                        </th>
-                        <th scope="col" className="px-6 py-4 font-inter-medium">
+                        </td>
+                        <td scope="col" className="px-6 py-4 font-inter-medium">
                             Angsuran Pokok
-                        </th>
-                        <th scope="col" className="px-6 py-4 font-inter-medium">
+                        </td>
+                        <td scope="col" className="px-6 py-4 font-inter-medium">
                             Angsuran Bunga
-                        </th>
-                        <th scope="col" className="px-6 py-4 font-inter-medium">
+                        </td>
+                        <td scope="col" className="px-6 py-4 font-inter-medium rounded-tr-lg rounded-br-lg">
                             Angsuran
-                        </th>
+                        </td>
                     </tr>
                 </thead>
                 <tbody class="overflow-y-auto">
                     {dataAngsuran.map((item, i) => (
-                        <tr className="bg-white border-b border-dashed dark:bg-gray-900 dark:border-gray-700" key={i}>
+                        <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]" key={i}>
                             <td className="px-6 py-4">{item.angsuranKe}</td>
                             <td className="px-6 py-4">{item.sisaPokok}</td>
                             <td className="px-6 py-4">{item.angsuranPokok}</td>

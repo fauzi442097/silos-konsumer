@@ -2,10 +2,8 @@
 
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/navigation';
-import * as yup from "yup";
 
 import { API } from '@/config/api';
 import Input from '@/components/Form/Input';
@@ -14,22 +12,22 @@ import Alert from '@/components/Alert';
 import Button from '@/components/Button';
 import { useLoadingStore } from '@/stores/loading';
 import useAuth from '@/hooks/useAuth';
- 
-const loginSchema = yup.object({
-  username: yup.string().required('Wajib diisi'),
-  password: yup.string().required('Wajib diisi')
-})
+import { FormRules } from '@/lib/formRules';
+
+const formValidation = {
+  username: {
+    required: FormRules.Required(),
+    maxLength: FormRules.MaxLength('30'),
+  },
+  password: {
+    required: FormRules.Required()
+  }
+}
 
 
 const Page = () => {
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors } 
-  } = useForm({
-    resolver: yupResolver(loginSchema)
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm({mode: 'all'});
 
   const router = useRouter();
   const { loading, setLoading } = useLoadingStore()
@@ -60,19 +58,24 @@ const Page = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h2 className='mt-8 mb-10'> Login </h2>
         <div className='mb-8'>
-          <label className='mb-1.5 block dark:text-grey'> Username </label>
+          <label className='mb-1.5 block dark:text-grey' htmlFor='username'> Username </label>
           <Input.Text
               name={'username'}
+              id={'username'}
+              maxLength={30}
               register={register}
               errors={errors.username}
+              validation={formValidation.username}
             />
         </div>
         <div className='mb-8'>
-          <label className='mb-1.5 block dark:text-grey'> Password </label>
+          <label className='mb-1.5 block dark:text-grey' htmlFor='psswd'> Password </label>
           <Input.Password
+            id={'psswd'}
             name={'password'}
             errors={errors.password}
             register={register}
+            validation={formValidation.password}
           />
         </div>
         <div className='my-10'>

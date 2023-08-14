@@ -6,7 +6,7 @@ const PageTitle = ({ title, pageAction }) => {
     <div className='flex flex-row justify-between items-center flex-wrap'>
       <div>
         <h1> {title} </h1>
-        <Breadcrumbs/>
+        {/* <Breadcrumbs/> */}
       </div>
       
       <div>

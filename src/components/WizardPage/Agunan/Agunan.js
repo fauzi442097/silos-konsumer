@@ -103,6 +103,7 @@ const Agunan = ({ prevAction, onSubmit }) => {
             
             setRefListAgunan(arrJenisAgunan);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleChangeAgunan = value => {

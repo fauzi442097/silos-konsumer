@@ -3,7 +3,7 @@ import React from 'react'
 
 const TabAction = ({ prevAction, onSubmit, lastForm }) => {
   return (
-    <div className="flex justify-between border-t mt-10 py-6">
+    <div className="flex justify-between border-t mt-10 py-6 dark:border-t-[#2f3237]">
         <div className="order-first">
             {prevAction &&  <Button variant="outline" className="mr-3" onClick={prevAction}> Kembali </Button>}
         </div>
