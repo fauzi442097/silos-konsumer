@@ -1,16 +1,19 @@
 import React from 'react'
 import Button, { buttonVariants } from '../Button'
 import Dropdown, { DropdownItem } from '../Dropdown'
-import { cn } from '@/lib/utils'
+import { cn, formatRupiah } from '@/lib/utils'
 
-const RincianPinjaman = ({ closeModal }) => {
+const RincianPinjaman = ({ closeModal, data }) => {
+
+  let totalBiaya = Number(data.dataBiaya.biaya[0].nominal) + Number(data.dataBiaya.biaya[1].nominal) + Number(data.dataBiaya.biaya[2].nominal) + Number(data.dataBiaya.biaya[3].nominal) +  Number(data.dataBiaya.biaya[4].nominal)
+    
   return (
     <div className="div">
         <div className="flex flex-row">
             <div className="basis-1/2">
                 <p className="text-semibold mb-2">Angsuran promo sebesar</p>
-                <p className="text-3xl text-primary font-inter-bold mb-0">Rp 4.000.000 <span className="text-primary font-inter-semibold"> / bulan</span> </p> 
-                <p className="mt-0"> dari total pinjaman <span className="text-primary font-inter-bold text-lg"> Rp 200.000.000 </span></p>
+                <p className="text-3xl text-primary font-inter-bold mb-0">Rp {data.promo ? formatRupiah(data.promo.angsuranPromo) : formatRupiah(data.angsuranBulan)}  <span className="text-primary font-inter-semibold"> / bulan</span> </p> 
+                <p className="mt-0"> dari total pinjaman <span className="text-primary font-inter-bold text-lg"> Rp {formatRupiah(data.plafon)} </span></p>
 
                 <Button
                     variant="outline"
@@ -22,58 +25,67 @@ const RincianPinjaman = ({ closeModal }) => {
             <div className="basis-1/2 bg-gray-100 dark:bg-dark-depth2 rounded-lg text-sm p-4 italic self-start">
                 <p className='mb-1'> Catatan: </p>
                 <span>
-                    Cicilan ini setara dengan <span className="font-inter-medium"> 50% </span> dari penghasilan bulanan <span className='text-primary font-inter-medium'> Rp 50.0000 </span> dengan  <strong className="font-semibold text-gray-900 dark:text-white"> sisa penghasilan </strong> sebesar 
-                    <span className='text-primary font-inter-medium'> Rp 5.000.000 </span>
+                    Cicilan ini setara dengan <span className="font-inter-medium"> {parseFloat(data.angsuranGaji).toFixed(2)} % </span> dari penghasilan bulanan <span className='text-primary font-inter-medium'> Rp {formatRupiah(data.totalPenghasilan)} </span> dengan  <strong className="font-semibold text-gray-900 dark:text-white"> sisa penghasilan </strong> sebesar 
+                    <span className='text-primary font-inter-medium'> Rp {formatRupiah(data.sisaGaji)} </span>
                 </span>
             </div>
         </div>
     
-        <hr class="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+        <hr className="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
 
 
-        <div className='flex justify-between items-center'> 
-            <p className="text-lg font-inter-medium mb-0">Angsuran normal setelah promo </p>
-            <p className="text-lg text-primary font-inter-medium mb-0">Rp 10.000.000</p>
-        </div>
+        { data.promo && (<>
+            <div className='flex justify-between items-center'> 
+                <p className="text-lg font-inter-medium mb-0">Angsuran normal setelah promo </p>
+                <p className="text-lg text-primary font-inter-medium mb-0">Rp {formatRupiah(data.promo.angsuranNormal)} </p>
+            </div>
+            <hr className="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+            </>
+        )}
+        
 
-        <hr class="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
-
-        <p className='text-lg text-muted font-inter-medium dark:text-grey mb-8'> Biaya - Biaya </p>
+        <p className='text-lg text-muted font-inter-medium dark:text-grey mb-6'> Biaya - Biaya </p>
 
         <div className='flex justify-between items-center mb-2'> 
             <p className="mb-0">Biaya Notaris </p>
-            <p className="text-primary font-inter-medium mb-0">Rp 2.000.000</p>
+            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[0].nominal))} </p>
         </div>
 
         <div className='flex justify-between items-center mb-2'> 
             <p className="mb-0">Biaya Asuransi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp 2.000.000</p>
+            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[2].nominal))} </p>
         </div>
 
         <div className='flex justify-between items-center mb-2'> 
             <p className="mb-0">Biaya Provisi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp 2.000.000</p>
+            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[1].nominal))} </p>
         </div>
 
         <div className='flex justify-between items-center mb-2'> 
             <p className="mb-0">Biaya Administrasi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp 2.000.000</p>
+            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[3].nominal))} </p>
         </div>
 
         <div className='flex justify-between items-center mb-2'> 
-            <p className="text-lg mb-0 font-inter-medium">Total Biaya Lainnya </p>
-            <p className="text-lg text-primary font-inter-medium mb-0">Rp 8.000.000</p>
+            <p className="mb-0">Biaya Pihak Ketiga </p>
+            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[4].nominal))} </p>
         </div>
 
-        <hr class="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+        <div className='flex justify-between items-center mb-4'> 
+            <p className="text-lg mb-0 font-inter-medium">Total Biaya Lainnya </p>
+            <p className="text-lg text-primary font-inter-medium mb-0">Rp {formatRupiah(totalBiaya)}</p>
+        </div>
 
-        <div className="flex flex-row">
+        <hr className="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+
+        { parseFloat(data.angsuranGaji).toFixed() > 90 && (<><div className="flex flex-row">
             <div className="basis-full">
                 <span>Rasio ini sudah <strong className="font-inter-semibold text-red-600 dark:text-white">berbahaya</strong>, berpotensi mengganggu cash flow mu dimasa depan. <br></br> Karena angsuran perbulan telah melebihi 90% gaji</span>
             </div>
         </div>
-
-        <hr class="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+        <hr className="h-px my-4 bg-gray-400 border-0 dark:border-[#2f3237]"></hr>
+        </>)}
+        
 
         <div className='flex flex-row justify-between'>
 
