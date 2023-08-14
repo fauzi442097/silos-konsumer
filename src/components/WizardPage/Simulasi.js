@@ -96,62 +96,62 @@ const Simulasi = ({ onSubmit }) => {
         }
     };
 
-    const id = 4;
-    const refAgunan = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null });
+    // const id = 4;
+    // const refAgunan = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null });
     const refDataProduk = useGet(['refProduct'], `master/list/product`, { retry: 1, refetchOnWindowFocus: false });
-    console.log(refDataProduk.data);
-    console.log(refAgunan.data);
+    // console.log(refDataProduk.data);
+    // console.log(refAgunan.data);
 
-    const getProduk = async () => {
-        const arr = [];
-        const response = await API.GET(`/master/list/product`);
-        console.log(response)
-        if (response.status != 200) return MySwal.error(response.data.error)
-        let result = response.data.data;
-        result.map((item) => {
-            return arr.push({ 
-                value: item.id, 
-                label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
-                eqRate: item.eqRate,
-                eqRateReal: item.eqRateReal
-            })
-        })
+    // const getProduk = async () => {
+    //     const arr = [];
+    //     const response = await API.GET(`master/list/product`);
+    //     console.log(response)
+    //     if (response.status != 200) return MySwal.error(response.data.error)
+    //     let result = response.data.data;
+    //     result.map((item) => {
+    //         return arr.push({ 
+    //             value: item.id, 
+    //             label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
+    //             eqRate: item.eqRate,
+    //             eqRateReal: item.eqRateReal
+    //         })
+    //     })
         
-        setDataProduk(arr)
-    }
+    //     setDataProduk(arr)
+    // }
 
-    const getPekerjaan = async (idProduk) => {
-        setLoadingPekerjaan(true)
-        const arrPekerjaan = [];
-        const response = await API.GET(`master/list/pekerjaan?idProduct=${idProduk}`)
-        setLoadingPekerjaan(false)
+    // const getPekerjaan = async (idProduk) => {
+    //     setLoadingPekerjaan(true)
+    //     const arrPekerjaan = [];
+    //     const response = await API.GET(`master/list/pekerjaan?idProduct=${idProduk}`)
+    //     setLoadingPekerjaan(false)
             
-        let getDataPekerjaan = response.data.data;
-        getDataPekerjaan.map((item) => {
-            return arrPekerjaan.push({ 
-                value: item.idPekerjaan, 
-                label: item.nmPekerjaan + ' - Max Tenor. ' + item.tenor + ' Bln', 
-                tenor: item.tenor, 
-                masaKerja: item.masaKerjaUmur
-            })
-        })
+    //     let getDataPekerjaan = response.data.data;
+    //     getDataPekerjaan.map((item) => {
+    //         return arrPekerjaan.push({ 
+    //             value: item.idPekerjaan, 
+    //             label: item.nmPekerjaan + ' - Max Tenor. ' + item.tenor + ' Bln', 
+    //             tenor: item.tenor, 
+    //             masaKerja: item.masaKerjaUmur
+    //         })
+    //     })
 
-        setDataPekerjaan(arrPekerjaan);
-    }
+    //     setDataPekerjaan(arrPekerjaan);
+    // }
 
-    const getMenikah = async () => {
-        const arrMenikah = [];
-        const response = await API.GET(`master/list/status-kawin`);
-        let getDataMenikah = response.data.data;
-        getDataMenikah.map((item) => {
-            return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
-        })
+    // const getMenikah = async () => {
+    //     const arrMenikah = [];
+    //     const response = await API.GET(`master/list/status-kawin`);
+    //     let getDataMenikah = response.data.data;
+    //     getDataMenikah.map((item) => {
+    //         return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
+    //     })
 
-        setDataMenikah(arrMenikah);
-    }
+    //     setDataMenikah(arrMenikah);
+    // }
 
     const handleChangeMenikah = value => {
-        setMenikah(value);
+        // setMenikah(value);
     }
 
 
@@ -169,8 +169,8 @@ const Simulasi = ({ onSubmit }) => {
     }    
 
     useEffect(() => {
-        getProduk();
-        getMenikah();
+        // getProduk();
+        // getMenikah();
     }, []);
 
     return (
