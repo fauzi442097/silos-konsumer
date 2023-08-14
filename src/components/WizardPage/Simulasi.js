@@ -415,8 +415,7 @@ const Simulasi = ({ onSubmit }) => {
                                 <Input.Group
                                     append
                                     inputGroupText={'%'}
-                                    id="suku_bunga"
-                                    inputElement={<Input.Text name='suku_bunga' ref={suku_bunga} value={suku_bunga.current} readOnly/>}
+                                    inputElement={<Input.Text name='suku_bunga' id="suku_bunga" ref={suku_bunga} value={suku_bunga.current} readOnly/>}
                                 />
                             </>
                         }
@@ -533,7 +532,7 @@ const Simulasi = ({ onSubmit }) => {
 
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey'> Jangka Waktu Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
+                        label={<label className='dark:text-grey' htmlFor="jangka_waktu_promo"> Jangka Waktu Promo <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>} 
                         input={
                             <>
                                 <Input.Group
@@ -546,6 +545,7 @@ const Simulasi = ({ onSubmit }) => {
                                         maxLength={3}
                                         hideError 
                                         register={register} 
+                                        id="jangka_waktu_promo"
                                         name='jangka_waktu_promo'
                                         errors={errors.jangka_waktu_promo} 
                                     />}
@@ -640,7 +640,7 @@ const Simulasi = ({ onSubmit }) => {
 
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey'> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>} 
+                        label={<label className='dark:text-grey' htmlFor="penghasilan_lain"> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>} 
                         input={
                             <>
                                 <Input.Group
@@ -652,6 +652,7 @@ const Simulasi = ({ onSubmit }) => {
                                         errors={errors.penghasilan_lain}
                                         maxLength={9} 
                                         hideError
+                                        id="penghasilan_lain"
                                         allowNegativeValue={false}
                                         decimalSeparator={','}
                                         groupSeparator={'.'}
@@ -703,6 +704,7 @@ const Simulasi = ({ onSubmit }) => {
                                     inputGroupText={'Rp'}
                                     inputElement={<Input.Currency
                                         name="total_penghasilan"
+                                        id="total_penghasilan"
                                         readOnly
                                         allowDecimals={true}
                                         allowNegativeValue={false}
