@@ -287,10 +287,11 @@ const Simulasi = ({ onSubmit }) => {
     
 
     const storeDataSimulasi = (data) => {
+
         if ( (data.jangka_waktu_promo && !data.bunga_promo) || (!data.jangka_waktu_promo && data.bunga_promo) ) {
-            mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
+            return mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
         }
-        
+
         const dataFormatted = {
             productId: data.produk,
             idPekerjaan: data.pekerjaan,
