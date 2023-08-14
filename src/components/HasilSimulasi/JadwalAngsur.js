@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../Button'
 import dataAngsuran from './dataAngsuran.json';
 
-const JadwalAngsur = () => {
+const JadwalAngsur = ({ data }) => {
   return (
     <div>
         <div className='flex flex-wrap justify-between items-center mb-6 flex-row-reverse'>
