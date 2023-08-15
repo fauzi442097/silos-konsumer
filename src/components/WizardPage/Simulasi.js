@@ -19,7 +19,7 @@ import ModalInfoPlafon from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalI
 import useGet from "@/hooks/useGet";
 
 const formValidation = {
-    nama_debitur: {maxLength: FormRules.MaxLength(30),  pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf')},
+    nama_debitur: {required: FormRules.Required(), maxLength: FormRules.MaxLength(30),  pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf')},
     cif: {maxLength: FormRules.MaxLength(15, 'Maksimal diisi 15 digit Angka')},
     produk: {required: FormRules.Required('Pilih produk')},
     pekerjaan: {required: FormRules.Required('Pilih pekerjaan')},
