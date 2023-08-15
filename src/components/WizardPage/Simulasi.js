@@ -103,6 +103,8 @@ const Simulasi = ({ onSubmit }) => {
     const [ rateAsuransi, setRateAsuransi ] = useState(undefined)
     const [dataSimulasi, setDataSimulasi] = useState({})
 
+    const [ plafon, setPlafon ] = useState(undefined)
+
     const minAge = moment().subtract(17, 'years');
     const refGaji = useRef(0)
     const refULP = useRef(0)
@@ -203,6 +205,11 @@ const Simulasi = ({ onSubmit }) => {
                 let statusSelected = dataMenikah.find((item, i) => item.value == value)
                 setMenikah(statusSelected)
             break;
+            case 'plafon' :
+                console.log(value)
+                // onChange(value)
+                // setPlafon(value)
+            break;
             case 'asuransi' :
                 onChange(value)
                 let asuransiSelected = dataAsuransi.find((item, i) => item.value == value)
@@ -274,7 +281,7 @@ const Simulasi = ({ onSubmit }) => {
             jangkaWaktu: data.jangka_waktu,
             tglLahir: data.tanggal_lahir,
             isMenikah: data.status_debitur,
-            plafon: data.plafon ? clearFormatRupiah(data.plafon.toString()) : null,
+            plafon: plafon ? clearFormatRupiah(plafon.toString()) : null,
             rate: Number(suku_bunga.current),
             pengeluaran: 0,
             totalAngsuranLain: 0,
@@ -287,6 +294,7 @@ const Simulasi = ({ onSubmit }) => {
         if ( (data.jangka_waktu_promo && !data.bunga_promo) || (!data.jangka_waktu_promo && data.bunga_promo) ) {
             return mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
         }
+
         const dataFormatted = {
             productId: data.produk,
             idPekerjaan: data.pekerjaan,
@@ -296,7 +304,7 @@ const Simulasi = ({ onSubmit }) => {
             jangkaWaktu: data.jangka_waktu,
             tglLahir: data.tanggal_lahir,
             isMenikah: data.status_debitur,
-            plafon: data.plafon ? clearFormatRupiah(data.plafon.toString()) : null,
+            plafon: plafon ? clearFormatRupiah(plafon.toString()) : null,
             rate: Number(suku_bunga.current),
             pengeluaran: 0,
             totalAngsuranLain: 0,
@@ -317,8 +325,9 @@ const Simulasi = ({ onSubmit }) => {
     const setMaksimalPlafon = (jangkaWaktu, plafon) => {
         setShowModalPlafon(false)
         setValue('jangka_waktu', jangkaWaktu)
-        setValue('plafon', plafon)        
-    }
+        // setValue('plafon', plafon)     
+        setPlafon(plafon)
+    }    
 
     return (
         <>
@@ -750,7 +759,8 @@ const Simulasi = ({ onSubmit }) => {
                                     errors={errors.plafon}
                                     maxLength={10} 
                                     hideError
-                                    value={watch('plafon')}
+                                    value={plafon}
+                                    onChange={(value) => setPlafon(value)}
                                     allowNegativeValue={false}
                                     decimalSeparator={','}
                                     groupSeparator={'.'}

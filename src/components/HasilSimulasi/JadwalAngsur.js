@@ -2,14 +2,16 @@ import React, { useEffect } from 'react'
 import Button from '../Button'
 import usePost from '@/hooks/usePost';
 import { formatRupiah } from '@/lib/utils';
+import { useMySwal } from '@/hooks/useMySwal';
 
 const JadwalAngsur = ({ dataSimulasi }) => {
 
+    const mySwal = useMySwal()
+    
     const hitJadwalAngsur = usePost(['simulasi'], 'master/jadwal-angsur', [], {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
-            console.log('tes')
             mySwal.warning(error.rm)
         },
     });
