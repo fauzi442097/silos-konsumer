@@ -16,7 +16,7 @@ const MyToast = dynamic(() => import('../../components/Toast/MyToast'), { ssr: f
 const GuestLayout = ({ children }) => {
 
    const { theme, setTheme } = useTheme();
-   const logoBrand = theme == 'light' ? '/logo_bank_kalteng.png' : '/logo_bank_kalteng_transparent.png';
+   const logoBrand = theme == 'light' ? '/img/logo_bank_kalteng.png' : '/img/logo_bank_kalteng_transparent.png';
    const ToggleThemeIcon = <span className='text-yellow-logo' dangerouslySetInnerHTML={{ __html: theme == 'light' ? SunIcon : MoonIcon }}/>
 
 

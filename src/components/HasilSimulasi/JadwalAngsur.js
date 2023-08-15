@@ -1,8 +1,48 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '../Button'
-import dataAngsuran from './dataAngsuran.json';
+import usePost from '@/hooks/usePost';
+import { formatRupiah } from '@/lib/utils';
 
-const JadwalAngsur = ({ data }) => {
+const JadwalAngsur = ({ dataSimulasi }) => {
+
+    const hitJadwalAngsur = usePost(['simulasi'], 'master/jadwal-angsur', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            console.log('tes')
+            mySwal.warning(error.rm)
+        },
+    });
+    
+    let payloadPromo = null
+    if ( dataSimulasi.promo ) {
+        const { angsuranPromo, plafonPromo, tenorPromo, ratePromo, bulanPromo, angsuranNormal, plafonNormal, tenorNormal, rateNormal } = dataSimulasi.promo
+        payloadPromo = { angsuranPromo, plafonPromo, tenorPromo, ratePromo, bulanPromo, angsuranNormal, plafonNormal, tenorNormal, rateNormal }
+    }
+
+
+    const payload = {
+        idProduct: dataSimulasi.product.id,
+        totalAngsuran: dataSimulasi.angsuranBulan,
+        plafon: dataSimulasi.plafon,
+        jangkaWaktu: dataSimulasi.input.jangkaWaktu,
+        rate: dataSimulasi.input.rate,
+        typeJadwalId: !dataSimulasi.promo ? 1 : 2,
+        promo: payloadPromo
+    }
+
+    console.log(payload)
+
+    useEffect(() => {
+        hitJadwalAngsur.mutate(payload)
+    }, [])
+
+    let jadwalAngsur = []
+    if ( hitJadwalAngsur.isSuccess ) {
+        jadwalAngsur = hitJadwalAngsur.data.data.data.jadwalAngsur
+        console.log({jadwalAngsur})
+    }
+
   return (
     <div>
         <div className='flex flex-wrap justify-between items-center mb-6 flex-row-reverse'>
@@ -34,16 +74,25 @@ const JadwalAngsur = ({ data }) => {
                         </td>
                     </tr>
                 </thead>
-                <tbody class="overflow-y-auto">
-                    {dataAngsuran.map((item, i) => (
-                        <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]" key={i}>
-                            <td className="px-6 py-4">{item.angsuranKe}</td>
-                            <td className="px-6 py-4">{item.sisaPokok}</td>
-                            <td className="px-6 py-4">{item.angsuranPokok}</td>
-                            <td className="px-6 py-4">{item.angsuranBunga}</td>
-                            <td className="px-6 py-4">{item.angsuran}</td>
+                <tbody className="overflow-y-auto">
+                    {hitJadwalAngsur.isLoading && (
+                        <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]"> 
+                            <td colSpan={6} align='center' className='px-6 py-4 text-lg'> Loading ... </td>
                         </tr>
-                    ))}
+                    )}
+
+                    {hitJadwalAngsur.isSuccess && (
+                        jadwalAngsur.map((item, i) => (
+                            <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]" key={i}>
+                                <td className="px-6 py-4" align='center'>{item.angsuranKe}</td>
+                                <td className="px-6 py-4">{formatRupiah(item.sisaPokok)}</td>
+                                <td className="px-6 py-4">{formatRupiah(item.angsuranPokok)}</td>
+                                <td className="px-6 py-4">{formatRupiah(item.angsuranBunga)}</td>
+                                <td className="px-6 py-4">{formatRupiah(item.angsuran)}</td>
+                            </tr>
+                        ))
+                    )}
+                    
                 </tbody>
             </table>
         </div>

@@ -22,7 +22,7 @@ const FormNewEntry = () => {
     return (
         <>
             <PageTitle title="Simulasi" />
-            <Card>
+            <Card className={'overflow-x-auto'}>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}>
                     <h3> Simulasi </h3>
                 </Card.Header>
