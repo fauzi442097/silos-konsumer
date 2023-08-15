@@ -76,6 +76,9 @@ const Slik = ({ prevAction, onSubmit }) => {
 
       <TabAction onSubmit={storeSlik} prevAction={prevAction} />
 
+      <div className='bg-primary-500'>
+      </div>
+
     </>
   )
 }
