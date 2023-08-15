@@ -2,6 +2,7 @@ import React from 'react'
 import Button, { buttonVariants } from '../Button'
 import Dropdown from '../Dropdown'
 import { cn, formatRupiah } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 
 const InfoBiaya = ({ label, value}) => {
     return (
@@ -13,7 +14,7 @@ const InfoBiaya = ({ label, value}) => {
 }
 
 const RincianPinjaman = ({ closeModal, data }) => {
-
+ const router = useRouter();
   let totalBiaya = Number(data.dataBiaya.biaya[0].nominal) + Number(data.dataBiaya.biaya[1].nominal) + Number(data.dataBiaya.biaya[2].nominal) + Number(data.dataBiaya.biaya[3].nominal)
     
   return (
@@ -82,7 +83,7 @@ const RincianPinjaman = ({ closeModal, data }) => {
 
             <div>
                 <Button className="mr-3" variant={'light'}> Simpan Simulasi </Button>
-                <Button onClick={() => router.push(`/simulasi_kredit/debitur_baru/prospek`)}> Ajukan Pinjaman </Button>
+                <Button onClick={() => router.push(`/pengajuan_kredit?tab=data_debitur`)}> Ajukan Pinjaman </Button>
             </div>
         </div>
     </div>
