@@ -6,7 +6,6 @@ import Input from "@/components/Form/Input"
 import TabAction from "../../TabAction";
 import { formDataPasangan } from "../../formValidation";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const pekerjaanPasangan = [
     { value: "Pegawai Swasta", label: "Pegawai Swasta"},
@@ -17,25 +16,20 @@ const pekerjaanPasangan = [
 const DataPasangan = () => {
     const [pekerjaan, setPekerjaan] = useState(null);
 
-    const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
-        resolver: yupResolver(formDataPasangan),
-        mode: 'all'
-    });
-
     const handlePekerjaan = value => {
         setPekerjaan(value)
     }
 
     return (
         <>
-            <hr class="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+            <hr className="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700"></hr>
             <p className="text-xl text-muted font-inter-medium mb-8 mt-6"> Data Pasangan </p>
 
             
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama </label>
-                    <Input.Text placeholder="Isikan nama pasangan" name="nama_pasangan" register={register} errors={errors.nama_pasangan}/>
+                    <Input.Text placeholder="Isikan nama pasangan" name="nama_pasangan"/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor KTP </label>

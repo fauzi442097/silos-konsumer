@@ -8,7 +8,7 @@ const StrukturPembiayaan = () => {
     return (
         <>
             <strong className="text-3xl text-primary font-sans">Struktur Pembiayaan</strong>
-            <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+            <hr className="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
             
             <div className='flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7' style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>

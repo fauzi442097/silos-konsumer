@@ -1,23 +1,17 @@
 'use client'
 
-import React, { useState } from "react"
+import React, { useEffect, useState, useRef } from "react";
+import { API } from "@/config/api";
+import { Controller, useForm } from "react-hook-form";
+import useGet from '@/hooks/useGet';
+import { FormRules } from "@/lib/formRules";
+
 import MySelect from "@/components/Form/Select"
 import Input from "@/components/Form/Input"
 import Button from "@/components/Button";
 import Radio from "@/components/Form/Radio";
 import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
-import { formDataNasabahSchema } from "../../formValidation";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import useGet from '@/hooks/useGet';
-
-
-const options = [
-    { value: "fox", label: "Fox" },
-    { value: "Butterfly", label: "Butterfly" },
-    { value: "Honeybee", label: "Honeybee" }
-];
 
 const statusKTP = [
     { value: "1", label: "Expired" },
@@ -28,37 +22,53 @@ const statusMenikah = [
     { value: "1", label: "Belum Menikah" },
     { value: "2", label: "Menikah" },
     { value: "3", label: "Duda / Janda" }
-]
+];
 
-const DataNasabah = ({ onSubmit }) => {
+const formValidation = {
+    produk: { required: FormRules.Required('Pilih produk') }
+}
+
+const DataNasabah = () => {
+    const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
+
+    const [listProduk, setListProduk] = useState([]);
+    const [produk, setProduk] = useState({ value: -1, label: 'Pilih produk', disabled: true });
+
     const [statKTP, setStatKTP] = useState(null);
-    const [produk, setProduk] = useState(null);
     const [menikah, setMenikah] = useState(null);
 
-    const { register, control, handleSubmit, reset, watch, formState: { errors }  } = useForm({
-        resolver: yupResolver(formDataNasabahSchema),
-        mode: 'all'
-    });
+    const suku_bunga = useRef(undefined)
+    const handleChange = async (e, type, onChange) => {
+        let value = e.value;
+        switch (type) {
+            case 'produk':
+                onChange(value);
+                let produkSelected = listProduk.find((item, i) => item.value == value);
+                setProduk(produkSelected);
+                suku_bunga.current = produkSelected.eqRate
+                console.log(produkSelected);
+                break;
 
-    const { data, isLoading, isError, error, isFetching, refetch } = useGet(['refDataProduk'], `/master/list/product`, { retry: 1, refetchOnWindowFocus: false })
-    console.log(data);
-
-    const handleChangeKTP = value => {
-        setStatKTP(value);
+            default:
+                break;
+        }
+        // setProduk(value);
     };
 
-    const handleChangeProduk = value => {
-        setProduk(value);
+    const refDataProduk = useGet(['refProduk'], `/master/list/product`, { retry: 1, refetchOnWindowFocus: false })
+    console.log(refDataProduk.data);
+
+    let arrProduk = [];
+    if (!refDataProduk.isLoading) {
+        let dataProduk = refDataProduk.data?.data.data;
+
+        dataProduk.map((item) => {
+            return arrProduk.push({ value: item.id, label: item.prodName })
+        });
     }
 
-    const handleChangeMenikah = value => {
-        setMenikah(value);
-    }
 
-    const storeDataNasabah = (data) => {
-        console.log(data)
-        onSubmit()
-    }
+    // const refDataPekerjaan = useGet(['refPekerjaan'], `/master/list/pekerjaan?idProduct=`, { retry: 1, refetchOnWindowFocus: false });
 
     return (
         <>
@@ -67,14 +77,32 @@ const DataNasabah = ({ onSubmit }) => {
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Produk </label>
-                    <MySelect withSearch placeholder="Isikan produk" name="produk" id="produk" options={options} value={produk} onChange={handleChangeProduk} />
+                    <Controller
+                        control={control}
+                        name="produk"
+                        id="produk"
+                        render={({ field: { onChange } }) => (
+                            <MySelect
+                                withSearch
+                                id="produk"
+                                name={'produk'}
+                                register={register}
+                                errors={errors.produk}
+                                options={arrProduk}
+                                value={produk}
+                                isLoading={refDataProduk.isLoading}
+                                disabled={refDataProduk.isLoading}
+                                validation={formValidation.produk}
+                                onChange={(e) => handleChange(e, 'produk', onChange)} />
+                        )}
+                    />
+                    {/* <MySelect withSearch placeholder="Isikan produk" name="produk" id="produk" options={listProduk} value={produk} onChange={(e) => handleChange(e, 'produk', onChange)} /> */}
                 </div>
                 <div style={{ width: "450px" }}>
-                    <label className='block mb-3'> Nama Nasabah </label>
-                    <Input.Text register={register}
-                        errors={errors.namaNasabah}
+                    <label className='block mb-3'> Nama Debitur </label>
+                    <Input.Text
                         maxLength={50}
-                        placeholder="Isikan nama nasabah" id="namaNasabah" name="namaNasabah" />
+                        placeholder="Isikan nama nasabah" id="namaDebitur" name="namaDebitur" />
                 </div>
                 <div className="mt-10" style={{ width: "450px" }}>
                     <div className='flex gap-2'>
@@ -111,11 +139,11 @@ const DataNasabah = ({ onSubmit }) => {
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Status KTP </label>
-                    <MySelect withSearch placeholder="Isikan status KTP" name="statusKTP" id="statusKtp" options={statusKTP} value={statKTP} onChange={handleChangeKTP}></MySelect>
+                    <MySelect withSearch placeholder="Isikan status KTP" name="statusKTP" id="statusKtp" options={statusKTP} value={statKTP} onChange={(e) => handleChange(e, 'ktp', onChange)}></MySelect>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className="block mb-3">Status Menikah</label>
-                    <MySelect withSearch placeholder="Isikan Status Menikah" id="statusMenikah" name="statusMenikah" value={menikah} onChange={handleChangeMenikah} options={statusMenikah}></MySelect>
+                    <MySelect withSearch placeholder="Isikan Status Menikah" id="statusMenikah" name="statusMenikah" value={menikah} options={statusMenikah} onChange={(e) => handleChange(e, 'menikah', onChange)}></MySelect>
                 </div>
             </div>
 

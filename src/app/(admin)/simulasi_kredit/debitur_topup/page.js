@@ -37,8 +37,8 @@ const FormNewEntry = () => {
                 <Card.Header className={'flex justify-between flex-wrap items-center'}>
                     <h3> Simulasi </h3>
                     <div dir="rtl">
-                        <div class="relative h-12 w-full ...">
-                            <div class="absolute h-14 w-[130px] top-0 start-0 ...">
+                        <div className="relative h-12 w-full ...">
+                            <div className="absolute h-14 w-[130px] top-0 start-0 ...">
                                 <Button
                                     variant="secondary"
                                     size="sm"
@@ -55,8 +55,8 @@ const FormNewEntry = () => {
                 </Card.Body>
                 <Card.Footer>
                     <div dir="rtl">
-                        <div class="relative h-12 w-full ...">
-                            <div class="absolute h-14 w-[120px] top-0 start-0 ...">
+                        <div className="relative h-12 w-full ...">
+                            <div className="absolute h-14 w-[120px] top-0 start-0 ...">
                                 <Button
                                     variant="primary"
                                     size="sm"
@@ -96,7 +96,7 @@ const FormNewEntry = () => {
                                 </div>
                             </div>
 
-                            <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+                            <hr className="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
 
                             <div className="flex flex-row">
                                 <div className="basis-1/2">
@@ -144,7 +144,7 @@ const FormNewEntry = () => {
                         {/* </div> */}
 
 
-                        <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+                        <hr className="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
 
                         <div className="flex flex-row mb-10">
                             <div className="basis-full">
@@ -158,7 +158,7 @@ const FormNewEntry = () => {
                             </div>
                         </div>
 
-                        <hr class="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+                        <hr className="h-px my-8 bg-gray-400 border-0 dark:bg-gray-700"></hr>
 
                         <Button
                             variant="primary"

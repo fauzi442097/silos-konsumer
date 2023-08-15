@@ -7,7 +7,7 @@ const DataBiaya = () => {
 
     return (
         <>
-            <hr class="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700"></hr>
+            <hr className="h-px my-4 bg-gray-400 border-0 dark:bg-gray-700"></hr>
             <p className="text-xl text-muted font-inter-medium mb-8 mt-6"> Data Biaya - Biaya </p>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>

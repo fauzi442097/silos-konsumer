@@ -34,7 +34,7 @@ const JadwalAngsur = ({ data }) => {
                         </td>
                     </tr>
                 </thead>
-                <tbody class="overflow-y-auto">
+                <tbody className="overflow-y-auto">
                     {dataAngsuran.map((item, i) => (
                         <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]" key={i}>
                             <td className="px-6 py-4">{item.angsuranKe}</td>

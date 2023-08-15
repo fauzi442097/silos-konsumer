@@ -24,7 +24,7 @@ export const valueStatusPinjaman = {
     { value: valueStatusSlik.NEGATIF, label: "Negatif" }
  ];
  
- {/* <select class="form-control form-control-sm" name="kolek1" id="kolek1"><option selected="" value="1">Kol 1 - Lancar</option><option value="2">Kol 2 - Dalam Perhatian Khusus</option><option value="3">Kol 3 - Kurang Lancar</option><option value="4">Kol 4 - Diragukan</option><option value="5">Kol 5 - Macet</option></select> */}
+ {/* <select className="form-control form-control-sm" name="kolek1" id="kolek1"><option selected="" value="1">Kol 1 - Lancar</option><option value="2">Kol 2 - Dalam Perhatian Khusus</option><option value="3">Kol 3 - Kurang Lancar</option><option value="4">Kol 4 - Diragukan</option><option value="5">Kol 5 - Macet</option></select> */}
  
  export const valueKolektibilitas = {
     LANCAR: 1,

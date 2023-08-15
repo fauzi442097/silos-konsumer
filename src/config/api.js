@@ -5,7 +5,7 @@ import { BASE_URL_API } from "./env";
 
 const clientCookies = new Cookies();
 export const mainAPI = axios.create({
-  baseURL: '/api/',
+  baseURL: '/API',
   withCredentials: true
 });
 
@@ -75,7 +75,7 @@ function GET(url, datatable = false) {
       resData['status'] = res.status;
       resData['data'] = res.data;
 
-      if ( datatable) {
+      if (datatable) {
         resData['data'] = res.data.data;
         resData['meta'] = res.data.meta;
         resData['rc'] = res.data.rc;

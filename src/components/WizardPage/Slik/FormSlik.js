@@ -8,23 +8,23 @@ import ListPinjaman from './ListPinjaman'
 import Button from '@/components/Button'
 import { statusPinjamanOptions, statusSlikOptions, valueStatusPinjaman } from './OptionList'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from "yup";
+// import { yupResolver } from '@hookform/resolvers/yup'
+// import * as yup from "yup";
 
-const formLoanSchema = yup.object({
-    lembaga_keuangan: yup.string().required('Wajib diisi'),
-    baki_debet: yup.string().required('Wajib diisi'),
-    kolektibilitas: yup.string().required('Pilih kolektibilitas'),
-    status: yup.string().required('Pilih status'),
-    keterangan: yup.string().max('30', 'Maksimal 10 karakter')
- })
+// const formLoanSchema = yup.object({
+//     lembaga_keuangan: yup.string().required('Wajib diisi'),
+//     baki_debet: yup.string().required('Wajib diisi'),
+//     kolektibilitas: yup.string().required('Pilih kolektibilitas'),
+//     status: yup.string().required('Pilih status'),
+//     keterangan: yup.string().max('30', 'Maksimal 10 karakter')
+//  })
  
- const formSlikSchema = yup.object({
-    status_slik: yup.string().required('Pilih status slik'),
-    status_pinjaman: yup.string().required('Pilih status pinjaman'),
-    catatan: yup.string().max(30, 'Maksimal 30 karakter'),
-    loan: yup.array().of(formLoanSchema)
-})
+//  const formSlikSchema = yup.object({
+//     status_slik: yup.string().required('Pilih status slik'),
+//     status_pinjaman: yup.string().required('Pilih status pinjaman'),
+//     catatan: yup.string().max(30, 'Maksimal 30 karakter'),
+//     loan: yup.array().of(formLoanSchema)
+// })
  
 const FormSlik = () => {
 
@@ -91,8 +91,8 @@ const FormSlik = () => {
                     render={({ field: { onChange } }) => (
                             <MySelect
                                 name={'status_slik'} 
-                                register={register} 
-                                errors={errors.status_slik} 
+                                // register={register} 
+                                // errors={errors.status_slik} 
                                 options={statusSlikOptions} 
                                 value={statusSlik} 
                                 onChange={(e) => handleChange(e, 'status_slik', onChange)}
@@ -112,8 +112,8 @@ const FormSlik = () => {
                     render={({ field: { onChange } }) => (
                         <MySelect 
                             name={'status_pinjaman'} 
-                            ref={register} 
-                            errors={errors.status_pinjaman} 
+                            // ref={register} 
+                            // errors={errors.status_pinjaman} 
                             options={statusPinjamanOptions} 
                             value={statusPinjaman} 
                             onChange={(e) => handleChange(e, 'status_pinjaman', onChange)}
