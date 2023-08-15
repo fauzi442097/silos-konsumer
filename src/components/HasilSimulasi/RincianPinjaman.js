@@ -14,7 +14,7 @@ const InfoBiaya = ({ label, value}) => {
 
 const RincianPinjaman = ({ closeModal, data }) => {
 
-  let totalBiaya = Number(data.dataBiaya.biaya[0].nominal) + Number(data.dataBiaya.biaya[1].nominal) + Number(data.dataBiaya.biaya[2].nominal) + Number(data.dataBiaya.biaya[3].nominal) +  Number(data.dataBiaya.biaya[4].nominal)
+  let totalBiaya = Number(data.dataBiaya.biaya[0].nominal) + Number(data.dataBiaya.biaya[1].nominal) + Number(data.dataBiaya.biaya[2].nominal) + Number(data.dataBiaya.biaya[3].nominal)
     
   return (
     <div className="div">
@@ -28,7 +28,7 @@ const RincianPinjaman = ({ closeModal, data }) => {
             <div className="basis-1/2 bg-gray-100 dark:bg-dark-depth2 rounded-lg text-sm p-4 italic self-start">
                 <p className='mb-1'> Catatan: </p>
                 <span>
-                    Cicilan ini setara dengan <span className="font-inter-medium"> {parseFloat(data.angsuranGaji).toFixed(2)} % </span> dari penghasilan bulanan <span className='text-primary font-inter-medium'> Rp {formatRupiah(data.totalPenghasilan)} </span> dengan  <strong className="font-semibold text-gray-900 dark:text-white"> sisa penghasilan </strong> sebesar 
+                    Cicilan ini setara dengan <span className="font-inter-medium"> {parseFloat(data.angsuranGaji).toFixed(2)} % </span> dari penghasilan bulanan <span className='text-primary font-inter-medium'> Rp {formatRupiah(data.input.totalPenghasilan)} </span> dengan  <strong className="font-semibold text-gray-900 dark:text-white"> sisa penghasilan </strong> sebesar 
                     <span className='text-primary font-inter-medium'> Rp {formatRupiah(data.sisaGaji)} </span>
                 </span>
             </div>
@@ -53,7 +53,7 @@ const RincianPinjaman = ({ closeModal, data }) => {
         <InfoBiaya label={'Biaya Asuransi'} value={formatRupiah(Number(data.dataBiaya.biaya[2].nominal))}/>
         <InfoBiaya label={'Biaya Provisi'} value={formatRupiah(Number(data.dataBiaya.biaya[1].nominal))}/>
         <InfoBiaya label={'Biaya Administrasi'} value={formatRupiah(Number(data.dataBiaya.biaya[3].nominal))}/>
-        <InfoBiaya label={'Biaya Pihak Ketiga'} value={formatRupiah(Number(data.dataBiaya.biaya[4].nominal))}/>
+        {/* <InfoBiaya label={'Biaya Pihak Ketiga'} value={formatRupiah(Number(data.dataBiaya.biaya[4].nominal))}/> */}
 
         <div className='flex justify-between items-center mb-4'> 
             <p className="text-lg mb-0 font-inter-medium">Total Biaya Lainnya </p>

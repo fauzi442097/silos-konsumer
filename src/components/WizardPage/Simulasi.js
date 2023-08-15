@@ -30,7 +30,7 @@ const formValidation = {
     gaji: {required: FormRules.Required(), maxLength: FormRules.MaxLength(11)},
     penghasilan_lain: {maxLength: FormRules.MaxLength(11)},
     ulp: {maxLength: FormRules.MaxLength(11)},
-    plafon: {required: FormRules.Required(), maxLength: FormRules.MaxLength(13)},
+    plafon: {maxLength: FormRules.MaxLength(13)},
     status_debitur: {required: FormRules.Required()}
 }
 
@@ -39,7 +39,6 @@ const Simulasi = ({ onSubmit }) => {
     const mySwal = useMySwal()
     const { register, control, handleSubmit, getValues, setValue, formState: { errors }  } = useForm({ mode: "all" });
 
-    
     const [dataProduk, setDataProduk] = useState([]);
     const [produk, setProduk] = useState({value: -1, label: 'Pilih produk', disabled: true});
 
@@ -47,6 +46,7 @@ const Simulasi = ({ onSubmit }) => {
 
     const [dataAsuransi, setDataAsuransi] = useState([])
     const [asuransi, setAsuransi] = useState({value: -1, label: 'Pilih asuransi', disabled: true})
+    const [loadingAsuransi, setLoadingAsuransi] = useState(false)
 
     const [dataPekerjaan, setDataPekerjaan] = useState([]);
     const [pekerjaan, setPekerjaan] = useState({value: -1, label: 'Pilih pekerjaan', disabled: true});
@@ -58,7 +58,15 @@ const Simulasi = ({ onSubmit }) => {
     const [tanggalLahir, setTanggalLahir] = useState(undefined);
     const [totalPenghasilan, setTotalPenghasilan] = useState(undefined)
 
+    const [ rateAsuransi, setRateAsuransi ] = useState(undefined)
     const [dataSimulasi, setDataSimulasi] = useState({})
+
+    const minAge = moment().subtract(17, 'years');
+    const refGaji = useRef(0)
+    const refULP = useRef(0)
+    const suku_bunga = useRef(undefined)
+    const refPenghasilanLain = useRef(0)
+    const refUsia = useRef('')
 
     
     let payload = []
@@ -70,7 +78,14 @@ const Simulasi = ({ onSubmit }) => {
         },
         onSuccess: (data, variables, context) => {
             let resData = data.data.data
-            let collectData = {...resData, totalPenghasilan}
+            let collectData = {
+                ...resData, 
+                input: {
+                    totalPenghasilan, 
+                    jangkaWaktu: variables.jangkaWaktu,
+                    rate: variables.rate
+                }
+            }
             setDataSimulasi(collectData)
 
             let angsuranBulan = resData.promo ? resData.promo.angsuranPromo : resData.angsuranBulan
@@ -79,11 +94,11 @@ const Simulasi = ({ onSubmit }) => {
                 idPekerjaan: variables.idPekerjaan,
                 jangkaWaktu: variables.jangkaWaktu,
                 rate: variables.rate,
-                plafon: variables.plafon,
+                plafon: resData.plafon,
                 asuransiId: getValues('asuransi'),
                 angsuran: angsuranBulan,
                 idProspek: null,
-                rateAsuransi: getValues('rate_asuransi')
+                rateAsuransi: Number(rateAsuransi)
             }
             hitBiayaLainnya.mutate(payloadBiayaLainnya)
         },
@@ -103,35 +118,6 @@ const Simulasi = ({ onSubmit }) => {
         },
     })
 
-    // typeJadwalId = jika ada promo type = 1 else 2
-    // $response = $this->postAPIClient('master/jadwal-angsur', [
-    //     "idProduct" => $request->get('productId')?$request->get('productId'):$request->get('prodId'),
-    //     "totalAngsuran" => $request->get('angsuranBulan')?str_replace('.','',$request->get('angsuranBulan')):str_replace('.','',$request->get('angsuranNew')),
-    //     "plafon" => str_replace('.','',$request->get('plafon')),
-    //     "jangkaWaktu" => $request->get('jangkaWaktu'),
-    //     "rate" => $request->get('rate'),
-    //     "typeJadwalId" => $request->get('typeJadwalId'),
-    //     "promo" => [
-    //         "angsuranPromo"=> $request->get('angsuranPromo'),
-    //         "plafonPromo"=> $request->get('plafonPromo'),
-    //         "tenorPromo"=> $request->get('tenorPromo'),
-    //         "ratePromo"=> $request->get('ratePromo'),
-    //         "bulanPromo"=> $request->get('bulanPromo'),
-    //         "angsuranNormal"=> $request->get('angsuranNormal'),
-    //         "plafonNormal"=> $request->get('plafonNormal'),
-    //         "tenorNormal"=> $request->get('tenorNormal'),
-    //         "rateNormal"=> $request->get('rateNormal')
-    //     ],
-    // ])->json();
-
-    const minAge = moment().subtract(17, 'years');
-    const refGaji = useRef(0)
-    const refULP = useRef(0)
-    const suku_bunga = useRef(undefined)
-    const refPenghasilanLain = useRef(0)
-    const refUsia = useRef('')
-    const refRateAsuransi = useRef(0)
-
     const handleChange = async (e, type, onChange) => {
         let value = e.value   
         switch (type)  {
@@ -142,12 +128,14 @@ const Simulasi = ({ onSubmit }) => {
                 setProduk(produkSelected)
                 getPekerjaan(value)
                 register('bunga_promo', {max: {value: Number(produkSelected.eqRate), message: `Tidak boleh lebih dari suku bunga normal`}, valueAsNumber: true})
+                checkAndGetAsuransi()
             break;
             case 'pekerjaan' :
                 let pekerjaanSelected = dataPekerjaan.find((item, i) => item.value == value)
                 setPekerjaan(pekerjaanSelected)
                 onChange(value)
                 register('jangka_waktu', {max: {value: pekerjaanSelected.tenor, message: `Maksimal diisi ${pekerjaanSelected.tenor} bulan`}, valueAsNumber: true})
+                checkAndGetAsuransi()
             break;
             case 'tglLahir' :
                 let tglLahir = e.startDate
@@ -155,6 +143,7 @@ const Simulasi = ({ onSubmit }) => {
                 refUsia.current = `${age} Tahun`
                 setTanggalLahir(e)
                 onChange(e.startDate)
+                checkAndGetAsuransi()
             break;
             case 'statusDebitur' :
                 onChange(value)
@@ -172,7 +161,7 @@ const Simulasi = ({ onSubmit }) => {
 
                 if ( produkId && tglLahirSelected && idPekerjaan && tenor && asuransiId ) {
                     let rateAsuransi = await getAsuransi(asuransiId, tenor, produkId, tglLahirSelected, idPekerjaan, 'rate-asuransi')
-                    refRateAsuransi.current = rateAsuransi
+                    setRateAsuransi(rateAsuransi)
                 }
 
                 setAsuransi(asuransiSelected)
@@ -198,6 +187,7 @@ const Simulasi = ({ onSubmit }) => {
 
     const getPekerjaan = async (idProduk) => {
         setLoadingPekerjaan(true)
+        setPekerjaan({value: -1, label: 'Pilih pekerjaan', disabled: true})
         const arrPekerjaan = [];
         const response = await API.GET(`master/list/pekerjaan?idProduct=${idProduk}`)
         if (response.status != 200) return mySwal.error(response.data.error)
@@ -226,8 +216,10 @@ const Simulasi = ({ onSubmit }) => {
     }
 
     const getAsuransi = async (asuransiId = null, jangkaWaktu, idProduct, tglLahir, idPekerjaan, type = 'list-asuransi') => {
+        if ( type == 'list-asuransi') setLoadingAsuransi(true)
         const response = await API.POST(`v2/master/calc-asuransi-list/${asuransiId}?jangkaWaktu=${jangkaWaktu}&idProduct=${idProduct}&${tglLahir}&idPekerjaan=${idPekerjaan}`);            
         if (response.status != 200) return mySwal.error(response.data.error)
+        if ( type == 'list-asuransi') setLoadingAsuransi(false)
         const refAsuransi = response.data.data.list
         if ( type == 'rate-asuransi' ) return response.data.data.rate
         const arrAsuransi = []
@@ -235,6 +227,15 @@ const Simulasi = ({ onSubmit }) => {
         setDataAsuransi(arrAsuransi)    
     }
 
+    const checkAndGetAsuransi = () => {
+        setAsuransi({value: -1, label: 'Pilih asuransi', disabled: true})
+        setDataAsuransi([])
+        let jangkaWaktu = getValues('jangka_waktu')
+        let productId = getValues('produk')
+        let tglLahir = getValues('tanggal_lahir')
+        let idPekerjaan = getValues('pekerjaan')
+        if ( jangkaWaktu && productId && tglLahir && idPekerjaan ) getAsuransi(null, jangkaWaktu, productId, tglLahir, idPekerjaan)
+    }
     
 
     const storeDataSimulasi = (data) => {
@@ -252,15 +253,14 @@ const Simulasi = ({ onSubmit }) => {
             jangkaWaktu: data.jangka_waktu,
             tglLahir: data.tanggal_lahir,
             isMenikah: data.status_debitur,
-            plafon: clearFormatRupiah(data.plafon),
+            plafon: data.plafon ? clearFormatRupiah(data.plafon) : null,
             rate: Number(suku_bunga.current),
             pengeluaran: 0,
             totalAngsuranLain: 0,
-            ratePromo: data.bunga_promo,
+            ratePromo: data.bunga_promo ? data.bunga_promo : 0,
             bulanPromo: Number(data.jangka_waktu_promo),
         }
         hitSimulasi.mutate(dataFormatted)
-        // onSubmit();
     }
 
     const calculateTotalPenghasilan = (value, name) => {
@@ -271,10 +271,10 @@ const Simulasi = ({ onSubmit }) => {
         setTotalPenghasilan(total)
     }    
 
+
     useEffect(() => {
         getProduk();
         getMenikah();
-        getAsuransi(null,120,4,'2000-12-22',8)
     }, []);
 
     return (
@@ -391,6 +391,7 @@ const Simulasi = ({ onSubmit }) => {
                                     allowDecimals={false}
                                     id="jangka_waktu"
                                     maxLength={3}
+                                    onBlur={() => checkAndGetAsuransi()}
                                     hideError 
                                     onChange={(value, name) => register('jangka_waktu_promo', {max: {value: value, message: `Tidak boleh lebih dari jangka waktu normal`}, valueAsNumber: true})}
                                     register={register} 
@@ -523,8 +524,8 @@ const Simulasi = ({ onSubmit }) => {
                             render={({ field: { onChange } }) => (
                                     <MySelect
                                         withSearch
-                                        // loading={loadingPekerjaan}
-                                        // isDisabled={loadingPekerjaan}
+                                        loading={loadingAsuransi}
+                                        isDisabled={loadingAsuransi}
                                         name={'asuransi'} 
                                         id="asuransi"
                                         register={register} 
@@ -545,20 +546,29 @@ const Simulasi = ({ onSubmit }) => {
                                 <Input.Group
                                     append
                                     inputGroupText={'%'}
-                                    inputElement={<Input.Currency 
-                                        disableGroupSeparators
-                                        allowNegativeValue={false}
-                                        allowDecimals={true}
-                                        maxLength={6}
-                                        decimalsLimit={4}
-                                        hideError 
-                                        value={refRateAsuransi.current}
-                                        validation={formValidation.rate_asuransi}
-                                        register={register} 
-                                        id="rate_asuransi"
-                                        name='rate_asuransi'
-                                        errors={errors.rate_asuransi} 
-                                    />}
+                                    inputElement={
+                                        <Controller
+                                            control={control}
+                                            name="rate_asuransi"
+                                            id="rate_asuransi"
+                                            render={({ field: { onChange } }) => (
+                                                    <Input.Currency 
+                                                        disableGroupSeparators
+                                                        allowNegativeValue={false}
+                                                        allowDecimals={true}
+                                                        maxLength={6}
+                                                        decimalsLimit={4}
+                                                        hideError 
+                                                        value={rateAsuransi}
+                                                        validation={formValidation.rate_asuransi}
+                                                        register={register} 
+                                                        id="rate_asuransi"
+                                                        name='rate_asuransi'
+                                                        errors={errors.rate_asuransi} 
+                                                        onChange={(e) => setRateAsuransi(e)}
+                                                    />
+                                                )}
+                                        />}
                                 />
                                 {errors.rate_asuransi && <ErrorMessageForm>{errors.rate_asuransi.message}</ErrorMessageForm>}                    
                         </>}
@@ -704,9 +714,9 @@ const Simulasi = ({ onSubmit }) => {
             <div className="text-right pb-6">
                 <Button 
                     onClick={handleSubmit(storeDataSimulasi)}
-                    className={`${hitBiayaLainnya.isLoading && 'cursor-not-allowed'}`}> 
-                    {hitBiayaLainnya.isLoading && <LoadingSpinner/>} 
-                    {hitBiayaLainnya.isLoading ? 'Processing ...' : 'Simulasi'}
+                    className={`${(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) && 'cursor-not-allowed'}`}> 
+                    {(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) && <LoadingSpinner/>} 
+                    {(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) ? 'Processing ...' : 'Simulasi'}
                 </Button>
             </div>
 
