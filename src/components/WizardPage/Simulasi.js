@@ -12,9 +12,11 @@ import FormGroup from "../Form/FormGroup";
 import { FormRules } from "@/lib/formRules";
 import moment from "moment";
 import { useMySwal } from "@/hooks/useMySwal";
-import { clearFormatRupiah } from "@/lib/utils";
+import { clearFormatRupiah, formatRupiah } from "@/lib/utils";
 import usePost from "@/hooks/usePost";
 import LoadingSpinner from "../LoadingSpinner";
+import ModalInfoPlafon from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInfoPlafon";
+import useGet from "@/hooks/useGet";
 
 const formValidation = {
     nama_debitur: {maxLength: FormRules.MaxLength(30),  pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf')},
@@ -34,15 +36,56 @@ const formValidation = {
     status_debitur: {required: FormRules.Required()}
 }
 
+const BlockUI = () => {
+    return (
+        <div className="absolute inset-0 z-30 transition-opacity backdrop-blur-sm bg-transparent">
+            <div className="relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl text-center flex justify-center items-center gap-2"> 
+                <p className="text-primary font-inter-medium text-2xl mb-0"> Processing </p>
+                <div role="status">
+                    <svg aria-hidden="true" className="w-6 h-6 dark:text-white animate-spin text-primary  fill-white dark:fill-green-700" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const Simulasi = ({ onSubmit }) => {
 
     const mySwal = useMySwal()
-    const { register, control, handleSubmit, getValues, setValue, formState: { errors }  } = useForm({ mode: "all" });
+    const { register, control, handleSubmit, getValues, setValue, watch, formState: { errors }  } = useForm({ mode: "all" });
 
-    const [dataProduk, setDataProduk] = useState([]);
+
+    const refDataProduk = useGet(['refProduk'], '/master/list/product', { retry: false, refetchOnWindowFocus: false });
+    if ( refDataProduk.isError ) mySwal.error(refDataProduk.error)
+    let dataProduk = [];
+    if (refDataProduk.isSuccess) {
+        let products = refDataProduk.data?.data.data;
+        products.map((item) => {
+            return dataProduk.push({ 
+                value: item.id, 
+                label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
+                eqRate: item.eqRate,
+                eqRateReal: item.eqRateReal 
+            })
+        });
+    }
+    
+    const refStatusDebitur = useGet(['refStatusDebitur'], '/master/list/status-kawin', { retry: false, refetchOnWindowFocus: false });
+    if ( refStatusDebitur.isError ) mySwal.error(refDataProduk.error)
+    let dataMenikah = [];
+    if (refStatusDebitur.isSuccess) {
+        let getDataMenikah = refStatusDebitur.data?.data.data;
+        getDataMenikah.map((item) => {return dataMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })})
+    }
+    
+    
     const [produk, setProduk] = useState({value: -1, label: 'Pilih produk', disabled: true});
 
     const [ showModal, setShowModal ] = useState(false)
+    const [ showModalPlafon, setShowModalPlafon ] = useState(false)
 
     const [dataAsuransi, setDataAsuransi] = useState([])
     const [asuransi, setAsuransi] = useState({value: -1, label: 'Pilih asuransi', disabled: true})
@@ -52,7 +95,6 @@ const Simulasi = ({ onSubmit }) => {
     const [pekerjaan, setPekerjaan] = useState({value: -1, label: 'Pilih pekerjaan', disabled: true});
     const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
 
-    const [dataMenikah, setDataMenikah] = useState([]);
     const [menikah, setMenikah] = useState({value: -1, label: 'Pilih status debitur', disabled: true});
 
     const [tanggalLahir, setTanggalLahir] = useState(undefined);
@@ -118,6 +160,17 @@ const Simulasi = ({ onSubmit }) => {
         },
     })
 
+    const hitMaksimalPlafon = usePost(['simulasi-plafon'], 'v2/master/simulasi-plafon', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning(error.rm)
+        },
+        onSuccess: (data, variables, context) => {
+            setShowModalPlafon(true)
+        },
+    })
+
     const handleChange = async (e, type, onChange) => {
         let value = e.value   
         switch (type)  {
@@ -169,22 +222,6 @@ const Simulasi = ({ onSubmit }) => {
         }
     };
 
-    const getProduk = async () => {
-        const response = await API.GET(`/master/list/product`);
-        if (response.status != 200) return mySwal.error(response.data.error)
-        const arr = [];
-        let result = response.data.data;        
-        result.map((item) => {
-            return arr.push({ 
-                value: item.id, 
-                label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
-                eqRate: item.eqRate,
-                eqRateReal: item.eqRateReal
-            })
-        })
-        setDataProduk(arr)
-    }
-
     const getPekerjaan = async (idProduk) => {
         setLoadingPekerjaan(true)
         setPekerjaan({value: -1, label: 'Pilih pekerjaan', disabled: true})
@@ -204,16 +241,6 @@ const Simulasi = ({ onSubmit }) => {
         setDataPekerjaan(arrPekerjaan);
     }
 
-    const getMenikah = async () => {
-        const response = await API.GET(`master/list/status-kawin`);
-        if (response.status != 200) return mySwal.error(response.data.error)
-        const arrMenikah = [];
-        let getDataMenikah = response.data.data;
-        getDataMenikah.map((item) => {
-            return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
-        })
-        setDataMenikah(arrMenikah);
-    }
 
     const getAsuransi = async (asuransiId = null, jangkaWaktu, idProduct, tglLahir, idPekerjaan, type = 'list-asuransi') => {
         if ( type == 'list-asuransi') setLoadingAsuransi(true)
@@ -236,14 +263,30 @@ const Simulasi = ({ onSubmit }) => {
         let idPekerjaan = getValues('pekerjaan')
         if ( jangkaWaktu && productId && tglLahir && idPekerjaan ) getAsuransi(null, jangkaWaktu, productId, tglLahir, idPekerjaan)
     }
+
+    const lihatMaksimalPlafon = (data) => {
+        const payloadMaksimalPlafon = {
+            productId: data.produk,
+            idPekerjaan: data.pekerjaan,
+            pendapatanBulan: clearFormatRupiah(data.gaji),
+            pendapatanLainnya: clearFormatRupiah(data.penghasilan_lain),
+            pendapatanLainnya2: clearFormatRupiah(data.ulp),
+            jangkaWaktu: data.jangka_waktu,
+            tglLahir: data.tanggal_lahir,
+            isMenikah: data.status_debitur,
+            plafon: data.plafon ? clearFormatRupiah(data.plafon.toString()) : null,
+            rate: Number(suku_bunga.current),
+            pengeluaran: 0,
+            totalAngsuranLain: 0,
+        }
+        hitMaksimalPlafon.mutate(payloadMaksimalPlafon)
+    }
     
 
     const storeDataSimulasi = (data) => {
-
         if ( (data.jangka_waktu_promo && !data.bunga_promo) || (!data.jangka_waktu_promo && data.bunga_promo) ) {
             return mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
         }
-
         const dataFormatted = {
             productId: data.produk,
             idPekerjaan: data.pekerjaan,
@@ -253,7 +296,7 @@ const Simulasi = ({ onSubmit }) => {
             jangkaWaktu: data.jangka_waktu,
             tglLahir: data.tanggal_lahir,
             isMenikah: data.status_debitur,
-            plafon: data.plafon ? clearFormatRupiah(data.plafon) : null,
+            plafon: data.plafon ? clearFormatRupiah(data.plafon.toString()) : null,
             rate: Number(suku_bunga.current),
             pengeluaran: 0,
             totalAngsuranLain: 0,
@@ -271,15 +314,17 @@ const Simulasi = ({ onSubmit }) => {
         setTotalPenghasilan(total)
     }    
 
-
-    useEffect(() => {
-        getProduk();
-        getMenikah();
-    }, []);
+    const setMaksimalPlafon = (jangkaWaktu, plafon) => {
+        setShowModalPlafon(false)
+        setValue('jangka_waktu', jangkaWaktu)
+        setValue('plafon', plafon)        
+    }
 
     return (
         <>
-            <div className='grid sm:grid-cols-2 xl:grid-cols-3 gap-8 my-8'>
+            <div className='grid sm:grid-cols-2 xl:grid-cols-3 gap-8 my-8'>                
+                {hitMaksimalPlafon.isLoading && <BlockUI/>}
+
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
                     label={<label className='dark:text-grey' htmlFor="jenis_debitur"> Jenis Debitur </label>} 
@@ -324,6 +369,8 @@ const Simulasi = ({ onSubmit }) => {
                         render={({ field: { onChange } }) => (
                                 <MySelect
                                     withSearch
+                                    isDisabled={refDataProduk.isLoading}
+                                    loading={refDataProduk.isLoading}
                                     id="produk"
                                     name={'produk'} 
                                     register={register} 
@@ -395,6 +442,7 @@ const Simulasi = ({ onSubmit }) => {
                                     hideError 
                                     onChange={(value, name) => register('jangka_waktu_promo', {max: {value: value, message: `Tidak boleh lebih dari jangka waktu normal`}, valueAsNumber: true})}
                                     register={register} 
+                                    value={watch('jangka_waktu') || ''}
                                     name='jangka_waktu'
                                     errors={errors.jangka_waktu} 
                                     validation={formValidation.jangka_waktu}
@@ -418,6 +466,8 @@ const Simulasi = ({ onSubmit }) => {
                                     withSearch
                                     name={'status_debitur'} 
                                     id="status_debitur"
+                                    isDisabled={refStatusDebitur.isLoading}
+                                    loading={refStatusDebitur.isLoading}
                                     register={register} 
                                     errors={errors.status_debitur} 
                                     options={dataMenikah} 
@@ -700,12 +750,14 @@ const Simulasi = ({ onSubmit }) => {
                                     errors={errors.plafon}
                                     maxLength={10} 
                                     hideError
+                                    value={watch('plafon')}
                                     allowNegativeValue={false}
                                     decimalSeparator={','}
                                     groupSeparator={'.'}
                                 />}
                             />     
                             {errors.plafon && <ErrorMessageForm>{errors.plafon.message}</ErrorMessageForm>}                    
+                            <button type="button" className="text-left text-primary hover:cursor-pointer hover:text-primary-800" onClick={handleSubmit(lihatMaksimalPlafon)}> Lihat maksimal plafon </button>
                         </>
                     }
                 />    
@@ -721,6 +773,8 @@ const Simulasi = ({ onSubmit }) => {
             </div>
 
             {showModal && <ModalHasilSimulasi data={dataSimulasi} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)}/>}
+            {showModalPlafon && <ModalInfoPlafon data={hitMaksimalPlafon.data} setMaksimalPlafon={setMaksimalPlafon} setShowModal={setShowModalPlafon} closeModal={() => setShowModalPlafon((prev) => !prev)}/>}
+
         </>
     )
 };

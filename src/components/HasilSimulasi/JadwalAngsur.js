@@ -31,8 +31,6 @@ const JadwalAngsur = ({ dataSimulasi }) => {
         promo: payloadPromo
     }
 
-    console.log(payload)
-
     useEffect(() => {
         hitJadwalAngsur.mutate(payload)
     }, [])
@@ -40,7 +38,6 @@ const JadwalAngsur = ({ dataSimulasi }) => {
     let jadwalAngsur = []
     if ( hitJadwalAngsur.isSuccess ) {
         jadwalAngsur = hitJadwalAngsur.data.data.data.jadwalAngsur
-        console.log({jadwalAngsur})
     }
 
   return (
