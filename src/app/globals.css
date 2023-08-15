@@ -434,7 +434,7 @@
   }
 
   .form-check {
-		@apply cursor-pointer appearance-none border h-5 w-5  border-primary dark:border-primary-800 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-auto disabled:bg-form-check-disabled dark:disabled:bg-dark-form-check-disabled;
+		@apply cursor-pointer appearance-none border h-6 w-6  border-primary dark:border-primary-800 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-auto disabled:bg-form-check-disabled dark:disabled:bg-dark-form-check-disabled;
 	}
 
   .checbox-container:has(input:not([disabled])) { 
