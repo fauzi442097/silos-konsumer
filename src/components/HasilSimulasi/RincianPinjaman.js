@@ -1,7 +1,16 @@
 import React from 'react'
 import Button, { buttonVariants } from '../Button'
-import Dropdown, { DropdownItem } from '../Dropdown'
+import Dropdown from '../Dropdown'
 import { cn, formatRupiah } from '@/lib/utils'
+
+const InfoBiaya = ({ label, value}) => {
+    return (
+        <div className='flex justify-between items-center mb-2'> 
+            <p className="mb-0"> {label}</p>
+            <p className="text-primary font-inter-medium mb-0">Rp {value}</p>
+        </div>
+    )
+}
 
 const RincianPinjaman = ({ closeModal, data }) => {
 
@@ -14,13 +23,7 @@ const RincianPinjaman = ({ closeModal, data }) => {
                 <p className="text-semibold mb-2">Angsuran promo sebesar</p>
                 <p className="text-3xl text-primary font-inter-bold mb-0">Rp {data.promo ? formatRupiah(data.promo.angsuranPromo) : formatRupiah(data.angsuranBulan)}  <span className="text-primary font-inter-semibold"> / bulan</span> </p> 
                 <p className="mt-0"> dari total pinjaman <span className="text-primary font-inter-bold text-lg"> Rp {formatRupiah(data.plafon)} </span></p>
-
-                <Button
-                    variant="outline"
-                    className="mr-3"
-                    onClick={closeModal}>
-                    Hitung Ulang
-                </Button>
+                <Button variant="outline" className="mr-3" onClick={closeModal}> Hitung Ulang </Button>
             </div>
             <div className="basis-1/2 bg-gray-100 dark:bg-dark-depth2 rounded-lg text-sm p-4 italic self-start">
                 <p className='mb-1'> Catatan: </p>
@@ -46,30 +49,11 @@ const RincianPinjaman = ({ closeModal, data }) => {
 
         <p className='text-lg text-muted font-inter-medium dark:text-grey mb-6'> Biaya - Biaya </p>
 
-        <div className='flex justify-between items-center mb-2'> 
-            <p className="mb-0">Biaya Notaris </p>
-            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[0].nominal))} </p>
-        </div>
-
-        <div className='flex justify-between items-center mb-2'> 
-            <p className="mb-0">Biaya Asuransi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[2].nominal))} </p>
-        </div>
-
-        <div className='flex justify-between items-center mb-2'> 
-            <p className="mb-0">Biaya Provisi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[1].nominal))} </p>
-        </div>
-
-        <div className='flex justify-between items-center mb-2'> 
-            <p className="mb-0">Biaya Administrasi </p>
-            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[3].nominal))} </p>
-        </div>
-
-        <div className='flex justify-between items-center mb-2'> 
-            <p className="mb-0">Biaya Pihak Ketiga </p>
-            <p className="text-primary font-inter-medium mb-0">Rp {formatRupiah(Number(data.dataBiaya.biaya[4].nominal))} </p>
-        </div>
+        <InfoBiaya label={'Biaya Notaris'} value={formatRupiah(Number(data.dataBiaya.biaya[0].nominal))}/>
+        <InfoBiaya label={'Biaya Asuransi'} value={formatRupiah(Number(data.dataBiaya.biaya[2].nominal))}/>
+        <InfoBiaya label={'Biaya Provisi'} value={formatRupiah(Number(data.dataBiaya.biaya[1].nominal))}/>
+        <InfoBiaya label={'Biaya Administrasi'} value={formatRupiah(Number(data.dataBiaya.biaya[3].nominal))}/>
+        <InfoBiaya label={'Biaya Pihak Ketiga'} value={formatRupiah(Number(data.dataBiaya.biaya[4].nominal))}/>
 
         <div className='flex justify-between items-center mb-4'> 
             <p className="text-lg mb-0 font-inter-medium">Total Biaya Lainnya </p>
@@ -88,7 +72,6 @@ const RincianPinjaman = ({ closeModal, data }) => {
         
 
         <div className='flex flex-row justify-between'>
-
             <Dropdown
                 position='top'
                 className={cn([buttonVariants({ variant: 'secondary' })], 'mr-3')}
@@ -98,12 +81,8 @@ const RincianPinjaman = ({ closeModal, data }) => {
             </Dropdown>
 
             <div>
-                <Button className="mr-3" variant={'light'}>
-                    Simpan Simulasi
-                </Button>
-                <Button onClick={() => router.push(`/simulasi_kredit/debitur_baru/prospek`)}>
-                    Ajukan Pinjaman
-                </Button>
+                <Button className="mr-3" variant={'light'}> Simpan Simulasi </Button>
+                <Button onClick={() => router.push(`/simulasi_kredit/debitur_baru/prospek`)}> Ajukan Pinjaman </Button>
             </div>
         </div>
     </div>

@@ -1,6 +1,24 @@
 .bg_login {
    background: url('/img/bg-login3.png');
    background-repeat: no-repeat;
-   background-size: 40%;
-   background-position: center;
+   background-size: 35%;
+   background-position: 52% 52%;
+}
+
+@media only screen and (min-width: 1025px) and (max-width: 1600px){
+   .bg_login {
+      background: url('/img/bg-login3.png');
+      background-repeat: no-repeat;
+      background-size: 40%;
+      background-position: 60% 50%;
+   }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+   .bg_login {
+      background: url('/img/bg-login3.png');
+      background-repeat: no-repeat;
+      background-size: 50%;
+      background-position: 80% 40%;
+   }
 }

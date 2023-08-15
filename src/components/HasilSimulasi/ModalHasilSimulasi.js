@@ -51,7 +51,7 @@ const ModalHasilSimulasi = ({ setShowModal, closeModal, data }) => {
             </div>
 
             { showTab.rincian_pinjaman && <RincianPinjaman closeModal={closeModal} data={data}/>}
-            { showTab.jadwal_angsur && <JadwalAngsur/>}
+            { showTab.jadwal_angsur && <JadwalAngsur data={data}/>}
             
         </Modal.Body>
     </MyModal>

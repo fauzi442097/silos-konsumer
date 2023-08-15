@@ -46,8 +46,8 @@ const GuestLayout = ({ children }) => {
                      </div>
 
                      <div className='block md:hidden text-center'>
-                        <h1 className='text-primary font-inter-bold text-3xl'> Silos </h1>
-                        <p className='text-lg text-gray-500'> Platform Digital Pengelolaan Pinjaman </p>
+                        <h1 className='text-primary font-inter-bold text-3xl'> SILOS </h1>
+                        <p className='text-lg text-gray-500 font-inter-semibold dark:text-grey'> Platform Digital Pengelolaan Pinjaman </p>
                      </div>
                      
                   </div>
@@ -64,9 +64,9 @@ const GuestLayout = ({ children }) => {
             </div>
             <div className={`w-3/5 ${styles['bg_login']} relative hidden md:block`}>
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#009A4B" fillOpacity="1" d="M0,0L80,5.3C160,11,320,21,480,64C640,107,800,181,960,181.3C1120,181,1280,107,1360,69.3L1440,32L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
-               <div className='absolute top-48 left-[50%]'>
-                  <h1 className='text-primary font-inter-bold text-3xl'> Silos </h1>
-                  <p className='text-lg text-gray-500'> Platform Digital Pengelolaan Pinjaman </p>
+               <div className='absolute top-52 left-[40%]'>
+                  <h1 className='text-primary font-inter-bold text-3xl lg:text-4xl text-center'> SILOS </h1>
+                  <p className='text-lg lg:text-xl text-gray-500 font-inter-medium dark:text-grey'> Platform Digital Pengelolaan Pinjaman </p>
                </div>
             </div>
          </div>
