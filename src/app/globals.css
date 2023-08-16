@@ -733,5 +733,23 @@
       @apply bg-blue-600
   } */
 
+  .stepper-pengajuan::before {
+    content: "";
+    height: 2px;
+    left: -80%;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    background: #cbcbcb
+  }
+
+  .stepper {
+    flex: 1 1 0;
+    margin-top: 0;
+    min-height: 1rem;
+    position: relative;
+    text-align: center;
+  }
+
 }
 

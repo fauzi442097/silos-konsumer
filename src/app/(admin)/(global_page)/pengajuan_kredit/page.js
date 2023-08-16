@@ -38,11 +38,12 @@ export const REF_TAB_GROUP = {
     UPDATE_PENCAIRAN: 'update_pencairan'
 }
 
-const Stepper = ({icon, label, active = false, visited = false}) => {
+const Stepper = ({icon, label, active = false, visited = false, id}) => {
+    console.log(id)
     return (
-        <div className={cn(["flex flex-col gap-1 items-center hover:cursor-pointer", active && 'scale-125'])}> 
+        <div className={cn(["flex flex-col gap-1 items-center hover:cursor-pointer relative stepper", id != 1 && 'stepper-pengajuan'])}> 
             <i className={cn(["text-gray-400", (active || visited) && "text-primary"])} dangerouslySetInnerHTML={{ __html: icon }} />
-            <p className={cn("mb-0 text-lg font-inter-medium text-gray-400", active && "font-inter-semibold", (active || visited) && "text-primary")}> {label} </p>
+            <p className={cn("mb-0 font-inter-medium text-gray-400", active && "font-inter-semibold", (active || visited) && "text-primary")}> {label} </p>
         </div>
     )
 }
@@ -53,13 +54,13 @@ const RefStepper = [
         id: REF_STEP.SIMULASI_KREDIT,
         name: REF_TAB_GROUP.SIMULASI_KREDIT,
         label: 'Simulasi Kredit',
-        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M22 3H2c-1.09.04-1.96.91-2 2v14c.04 1.09.91 1.96 2 2h20c1.09-.04 1.96-.91 2-2V5a2.074 2.074 0 0 0-2-2m0 16H2V5h20v14m-8-2v-1.25c0-1.66-3.34-2.5-5-2.5c-1.66 0-5 .84-5 2.5V17h10M9 7a2.5 2.5 0 0 0-2.5 2.5A2.5 2.5 0 0 0 9 12a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 9 7m5 0v1h6V7h-6m0 2v1h6V9h-6m0 2v1h4v-1h-4"/></svg>'
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="currentColor" d="M22 3H2c-1.09.04-1.96.91-2 2v14c.04 1.09.91 1.96 2 2h20c1.09-.04 1.96-.91 2-2V5a2.074 2.074 0 0 0-2-2m0 16H2V5h20v14m-8-2v-1.25c0-1.66-3.34-2.5-5-2.5c-1.66 0-5 .84-5 2.5V17h10M9 7a2.5 2.5 0 0 0-2.5 2.5A2.5 2.5 0 0 0 9 12a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 9 7m5 0v1h6V7h-6m0 2v1h6V9h-6m0 2v1h4v-1h-4"/></svg>'
     },
     {
         id: REF_STEP.DATA_DEBITUR,
         name: REF_TAB_GROUP.DATA_DEBITUR,
         label: 'Data Debitur',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M22 3H2c-1.09.04-1.96.91-2 2v14c.04 1.09.91 1.96 2 2h20c1.09-.04 1.96-.91 2-2V5a2.074 2.074 0 0 0-2-2m0 16H2V5h20v14m-8-2v-1.25c0-1.66-3.34-2.5-5-2.5c-1.66 0-5 .84-5 2.5V17h10M9 7a2.5 2.5 0 0 0-2.5 2.5A2.5 2.5 0 0 0 9 12a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 9 7m5 0v1h6V7h-6m0 2v1h6V9h-6m0 2v1h4v-1h-4"/></svg>`
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="currentColor" d="M22 3H2c-1.09.04-1.96.91-2 2v14c.04 1.09.91 1.96 2 2h20c1.09-.04 1.96-.91 2-2V5a2.074 2.074 0 0 0-2-2m0 16H2V5h20v14m-8-2v-1.25c0-1.66-3.34-2.5-5-2.5c-1.66 0-5 .84-5 2.5V17h10M9 7a2.5 2.5 0 0 0-2.5 2.5A2.5 2.5 0 0 0 9 12a2.5 2.5 0 0 0 2.5-2.5A2.5 2.5 0 0 0 9 7m5 0v1h6V7h-6m0 2v1h6V9h-6m0 2v1h4v-1h-4"/></svg>`
     },
     {
         id: REF_STEP.CEKLIS_DOKUMEN,
@@ -83,7 +84,7 @@ const RefStepper = [
         id: REF_STEP.SCORING_KREDIT,
         name: REF_TAB_GROUP.SCORING_KREDIT,
         label: 'Scoring Kredit',
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="currentColor" d="M207.06 80.67A111.24 111.24 0 0 0 128 48h-.4C66.07 48.21 16 99 16 161.13V184a16 16 0 0 0 16 16h192a16 16 0 0 0 16-16v-24a111.25 111.25 0 0 0-32.94-79.33ZM224 184H119.71l54.76-75.3a8 8 0 0 0-12.94-9.42L99.92 184H32v-22.87c0-3.08.15-6.12.43-9.13H56a8 8 0 0 0 0-16H35.27c10.32-38.86 44-68.24 84.73-71.66V88a8 8 0 0 0 16 0V64.33A96.14 96.14 0 0 1 221 136h-21a8 8 0 0 0 0 16h23.67c.21 2.65.33 5.31.33 8Z"/></svg>`
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 256 256"><path fill="currentColor" d="M207.06 80.67A111.24 111.24 0 0 0 128 48h-.4C66.07 48.21 16 99 16 161.13V184a16 16 0 0 0 16 16h192a16 16 0 0 0 16-16v-24a111.25 111.25 0 0 0-32.94-79.33ZM224 184H119.71l54.76-75.3a8 8 0 0 0-12.94-9.42L99.92 184H32v-22.87c0-3.08.15-6.12.43-9.13H56a8 8 0 0 0 0-16H35.27c10.32-38.86 44-68.24 84.73-71.66V88a8 8 0 0 0 16 0V64.33A96.14 96.14 0 0 1 221 136h-21a8 8 0 0 0 0 16h23.67c.21 2.65.33 5.31.33 8Z"/></svg>`
     },
     {
         id: REF_STEP.APPROVAL,
@@ -141,6 +142,7 @@ const FormProspek = () => {
                     {RefStepper.map((item, i) => (
                         <Stepper
                             key={i}
+                            id={item.id}
                             visited={i < REF_STEP.SLIK}
                             active={item.id == REF_STEP.SLIK}
                             icon={item.icon} 
@@ -189,10 +191,10 @@ const FormProspek = () => {
 
                 </div>
 
-                
+{/*                 
                 <div className="w-10/12 bg-gray-200 m-auto my-2 h-4 rounded-xl"> 
                     <div className="h-4 bg-primary w-[50%] rounded-xl"> </div>
-                </div>  
+                </div>   */}
             </div>
 
             <Card>
