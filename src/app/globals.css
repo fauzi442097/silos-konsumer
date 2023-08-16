@@ -434,7 +434,7 @@
   }
 
   .form-check {
-		@apply cursor-pointer appearance-none border h-5 w-5  border-primary dark:border-primary-800 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-auto disabled:bg-form-check-disabled dark:disabled:bg-dark-form-check-disabled;
+		@apply cursor-pointer appearance-none border h-6 w-6  border-primary dark:border-primary-800 disabled:opacity-50 disabled:cursor-not-allowed pointer-events-auto disabled:bg-form-check-disabled dark:disabled:bg-dark-form-check-disabled;
 	}
 
   .checbox-container:has(input:not([disabled])) { 
@@ -732,6 +732,24 @@
   /* ::-webkit-scrollbar-thumb:hover {
       @apply bg-blue-600
   } */
+
+  .stepper-pengajuan::before {
+    content: "";
+    height: 2px;
+    left: -80%;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    background: #cbcbcb
+  }
+
+  .stepper {
+    flex: 1 1 0;
+    margin-top: 0;
+    min-height: 1rem;
+    position: relative;
+    text-align: center;
+  }
 
 }
 
