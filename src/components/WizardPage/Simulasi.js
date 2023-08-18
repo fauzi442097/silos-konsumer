@@ -12,7 +12,7 @@ import FormGroup from "../Form/FormGroup";
 import { FormRules } from "@/lib/formRules";
 import moment from "moment";
 import { useMySwal } from "@/hooks/useMySwal";
-import { clearFormatRupiah, formatRupiah } from "@/lib/utils";
+import { clearFormatRupiah } from "@/lib/utils";
 import usePost from "@/hooks/usePost";
 import LoadingSpinner from "../LoadingSpinner";
 import ModalInfoPlafon from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInfoPlafon";
@@ -36,6 +36,8 @@ const formValidation = {
     status_debitur: {required: FormRules.Required()}
 }
 
+const minAge = moment().subtract(17, 'years');
+
 const BlockUI = () => {
     return (
         <div className="absolute inset-0 z-30 transition-opacity backdrop-blur-sm bg-transparent">
@@ -52,17 +54,12 @@ const BlockUI = () => {
     )
 }
 
-const Simulasi = ({ onSubmit }) => {
-
+const useGetProducts = () => {
     const mySwal = useMySwal()
-    const { register, control, handleSubmit, getValues, setValue, watch, formState: { errors }  } = useForm({ mode: "all" });
-
-
-    const refDataProduk = useGet(['refProduk'], '/master/list/product', { retry: false, refetchOnWindowFocus: false });
-    if ( refDataProduk.isError ) mySwal.error(refDataProduk.error)
+    const queryProducts = useGet(['refProduk'], '/master/list/product', { retry: false, refetchOnWindowFocus: false });
     let dataProduk = [];
-    if (refDataProduk.isSuccess) {
-        let products = refDataProduk.data?.data.data;
+    if (queryProducts.isSuccess) {
+        let products = queryProducts.data?.data.data;
         products.map((item) => {
             return dataProduk.push({ 
                 value: item.id, 
@@ -72,49 +69,32 @@ const Simulasi = ({ onSubmit }) => {
             })
         });
     }
-    
-    const refStatusDebitur = useGet(['refStatusDebitur'], '/master/list/status-kawin', { retry: false, refetchOnWindowFocus: false });
-    if ( refStatusDebitur.isError ) mySwal.error(refDataProduk.error)
+
+    useEffect(() => {
+        if ( queryProducts.isError ) mySwal.error(queryProducts.error)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [queryProducts.isError])
+    return {dataProduk, queryProducts}
+}
+
+const useGetStatusDebitur = () => {
+    const mySwal = useMySwal()
+    const queryStatusDebitur = useGet(['refStatusDebitur'], '/master/list/status-kawin', { retry: false, refetchOnWindowFocus: false });
     let dataMenikah = [];
-    if (refStatusDebitur.isSuccess) {
-        let getDataMenikah = refStatusDebitur.data?.data.data;
+    if (queryStatusDebitur.isSuccess) {
+        let getDataMenikah = queryStatusDebitur.data?.data.data;
         getDataMenikah.map((item) => {return dataMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })})
     }
-    
-    
-    const [produk, setProduk] = useState({value: -1, label: 'Pilih produk', disabled: true});
 
-    const [ showModal, setShowModal ] = useState(false)
-    const [ showModalPlafon, setShowModalPlafon ] = useState(false)
+    useEffect(() => {
+        if ( queryStatusDebitur.isError ) mySwal.error(queryStatusDebitur.error)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [queryStatusDebitur.isError])
+    return {dataMenikah, queryStatusDebitur}
+}
 
-    const [dataAsuransi, setDataAsuransi] = useState([])
-    const [asuransi, setAsuransi] = useState({value: -1, label: 'Pilih asuransi', disabled: true})
-    const [loadingAsuransi, setLoadingAsuransi] = useState(false)
-
-    const [dataPekerjaan, setDataPekerjaan] = useState([]);
-    const [pekerjaan, setPekerjaan] = useState({value: -1, label: 'Pilih pekerjaan', disabled: true});
-    const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
-
-    const [menikah, setMenikah] = useState({value: -1, label: 'Pilih status debitur', disabled: true});
-
-    const [tanggalLahir, setTanggalLahir] = useState(undefined);
-    const [totalPenghasilan, setTotalPenghasilan] = useState(undefined)
-
-    const [ rateAsuransi, setRateAsuransi ] = useState(undefined)
-    const [dataSimulasi, setDataSimulasi] = useState({})
-
-    const [ plafon, setPlafon ] = useState(undefined)
-
-    const minAge = moment().subtract(17, 'years');
-    const refGaji = useRef(0)
-    const refULP = useRef(0)
-    const suku_bunga = useRef(undefined)
-    const refPenghasilanLain = useRef(0)
-    const refUsia = useRef('')
-
-    
-    let payload = []
-    const hitSimulasi = usePost(['simulasi'], '/v2/master/simulasi', payload, {
+const usePostSimulasi = (mySwal, setDataSimulasi, mutation) => {
+    return usePost(['simulasi'], '/v2/master/simulasi', [], {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
@@ -144,11 +124,13 @@ const Simulasi = ({ onSubmit }) => {
                 idProspek: null,
                 rateAsuransi: Number(rateAsuransi)
             }
-            hitBiayaLainnya.mutate(payloadBiayaLainnya)
+            mutation.mutate(payloadBiayaLainnya)
         },
     });
+}
 
-    const hitBiayaLainnya = usePost(['biaya-lainnya'], 'v2/master/kalkulasi-biaya', payload, {
+const usePostBiayaLainnya = (mySwal, setDataSimulasi, setShowModal) => {
+    return usePost(['biaya-lainnya'], 'v2/master/kalkulasi-biaya', [], {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
@@ -161,8 +143,10 @@ const Simulasi = ({ onSubmit }) => {
             setShowModal(true)
         },
     })
+}
 
-    const hitMaksimalPlafon = usePost(['simulasi-plafon'], 'v2/master/simulasi-plafon', [], {
+const usePostMaksimalPlafon = (mySwal, setShowModalPlafon) => {
+    return usePost(['simulasi-plafon'], 'v2/master/simulasi-plafon', [], {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
@@ -172,6 +156,51 @@ const Simulasi = ({ onSubmit }) => {
             setShowModalPlafon(true)
         },
     })
+}
+
+
+const Simulasi = ({ onSubmit }) => {
+
+    const mySwal = useMySwal()
+    const { register, control, handleSubmit, getValues, setValue, watch, formState: { errors }  } = useForm({ mode: "all" });
+
+    const { dataProduk, queryProducts } = useGetProducts()
+    const { dataMenikah, queryStatusDebitur } = useGetStatusDebitur()
+
+    
+    const [produk, setProduk] = useState({value: -1, label: 'Pilih produk', disabled: true});
+
+    const [ showModal, setShowModal ] = useState(false)
+    const [ showModalPlafon, setShowModalPlafon ] = useState(false)
+
+    const [dataAsuransi, setDataAsuransi] = useState([])
+    const [asuransi, setAsuransi] = useState({value: -1, label: 'Pilih asuransi', disabled: true})
+    const [loadingAsuransi, setLoadingAsuransi] = useState(false)
+
+    const [dataPekerjaan, setDataPekerjaan] = useState([]);
+    const [pekerjaan, setPekerjaan] = useState({value: -1, label: 'Pilih pekerjaan', disabled: true});
+    const [loadingPekerjaan, setLoadingPekerjaan] = useState(false)
+
+    const [menikah, setMenikah] = useState({value: -1, label: 'Pilih status debitur', disabled: true});
+
+    const [tanggalLahir, setTanggalLahir] = useState(undefined);
+    const [totalPenghasilan, setTotalPenghasilan] = useState(undefined)
+
+    const [ rateAsuransi, setRateAsuransi ] = useState(undefined)
+    const [dataSimulasi, setDataSimulasi] = useState({})
+
+    const [ plafon, setPlafon ] = useState(undefined)
+
+    const refGaji = useRef(0)
+    const refULP = useRef(0)
+    const suku_bunga = useRef(undefined)
+    const refPenghasilanLain = useRef(0)
+    const refUsia = useRef('')
+
+
+    const hitBiayaLainnya = usePostBiayaLainnya(mySwal, setDataSimulasi, setShowModal)
+    const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, hitBiayaLainnya)
+    const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon)
 
     const handleChange = async (e, type, onChange) => {
         let value = e.value   
@@ -378,8 +407,8 @@ const Simulasi = ({ onSubmit }) => {
                         render={({ field: { onChange } }) => (
                                 <MySelect
                                     withSearch
-                                    isDisabled={refDataProduk.isLoading}
-                                    loading={refDataProduk.isLoading}
+                                    isDisabled={queryProducts.isLoading}
+                                    loading={queryProducts.isLoading}
                                     id="produk"
                                     name={'produk'} 
                                     register={register} 
@@ -475,8 +504,8 @@ const Simulasi = ({ onSubmit }) => {
                                     withSearch
                                     name={'status_debitur'} 
                                     id="status_debitur"
-                                    isDisabled={refStatusDebitur.isLoading}
-                                    loading={refStatusDebitur.isLoading}
+                                    isDisabled={queryStatusDebitur.isLoading}
+                                    loading={queryStatusDebitur.isLoading}
                                     register={register} 
                                     errors={errors.status_debitur} 
                                     options={dataMenikah} 
@@ -767,7 +796,7 @@ const Simulasi = ({ onSubmit }) => {
                                 />}
                             />     
                             {errors.plafon && <ErrorMessageForm>{errors.plafon.message}</ErrorMessageForm>}                    
-                            <button type="button" className="text-left text-primary hover:cursor-pointer hover:text-primary-800" onClick={handleSubmit(lihatMaksimalPlafon)}> Lihat maksimal plafon </button>
+                            <button type="button" className="text-left link" onClick={handleSubmit(lihatMaksimalPlafon)}> Lihat maksimal plafon </button>
                         </>
                     }
                 />    
