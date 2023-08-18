@@ -92,7 +92,7 @@ const Agunan = ({ prevAction, onSubmit }) => {
 
     let arrJenisAgunan = [];
     const id = 4;
-    const { data, isLoading, isError, error, isFetching, refetch } = useGet(['refJenisAgunan', id], `master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null })
+    const { data, isLoading, isError, error, isFetching, refetch } = useGet(['refJenisAgunan', id], `/master/list/tipe-agunan/${id}/?idPekerjaan=8`, { retry: 1, refetchOnWindowFocus: false, enabled: id != null })
 
     useEffect(() => {
         if(!isLoading){
