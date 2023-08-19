@@ -72,6 +72,7 @@ const SwalContent = ({
   const buttonCloseElement = useMemo(() => getButtonCloseStyle(context, onClose, labelCancel), [context, onClose, labelCancel]);
   const buttonSubmitElement = useMemo(() => getButtonSubmitStyle(context, onSubmit, labelSubmit), [context, onSubmit, labelSubmit]);
 
+
   return (
     <motion.div 
     key={'swal'}
