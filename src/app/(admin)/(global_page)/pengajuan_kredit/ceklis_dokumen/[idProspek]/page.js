@@ -1,11 +1,11 @@
 import React from 'react'
 import PageTitle from '@/components/PageTitle'
-import { REF_STEP, RefStepper, Stepper } from '../Stepper'
 import Card from '@/components/Card'
 import { cookies } from 'next/headers'
 import DataNotFound from '@/components/DataNotFound'
 import InfoDebitur from './InfoDebitur'
 import FormUploadDokumen from './FormUploadDokumen'
+import { REF_STEP, RefStepper, Stepper } from '../../Stepper'
 
 const getDataDebitur = async (id) => {
     const cookieStore = cookies()
@@ -15,10 +15,10 @@ const getDataDebitur = async (id) => {
     return res.json()
 }
 
-const CeklisDokumen = async ({ searchParams }) => {
+const CeklisDokumen = async ({ params }) => {
 
-    const { id } = searchParams
-    const { rc, rm, data} = await getDataDebitur(id)
+    const { idProspek } = params
+    const { rc, rm, data} = await getDataDebitur(idProspek)
     if ( rc != 200 ) return <DataNotFound message={rm} />
 
     return (
