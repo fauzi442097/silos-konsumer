@@ -3,9 +3,9 @@ import PageTitle from '@/components/PageTitle'
 import Card from '@/components/Card'
 import { cookies } from 'next/headers'
 import DataNotFound from '@/components/DataNotFound'
-import InfoDebitur from './InfoDebitur'
 import FormUploadDokumen from './FormUploadDokumen'
 import { REF_STEP, RefStepper, Stepper } from '../../Stepper'
+import InfoDebitur from './InfoDebitur'
 
 const getDataDebitur = async (id) => {
     const cookieStore = cookies()

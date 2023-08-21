@@ -6,6 +6,7 @@ import Checkbox from '@/components/Form/Checkbox'
 import useGet from '@/hooks/useGet'
 import { useMySwal } from '@/hooks/useMySwal'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 
 
 const useGetDocuments = (data) => {
@@ -19,6 +20,8 @@ const useGetDocuments = (data) => {
 }
 
 const FormUploadDokumen = ({ dataDebitur }) => {
+
+    const router = useRouter()
     const mySwal = useMySwal()
     const { isLoading, isSuccess, data } = useGetDocuments(dataDebitur)
     const documents = data?.data?.data
@@ -35,7 +38,7 @@ const FormUploadDokumen = ({ dataDebitur }) => {
             const docName = unCheckDocRequired.map((item) => (`- ${item.description} <br/>`))
             mySwal.warning(`Dokumen wajib berikut belum dipilih: <br/>${docName.join("")}`)
         }
-        
+        router.push('/pengajuan_kredit/slik/4201')
     }
 
     const handleChange = (i) => {

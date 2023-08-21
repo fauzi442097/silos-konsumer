@@ -1,27 +1,33 @@
-'use client'
-
-import Badge from "@/components/Badge";
-import Skeleton from "react-loading-skeleton";
-import FormSlik from "./FormSlik";
-import TabAction from "@/components/TabAction";
-import { InfoProfile } from "../../../profile/[id]/page";
+import React from "react";
 import PageTitle from "@/components/PageTitle";
 import { REF_STEP, RefStepper, Stepper } from "../../Stepper";
 import Card from "@/components/Card";
+import { cookies } from 'next/headers'
+import DataNotFound from "@/components/DataNotFound";
+import FormSlik from "./FormSlik";
+import { useRouter } from "next/navigation";
 
 
-const Slik = ({ params }) => {
+const getBICheckDebitur = async (id) => {
+  const cookieStore = cookies()
+  const {token} = JSON.parse(cookieStore.get('auth').value)
+  const headers = {Authorization: "Bearer " + token}
+  const res = await fetch(`${process.env.API_BASE_URL}master/bi-check/prospek/${id}`, {headers: headers})
+  return res.json()
+}
+
+const Slik = async ({ params }) => {
 
   const { idProspek } = params
+  const { rc, rm, data} = await getBICheckDebitur(idProspek)
+  if ( rc != 200 ) return <DataNotFound message={rm} />
 
-  let idSlik = 1;
-  const id = idSlik
-  const isLoadingContent = false
+  console.log(data)
 
   const storeSlik = (data) => {
-    console.log(data)
-    onSubmit();
-}
+      console.log(data)
+      onSubmit();
+  }
 
   return (
     <>
@@ -44,6 +50,33 @@ const Slik = ({ params }) => {
 
             <Card>
                 <Card.Body className={'flex gap-4'}>
+                  <div className='my-10 w-[30%] '> 
+                    <p className='font-inter-medium text-xl mb-8 text-gray-500'> Informasi debitur </p>
+                    <p className='text-lg font-inter-medium'> {data.nmProspek} </p>
+
+                    <table className='w-full'>
+                        <tbody>
+                          <tr>
+                              <td className='py-2 text-muted w-[20%]'> No.Identitas </td>
+                              <td className='py-2'> {data.noIdentitas} </td>
+                          </tr>
+                          <tr>
+                              <td className='py-2 text-muted'> Tempat Lahir </td>
+                              <td className='py-2'> {data.tempatLahir} </td>
+                          </tr>
+                          <tr>
+                              <td className='py-2 text-muted'> Tanggal Lahir </td>
+                              <td className='py-2'> {data.tanggalLahir} </td>
+                          </tr>
+                          <tr>
+                              <td className='py-2 text-muted'> Alamat </td>
+                              <td className='py-2'> {data.alamat} </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                  </div>
+
+                  <FormSlik dataSlikDebitur={data}/>
                 </Card.Body>
             </Card>
 
