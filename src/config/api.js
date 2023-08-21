@@ -5,7 +5,7 @@ import { BASE_URL_API } from "./env";
 
 const clientCookies = new Cookies();
 export const mainAPI = axios.create({
-  baseURL: '/api/',
+  baseURL: '/API/',
   withCredentials: true
 });
 

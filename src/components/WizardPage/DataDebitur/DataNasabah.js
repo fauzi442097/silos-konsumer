@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useEffect, useState, useRef } from "react";
-import { API } from "@/config/api";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Controller } from "react-hook-form";
 import { FormRules } from "@/lib/formRules";
 import { useMySwal } from "@/hooks/useMySwal";
 import useGet from '@/hooks/useGet';
@@ -15,16 +14,116 @@ import Radio from "@/components/Form/Radio";
 import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
 import ErrorMessageForm from "@/components/Form/ErrorMessageForm";
+import { API } from "@/config/api";
 
-const DataNasabah = ({ dataNasabah }) => {
-    const mySwal = useMySwal()
-    const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
+const formValidation = {
+    produk: { required: FormRules.Required('Pilih produk') },
+    nama_debitur: { required: FormRules.Required(), maxLength: FormRules.MaxLength(50), pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf') },
+    tempat_lahir: { required: FormRules.Required(), pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf') },
+    tanggal_lahir: { required: FormRules.Required() },
+    ibu_kandung: { required: FormRules.Required() },
+    no_ktp: { required: FormRules.Required(), minLength: FormRules.MinLength(16), maxLength: FormRules.MaxLength(16) },
+    status_ktp: { required: FormRules.Required() },
+    status_debitur: { required: FormRules.Required() },
+    no_handphone: { required: FormRules.Required(), minLength: FormRules.MinLength(11), maxLength: FormRules.MaxLength(13) },
+    no_telepon: { minLength: FormRules.MinLength(10), maxLength: FormRules.MaxLength(13) },
+    alamat_ktp: { required: FormRules.Required() },
+    alamat_domisili: { required: FormRules.Required() },
+    wilayah_debitur: { required: FormRules.Required() },
+}
 
+const statusKTP = [
+    { value: "true", label: "Expired" },
+    { value: "false", label: "Seumur Hidup" }
+];
+
+const useGetProduk = () => {
+    const mySwal = useMySwal();
+    const getProduk = useGet(['refProdukDebitur'], '/master/list/product', { retry: false, refetchOnWindowFokus: false });
+    let arrProduk = [];
+    if (getProduk.isSuccess) {
+        let dataProduk = getProduk.data?.data.data;
+        dataProduk.map((item) => {
+            return arrProduk.push({ value: item.id, label: item.prodName })
+        })
+    }
+
+    useEffect(() => {
+        if (getProduk.isError) mySwal.error(getProduk.error)
+    }, [getProduk.isError]);
+
+    return { arrProduk, getProduk }
+}
+
+const useGetMenikah = () => {
+    const mySwal = useMySwal();
+    const getMenikah = useGet(['refStatusMenikah'], '/master/list/status-kawin', { retry: false, refetchOnWindowFokus: false });
+    let arrMenikah = [];
+    if(getMenikah.isSuccess){
+        let dataMenikah = getMenikah.data?.data.data;
+        dataMenikah.map((item) => {
+            return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
+        })
+    }
+
+    useEffect(() => {
+        if (getMenikah.isError) mySwal.error(getMenikah.error);
+    }, [getMenikah.isError]);
+
+    return { arrMenikah, getMenikah }
+}
+
+const DataNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
+    // const mySwal = useMySwal();
+    const minAge = moment().subtract(21, 'years');
+    const { arrProduk, getProduk } = useGetProduk();
+    const { arrMenikah, getMenikah } = useGetMenikah();
+
+    const [statKtp, setStatKtp] = useState(false);
     const [alamatDomisili, setAlamatDomisili] = useState(null);
-    const minAge = moment().subtract(17, 'years');
+
+    const [tglExpKtp, setTglExpKtp] = useState(undefined);
+    const [tanggalLahir, setTanggalLahir] = useState(undefined);
+
+    const handleChange = async (e, type, onChange) => {
+        let value = e.value;
+
+        switch (type) {
+            case 'produk':
+                onChange(value);
+                let produkSelected = arrProduk.find((item, i) => item.value === value);
+                stateNasabah.setProduk(produkSelected);
+
+                break;
+            case 'tglLahir':
+                onChange(e.startDate);
+                setTanggalLahir(e);
+
+                break;
+            case 'ktp':
+                onChange(e.startDate);
+                let ktpSelected = statusKTP.find((item, i) => item.value === value);
+                setStatKtp(ktpSelected);
+
+                break;
+            case 'tglExpKTP':
+                onChange(e.startDate);
+                setTglExpKtp(e);
+
+                break;
+            case 'statusDebitur':
+                onChange(value);
+                let menikahSelected = arrMenikah.find((item, i) => item.value === value);
+                stateNasabah.setStatusMenikah(menikahSelected);
+
+                break;
+            default:
+                break;
+        }
+    }
 
     const setDomisili = (alamatKtp) => {
-        setValue('alamat_domisili', alamatKtp);
+        setValue.setValue('alamat_domisili', alamatKtp);
         setAlamatDomisili(alamatKtp);
     }
 
@@ -43,15 +142,15 @@ const DataNasabah = ({ dataNasabah }) => {
                             <MySelect
                                 withSearch
                                 id="produk"
-                                name={'produk'}
+                                name='produk'
                                 register={register}
                                 errors={errors.produk}
-                                options={dataNasabah.arrProduk}
-                                value={dataNasabah.produk}
-                                isLoading={dataNasabah.refDataProduk.isLoading}
-                                disabled={dataNasabah.refDataProduk.isLoading}
-                                validation={dataNasabah.formValidation.produk}
-                                onChange={(e) => dataNasabah.handleChange(e, 'produk', onChange)} />
+                                validation={formValidation.produk}
+                                options={arrProduk}
+                                value={stateNasabah.produk}
+                                isLoading={getProduk.isLoading}
+                                disabled={getProduk.isLoading}
+                                onChange={(e) => handleChange(e, 'produk', onChange)} />
                         )}
                     />
                 </div>
@@ -64,7 +163,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="nama_debitur"
                         register={register}
                         errors={errors.nama_debitur}
-                        validation={dataNasabah.formValidation.nama_debitur} />
+                        validation={formValidation.nama_debitur} />
                 </div>
                 <div className="mt-10" style={{ width: "450px" }}>
                     <div className='flex gap-2'>
@@ -83,7 +182,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="tempat_lahir"
                         register={register}
                         errors={errors.tempat_lahir}
-                        validation={dataNasabah.formValidation.tempat_lahir} />
+                        validation={formValidation.tempat_lahir} />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className="block mb-3">Tanggal Lahir</label>
@@ -100,9 +199,9 @@ const DataNasabah = ({ dataNasabah }) => {
                                 startFrom={minAge}
                                 register={register}
                                 errors={errors.tanggal_lahir}
-                                value={dataNasabah.tanggalLahir}
-                                validation={dataNasabah.formValidation.tanggal_lahir}
-                                onChange={(e) => dataNasabah.handleChange(e, 'tglLahir', onChange)} />
+                                value={tanggalLahir}
+                                validation={formValidation.tanggal_lahir}
+                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} />
                         )}
                     />
                 </div>
@@ -114,7 +213,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="ibu_kandung"
                         register={register}
                         errors={errors.ibu_kandung}
-                        validation={dataNasabah.formValidation.ibu_kandung} />
+                        validation={formValidation.ibu_kandung} />
                 </div>
             </div>
 
@@ -131,7 +230,7 @@ const DataNasabah = ({ dataNasabah }) => {
                             id="no_ktp"
                             placeholder='Isikan nomor KTP'
                             register={register}
-                            validation={dataNasabah.formValidation.no_ktp} />}
+                            validation={formValidation.no_ktp} />}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
                     />
                     {errors.no_ktp && <ErrorMessageForm>{errors.no_ktp.message}</ErrorMessageForm>}
@@ -148,38 +247,39 @@ const DataNasabah = ({ dataNasabah }) => {
                                 placeholder="Isikan status KTP"
                                 name="status_ktp"
                                 id="status_ktp"
-                                options={dataNasabah.statusKTP}
-                                value={dataNasabah.statKTP}
+                                options={statusKTP}
+                                value={statKtp}
                                 register={register}
                                 errors={errors.status_ktp}
-                                validation={dataNasabah.formValidation.status_ktp}
-                                onChange={(e) => dataNasabah.handleChange(e, 'ktp', onChange)} />
+                                validation={formValidation.status_ktp}
+                                onChange={(e) => handleChange(e, 'ktp', onChange)}
+                            />
                         )} />
                 </div>
                 {
-                    dataNasabah.tglExpKtp === "true" ? 
-                    <div style={{ width: "450px" }}>
-                        <label className='block mb-3'> Tanggal Expired KTP </label>
-                        <Controller
-                        control={control}
-                        name="Tanggal Expired KTP"
-                        id="Tanggal Expired KTP"
-                        render={({ field: { onChange } }) => (
-                            <Input.Date 
-                                placeholder="Isikan tanggal expired KTP" 
-                                id="Tanggal Expired KTP" 
+                    statKtp.value === "true" ?
+                        <div style={{ width: "450px" }}>
+                            <label className='block mb-3'> Tanggal Expired KTP </label>
+                            <Controller
+                                control={control}
                                 name="Tanggal Expired KTP"
-                                maxDate={minAge}
-                                startFrom={minAge}
-                                value={dataNasabah.tglExp} 
-                                onChange={(e) => dataNasabah.handleChange(e, 'tglExpKTP', onChange)}
-                                /> 
-                        )} />
-                    </div>
-                :
-                    <div style={{ width: "450px" }}>
+                                id="Tanggal Expired KTP"
+                                render={({ field: { onChange } }) => (
+                                    <Input.Date
+                                        placeholder="Isikan tanggal expired KTP"
+                                        id="Tanggal Expired KTP"
+                                        name="Tanggal Expired KTP"
+                                        maxDate={minAge}
+                                        startFrom={minAge}
+                                        value={tglExpKtp}
+                                        onChange={(e) => handleChange(e, 'tglExpKTP', onChange)}
+                                    />
+                                )} />
+                        </div>
+                        :
+                        <div style={{ width: "450px" }}>
 
-                    </div>
+                        </div>
                 }
 
 
@@ -198,14 +298,14 @@ const DataNasabah = ({ dataNasabah }) => {
                                 placeholder="Isikan status debitur"
                                 id="status_debitur"
                                 name="status_debitur"
-                                value={dataNasabah.menikah}
-                                options={dataNasabah.arrMenikah}
+                                value={stateNasabah.statusMenikah}
+                                options={arrMenikah}
                                 register={register}
                                 errors={errors.status_debitur}
-                                isLoading={dataNasabah.refDataNikah.isLoading}
-                                disabled={dataNasabah.refDataNikah.isLoading}
-                                validation={dataNasabah.formValidation.status_debitur}
-                                onChange={(e) => dataNasabah.handleChange(e, 'statusDebitur', onChange)} />
+                                isLoading={getMenikah.isLoading}
+                                disabled={getMenikah.isLoading}
+                                validation={formValidation.status_debitur}
+                                onChange={(e) => handleChange(e, 'statusDebitur', onChange)} />
                         )} />
                 </div>
                 <div style={{ width: "450px" }}>
@@ -218,7 +318,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="no_handphone"
                         register={register}
                         errors={errors.no_handphone}
-                        validation={dataNasabah.formValidation.no_handphone} />
+                        validation={formValidation.no_handphone} />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className="block mb-3">Nomor Telepon</label>
@@ -230,7 +330,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="no_telepon"
                         register={register}
                         errors={errors.no_telepon}
-                        validation={dataNasabah.formValidation.no_telepon} />
+                        validation={formValidation.no_telepon} />
                 </div>
             </div>
 
@@ -243,7 +343,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="alamat_ktp"
                         register={register}
                         errors={errors.alamat_ktp}
-                        validation={dataNasabah.formValidation.alamat_ktp} />
+                        validation={formValidation.alamat_ktp} />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className="block mb-3">Alamat Domisili</label>
@@ -253,7 +353,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="alamat_domisili"
                         register={register}
                         errors={errors.alamat_domisili}
-                        validation={dataNasabah.formValidation.alamat_domisili} />
+                        validation={formValidation.alamat_domisili} />
                     <Checkbox
                         label={'Klik jika alamat sama dengan KTP'}
                         name={'domisili'}
@@ -273,7 +373,7 @@ const DataNasabah = ({ dataNasabah }) => {
                         name="wilayah_debitur"
                         register={register}
                         errors={errors.wilayah_debitur}
-                        validation={dataNasabah.formValidation.wilayah_debitur} />
+                        validation={formValidation.wilayah_debitur} />
                 </div>
                 <div style={{ width: "450px" }}>
                 </div>

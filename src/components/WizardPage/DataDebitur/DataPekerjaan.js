@@ -1,28 +1,93 @@
 'use client'
 
-import React, { useState } from "react"
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react"
+import { Controller, Form, useForm } from "react-hook-form";
+import { FormRules } from "@/lib/formRules";
+import { useMySwal } from "@/hooks/useMySwal";
+import useGet from '@/hooks/useGet';
 
 import MySelect from "@/components/Form/Select"
 import Input from "@/components/Form/Input"
 import Textarea from "@/components/Form/Textarea"
+import { isError } from "lodash";
 
+const formValidation = {
+    sumber_pendapatan: { required: FormRules.Required() },
+    pekerjaan: { required: FormRules.Required() },
+    nama_kantor: { required: FormRules.Required() },
+    jabatan: { required: FormRules.Required() },
+    alamat_kantor: { required: FormRules.Required() },
+    wilayah_kantor: { required: FormRules.Required() },
+    pendapatan_bulanan: { required: FormRules.Required(), maxLength: FormRules.MaxLength(12) }
+}
 
-// const sumberPendapatan = [
-//     { value: "Gaji", label: "Gaji"},
-//     { value: "Usaha", label: "Usaha"},
-//     { value: "Investasi", label: "Investasi"},
-//     { value: "Lainnya", label: "Lainnya"},
-// ];
+const DataPekerjaan = ({statePekerjaan, register, errors, control}) => {
 
-const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
-    console.log(dataPekerjaan);
-    // const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
-    // const [pendapatan, setPendapatan] = useState(null);
+    const useGetPekerjaan = () => { 
+        let idProduk = statePekerjaan.produk ? statePekerjaan.produk.value : 0;
+        const mySwal = useMySwal();
+        const getPekerjaan = useGet(['refDataPekerjaan', idProduk], `master/list/pekerjaan?idProduct=${idProduk}`, { retry: false, refetchOnWindowFokus: false, enable: idProduk !== null })
+        let arrPekerjaan = [];
+        
+        if(getPekerjaan.isSuccess){
+            let dataPekerjaan = getPekerjaan.data?.data.data;
+            dataPekerjaan.map((item) => {
+                return arrPekerjaan.push({ value: item.idPekerjaan, label: item.nmPekerjaan })
+            })
+        }
 
-    // const handlePendapatan = value => {
-    //     setPendapatan(value);
-    // }
+        useEffect(() => {
+            if (getPekerjaan.isError) mySwal.error(getPekerjaan.error);
+        }, [getPekerjaan,isError]);
+
+        return {arrPekerjaan, getPekerjaan};
+    }
+
+    const useGetSumberPendapatan = () => {
+        let idProduk = statePekerjaan.produk ? statePekerjaan.produk.value : 0;
+        const mySwal = useMySwal();
+        const getSumberPendapatan = useGet(['refSumberPendapatan', idProduk], `/master/list/pendapatan?idProduct=${idProduk}`, { retry: false, refetchOnWindowFokus: false, enable: idProduk !== null })
+        let arrSumberPendapatan = [];
+        if(getSumberPendapatan.isSuccess){
+            let dataSumberPendapatan = getSumberPendapatan.data?.data.data;
+            dataSumberPendapatan.map((item) => {
+                return arrSumberPendapatan.push({ label: item.idSumber, label: item.keterangan })
+            })
+        }
+
+        useEffect(() => {
+            if(getSumberPendapatan.isError) mySwal.error(getSumberPendapatan.error);
+        }, [getSumberPendapatan.isError]);
+
+        return {arrSumberPendapatan, getSumberPendapatan};
+    }
+
+    const {arrSumberPendapatan, getSumberPendapatan} = useGetSumberPendapatan();
+    const {arrPekerjaan, getPekerjaan} = useGetPekerjaan();
+    const [pendapatan, setPendapatan] = useState(null);
+    const [pekerjaan, setPekerjaan] = useState(null);
+    
+    const handleChange = async (e, type, onChange) => {
+        let value = e.value;
+        switch (type) {
+            case 'changePekerjaan':
+                onChange(value);
+                let pekerjaan = arrPekerjaan.find((item, i) => item.value === value);
+                setPekerjaan(pekerjaan);
+
+                break;
+
+            case 'changeSumberPendapatan':
+                onChange(value);
+                let sumberPendapatanSelected = arrSumberPendapatan.find((item, i) => item.value === value);
+                setPendapatan(sumberPendapatanSelected);
+
+                break;
+        
+            default:
+                break;
+        }
+    }
 
     return (
         <>
@@ -42,14 +107,14 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                                 placeholder="Isikan pekerjaan" 
                                 name="pekerjaan" 
                                 id="pekerjaan" 
-                                options={dataPekerjaan.arrPekerjaan} 
-                                value={dataPekerjaan.listPekerjaan} 
+                                options={arrPekerjaan} 
+                                value={pekerjaan} 
                                 register={register}
                                 errors={errors.pekerjaan}
-                                // isLoading={dataPekerjaan.refPekerjaan.isLoading}
-                                // disabled={dataPekerjaan.refPekerjaan.isLoading}
-                                validation={dataPekerjaan.formValidation.pekerjaan}
-                                onChange={(e) => dataPekerjaan.handleChange(e, 'pekerjaan', onChange)}
+                                isLoading={getPekerjaan.isLoading}
+                                disabled={getPekerjaan.isLoading}
+                                validation={formValidation.pekerjaan}
+                                onChange={(e) => handleChange(e, 'changePekerjaan', onChange)}
                                 />
                         )} />
                 </div>
@@ -61,7 +126,8 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                         name="nama_kantor"
                         register={register}
                         errors={errors.nama_kantor}
-                        validation={dataPekerjaan.formValidation.nama_kantor} />
+                        validation={formValidation.nama_kantor} 
+                        />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor Telepon Kantor </label>
@@ -81,7 +147,8 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                         name="jabatan"
                         register={register}
                         errors={errors.jabatan}
-                        validation={dataPekerjaan.formValidation.jabatan} />
+                        validation={formValidation.jabatan} 
+                        />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nama Pimpinan </label>
@@ -108,7 +175,8 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                         name="alamat_kantor"
                         register={register}
                         errors={errors.alamat_kantor}
-                        validation={dataPekerjaan.formValidation.alamat_kantor} />
+                        validation={formValidation.alamat_kantor} 
+                        />
                 </div>
                 <div style={{ width: "950px" }}>
                     <label className="block mb-3">Cari Wilayah Kantor</label>
@@ -118,21 +186,34 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                         name="wilayah_kantor"
                         register={register}
                         errors={errors.wilayah_kantor}
-                        validation={dataPekerjaan.formValidation.wilayah_kantor} />
+                        validation={formValidation.wilayah_kantor} 
+                        />
                 </div>
             </div>
 
             <div className="flex flex-row justify-center gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Sumber Pendapatan </label>
-                    <MySelect 
-                        withSearch 
-                        placeholder="Isikan sumber pendapatan" 
-                        name="sumberPendapatan" 
-                        id="sumberPendapatan" 
-                        // options={dataPekerjaan.arrPendapatan} 
-                        // value={dataPekerjaan.listPendapatan} 
-                        />
+                    <Controller 
+                        control={control}
+                        name="sumber_pendapatan"
+                        id="sumber_pendapatan"
+                        render={({ field: { onChange } }) => (
+                            <MySelect 
+                                withSearch 
+                                name="sumber_pendapatan" 
+                                id="sumber_pendapatan" 
+                                options={arrSumberPendapatan} 
+                                value={pendapatan} 
+                                register={register}
+                                errors={errors.sumber_pendapatan}
+                                validation={formValidation.sumber_pendapatan}
+                                isLoading={getSumberPendapatan.isLoading}
+                                disabled={getSumberPendapatan.isLoading}
+                                onChange={(e) => handleChange(e, 'changeSumberPendapatan', onChange)}
+                                />
+                        )}
+                    />
                 </div>
                 <div style={{ width: "450px" }}>
                 </div>
@@ -145,17 +226,20 @@ const DataPekerjaan = ({dataPekerjaan, register, errors, control}) => {
                     <label className='block mb-3'> Pendapatan Bulanan Pokok </label>
                     <Input.Currency 
                         placeholder="Isikan pendapatan bulanan pokok"
-                        id="pendapatanBulanan" 
-                        name="pendapatanBulanan" 
+                        id="pendapatan_bulanan" 
+                        name="pendapatan_bulanan" 
                         allowDecimals={false}
+                        register={register}
+                        errors={errors.pendapatan_bulanan}
+                        validation={formValidation.pendapatan_bulanan} 
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Penghasilan Lain </label>
                     <Input.Currency 
                         placeholder="Isikan penghasilan lain" 
-                        id="penghasilanLain" 
-                        name="penghasilanLain"
+                        id="penghasilan_lain" 
+                        name="penghasilan_lain"
                         allowDecimals={false}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>

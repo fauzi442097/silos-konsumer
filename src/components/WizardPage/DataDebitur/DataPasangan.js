@@ -1,11 +1,23 @@
 'use client'
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Controller, useForm } from "react-hook-form";
+import { FormRules } from "@/lib/formRules";
+import { useMySwal } from "@/hooks/useMySwal";
+import useGet from '@/hooks/useGet';
 import moment from "moment";
 
 import MySelect from "@/components/Form/Select"
 import Input from "@/components/Form/Input"
+
+const formValidation = {
+    nama_pasangan: { required: FormRules.Required(), maxLength: FormRules.MaxLength(50), pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf') },
+    no_ktp_pasangan: { required: FormRules.Required(), minLength: FormRules.MinLength(16), maxLength: FormRules.MaxLength(16) },
+    jenis_pekerjaan_pasangan: { required: FormRules.Required() },
+    tempat_lahir_pasangan: { required: FormRules.Required() },
+    tanggal_lahir_pasangan: { required: FormRules.Required() },
+    tempat_kerja_pasangan: { required: FormRules.Required() },
+}
 
 const pekerjaanPasangan = [
     { value: "Pegawai Swasta", label: "Pegawai Swasta"},
@@ -13,14 +25,50 @@ const pekerjaanPasangan = [
     { value: "TNI", label: "TNI"}
 ];
 
-const DataPasangan = ({dataPasangan}) => {
+const useGetPekerjaanPasangan = () => {
+    const mySwal = useMySwal();
+    const getPekerjaanPasangan = useGet(['refPekerjaanPasangan'], '/master/list/pekerjaan?idProduct=0', { retry: false, refetchOnWindowFokus: false });
+    let arrPekerjaanPasangan = [];
+    if(getPekerjaanPasangan.isSuccess){
+        let dataPekerjaanPasangan = getPekerjaanPasangan.data?.data.data;
+        dataPekerjaanPasangan.map((item) => {
+            return arrPekerjaanPasangan.push({ value: item.idPekerjaan, label: item.nmPekerjaan })
+        })
+    }
+
+    useEffect(() => {
+        if (getPekerjaanPasangan.isError) mySwal.error(getPekerjaanPasangan.error);
+    }, [getPekerjaanPasangan.isError]);
+
+    return { arrPekerjaanPasangan, getPekerjaanPasangan }
+}
+
+const DataPasangan = () => {
     const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
 
-    const [pekerjaan, setPekerjaan] = useState(null);
-    const minAge = moment().subtract(17, 'years');
+    const { arrPekerjaanPasangan, getPekerjaanPasangan } = useGetPekerjaanPasangan();
 
-    const handlePekerjaan = value => {
-        setPekerjaan(value)
+    const [pekerjaanPasangan, setPekerjaanPasangan] = useState(null);
+    const [tanggalLahirPasangan, setTanggalLahirPasangan] = useState(undefined);
+    const minAge = moment().subtract(21, 'years');
+
+    const handleChange = async (e, type, onChange) => {
+        let value = e.value;
+        switch (type) {
+            case 'pekerjaanPasangan':
+                onChange(value);
+                let pekerjaanPasanganSelected = arrPekerjaanPasangan.find((item, i) => item.value === value);
+                setPekerjaanPasangan(pekerjaanPasanganSelected);
+
+                break;
+            case 'tglLahirPasangan':
+                onChange(e.startDate);
+                setTanggalLahirPasangan(e);
+
+                break;
+            default:
+                break;
+        }
     }
 
     return (
@@ -37,7 +85,7 @@ const DataPasangan = ({dataPasangan}) => {
                         id="nama_pasangan" 
                         register={register}
                         errors={errors.nama_pasangan}
-                        validation={dataPasangan.formValidation.nama_pasangan}/>
+                        validation={formValidation.nama_pasangan}/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor KTP </label>
@@ -49,7 +97,7 @@ const DataPasangan = ({dataPasangan}) => {
                         maxLength={16}
                         register={register}
                         errors={errors.no_ktp_pasangan}
-                        validation={dataPasangan.formValidation.no_ktp_pasangan} />
+                        validation={formValidation.no_ktp_pasangan} />
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Jenis Pekerjaan </label>
@@ -63,14 +111,14 @@ const DataPasangan = ({dataPasangan}) => {
                                 placeholder="Isikan jenis pekerjaan" 
                                 name="jenis_pekerjaan_pasangan" 
                                 id="jenis_pekerjaan_pasangan" 
-                                options={dataPasangan.arrPekerjaanPasangan} 
-                                value={dataPasangan.listPekerjaanPasangan} 
+                                options={arrPekerjaanPasangan}
+                                value={pekerjaanPasangan}
                                 register={register}
-                                errors={errors.produk}
-                                isLoading={dataPasangan.refPekerjaanPasangan.isLoading}
-                                disabled={dataPasangan.refPekerjaanPasangan.isLoading}
-                                validation={dataPasangan.formValidation.produk}
-                                onChange={(e) => dataPasangan.handleChange(e, 'pekerjaanPasangan', onChange)} />
+                                errors={errors.jenis_pekerjaan_pasangan}
+                                validation={formValidation.jenis_pekerjaan_pasangan}
+                                isLoading={getPekerjaanPasangan.isLoading}
+                                disabled={getPekerjaanPasangan.isLoading}
+                                onChange={(e) => handleChange(e, 'pekerjaanPasangan', onChange)} />
                         )} />
                 </div>
             </div>
@@ -84,7 +132,7 @@ const DataPasangan = ({dataPasangan}) => {
                         name="tempat_lahir_pasangan"
                         register={register}
                         errors={errors.tempat_lahir_pasangan}
-                        validation={dataPasangan.formValidation.tempat_lahir_pasangan}/>
+                        validation={formValidation.tempat_lahir_pasangan}/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Tanggal Lahir </label>
@@ -99,11 +147,11 @@ const DataPasangan = ({dataPasangan}) => {
                                 name="tanggal_lahir_pasangan"
                                 maxDate={minAge}
                                 startFrom={minAge}
-                                value={dataPasangan.tanggalLahirPasangan} 
+                                value={tanggalLahirPasangan} 
                                 register={register}
                                 errors={errors.tanggal_lahir_pasangan}
-                                validation={dataPasangan.formValidation.tanggal_lahir_pasangan} 
-                                onChange={(e) => dataPasangan.handleChange(e, 'tglLahirPasangan', onChange)}
+                                validation={formValidation.tanggal_lahir_pasangan} 
+                                onChange={(e) => handleChange(e, 'tglLahirPasangan', onChange)}
                                 /> 
                         )} />
                 </div>
@@ -127,7 +175,7 @@ const DataPasangan = ({dataPasangan}) => {
                         name="tempat_kerja_pasangan" 
                         register={register}
                         errors={errors.tempat_kerja_pasangan}
-                        validation={dataPasangan.formValidation.tempat_kerja_pasangan}/>
+                        validation={formValidation.tempat_kerja_pasangan}/>
                 </div>
                 <div style={{ width: "450px" }}>
                     <label className='block mb-3'> Nomor Akta Nikah </label>
