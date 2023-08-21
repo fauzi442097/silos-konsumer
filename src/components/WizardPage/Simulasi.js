@@ -93,7 +93,7 @@ const useGetStatusDebitur = () => {
     return { dataMenikah, queryStatusDebitur }
 }
 
-const usePostSimulasi = (mySwal, setDataSimulasi, mutation) => {
+const usePostSimulasi = (mySwal, setDataSimulasi, paramInput, hitBiayaLainnya) => {
     return usePost(['simulasi'], '/v2/master/simulasi', [], {
         refetchOnWindowFocus: false,
         retry: false,
@@ -105,7 +105,7 @@ const usePostSimulasi = (mySwal, setDataSimulasi, mutation) => {
             let collectData = {
                 ...resData,
                 input: {
-                    totalPenghasilan,
+                    totalPenghasilan: paramInput.totalPenghasilan, 
                     jangkaWaktu: variables.jangkaWaktu,
                     rate: variables.rate
                 }
@@ -119,17 +119,17 @@ const usePostSimulasi = (mySwal, setDataSimulasi, mutation) => {
                 jangkaWaktu: variables.jangkaWaktu,
                 rate: variables.rate,
                 plafon: resData.plafon,
-                asuransiId: getValues('asuransi'),
+                asuransiId: paramInput.asuransiId,
                 angsuran: angsuranBulan,
                 idProspek: null,
-                rateAsuransi: Number(rateAsuransi)
+                rateAsuransi: paramInput.rateAsuransi
             }
-            mutation.mutate(payloadBiayaLainnya)
+            hitBiayaLainnya.mutate(payloadBiayaLainnya)
         },
     });
 }
 
-const usePostBiayaLainnya = (mySwal, setDataSimulasi, setShowModal) => {
+const usePostBiayaLainnya = (mySwal, setDataSimulasi, dataSimulasi, setShowModal) => {
     return usePost(['biaya-lainnya'], 'v2/master/kalkulasi-biaya', [], {
         refetchOnWindowFocus: false,
         retry: false,
@@ -198,8 +198,13 @@ const Simulasi = ({ onSubmit }) => {
     const refUsia = useRef('')
 
 
-    const hitBiayaLainnya = usePostBiayaLainnya(mySwal, setDataSimulasi, setShowModal)
-    const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, hitBiayaLainnya)
+    const hitBiayaLainnya = usePostBiayaLainnya(mySwal, setDataSimulasi, dataSimulasi, setShowModal)
+    let paramSimulasi = {
+        totalPenghasilan: totalPenghasilan, 
+        asuransiId: getValues('asuransi'),
+        rateAsuransi: Number(rateAsuransi)
+    }
+    const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, paramSimulasi, hitBiayaLainnya)
     const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon)
 
     const handleChange = async (e, type, onChange) => {
@@ -340,6 +345,7 @@ const Simulasi = ({ onSubmit }) => {
             ratePromo: data.bunga_promo ? data.bunga_promo : 0,
             bulanPromo: Number(data.jangka_waktu_promo),
         }
+
         hitSimulasi.mutate(dataFormatted)
     }
 

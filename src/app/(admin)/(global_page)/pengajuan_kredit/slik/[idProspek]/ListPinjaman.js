@@ -1,12 +1,22 @@
+'use client'
+
+import React, { useState } from 'react'
 import Button from '@/components/Button'
 import Input from '@/components/Form/Input'
 import Radio from '@/components/Form/Radio'
 import MySelect from '@/components/Form/Select'
-import React from 'react'
 import { KolektibilitasOptions } from './OptionList'
 import { cn, generateId } from '@/lib/utils'
 import { Controller } from 'react-hook-form'
-import { useState } from 'react'
+import { FormRules } from '@/lib/formRules'
+
+
+const formValidation = {
+   lembaga_keuangan: {required: FormRules.Required()},
+   kolektibilitas: {required: FormRules.Required()},
+   keterangan: {maxLength: FormRules.MaxLength(30)},
+   baki_debet: {required: FormRules.Required(), maxLength: FormRules.MaxLength(11)},
+}
 
 const TableRows = ({ fields, remove, register, errors, control, handleChange, kol }) => {
    return (
@@ -18,17 +28,22 @@ const TableRows = ({ fields, remove, register, errors, control, handleChange, ko
                   errors={errors.loan?.[index]?.lembaga_keuangan}
                   register={register}
                   name={`loan.${index}.lembaga_keuangan`} 
+                  validation={formValidation.lembaga_keuangan}
                   placeholder='OJK'/>
             </td>
             <td className='px-6 py-3'> 
                <Input.Currency 
                   key={item.id}
+                  maxLength={9} 
+                  decimalSeparator={','}
+                  groupSeparator={'.'}
                   placeholder={'1,000,000'}
                   className={'text-right'}
                   register={register}
                   errors={errors.loan?.[index]?.baki_debet}
                   name={`loan.${index}.baki_debet`} 
                   allowDecimals={false}
+                  validation={formValidation.baki_debet}
                   allowNegativeValue={false}
                />
             </td>
@@ -43,6 +58,7 @@ const TableRows = ({ fields, remove, register, errors, control, handleChange, ko
                         register={register} 
                         errors={errors.loan?.[index]?.kolektibilitas}
                         options={KolektibilitasOptions} 
+                        validation={formValidation.kolektibilitas}
                         value={kol[index].item}
                         onChange={(e) => handleChange(e, kol[index].id, onChange)}
                      />
@@ -55,6 +71,7 @@ const TableRows = ({ fields, remove, register, errors, control, handleChange, ko
                   register={register}
                   errors={errors.loan?.[index]?.keterangan}
                   name={`loan.${index}.keterangan`} 
+                  validation={formValidation.keterangan}
                   maxLength={30}
                />
             </td>
@@ -135,7 +152,7 @@ const ListPinjaman = ({
                      <td className='px-6 py-3 font-inter-medium rounded-tl-xl rounded-bl-xl'> Nama Lembaga Keuangan </td>
                      <td className='px-6 py-3 font-inter-medium'> Baki Debet </td>
                      <td className='px-6 py-3 font-inter-medium' width={300}> Kolektibilitas </td>
-                     <td className='px-6 py-3 font-inter-medium'> Keterangan </td>
+                     <td className='px-6 py-3 font-inter-medium'> Keterangan (Opsional)</td>
                      <td className='px-6 py-3 font-inter-medium'> Status </td>
                      <td className='px-6 py-3 font-inter-medium rounded-tr-xl rounded-br-xl'> </td>
                   </tr>
