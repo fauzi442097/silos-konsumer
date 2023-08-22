@@ -1,10 +1,11 @@
 import React from "react";
 import PageTitle from "@/components/PageTitle";
-import { REF_STEP, RefStepper, Stepper } from "../../Stepper";
+import { REF_STEP  } from "../../Stepper";
 import Card from "@/components/Card";
 import { cookies } from 'next/headers';
 import DataNotFound from "@/components/DataNotFound";
 import FormSlik from "./FormSlik";
+import ContainerStepper from "../../ContainerStepper";
 
 
 const getBICheckDebitur = async (id) => {
@@ -32,20 +33,9 @@ const Slik = async ({ params }) => {
     <>
 
           <PageTitle title="Ceklis Dokumen" />
-            <div className="my-6">
-                <div className="flex justify-between items-center gap-20 py-4 w-full m-auto">
-                    {RefStepper.map((item, i) => (
-                        <Stepper
-                            key={i}
-                            id={item.id}
-                            visited={i < REF_STEP.SLIK}
-                            active={item.id == REF_STEP.SLIK}
-                            icon={item.icon} 
-                            label={item.label}
-                        />
-                    ))}
-                </div>
-            </div>
+
+            <ContainerStepper currentStep={REF_STEP.SLIK} />
+            
 
             <Card>
                 <Card.Body className={'flex gap-4'}>

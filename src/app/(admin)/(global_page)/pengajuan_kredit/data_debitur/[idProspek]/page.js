@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form";
-import { REF_STEP, RefStepper, Stepper } from "../../Stepper";
+import { REF_STEP  } from "../../Stepper";
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 
@@ -13,6 +13,7 @@ import FormPasangan from './FormPasangan'
 import FormPekerjaan from './FormPekerjaan'
 import FormPembiayaan from './FormPembiayaan'
 import FormBiaya from './FormBiaya'
+import ContainerStepper from '../../ContainerStepper';
 
 const DataDebitur = () => {
     const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
@@ -42,21 +43,7 @@ const DataDebitur = () => {
 
     return (
         <>
-            <div className="my-6">
-                <div className="flex justify-between items-center gap-20 py-4 w-full m-auto">
-                    {RefStepper.map((item, i) => (
-                        <Stepper
-                            key={i}
-                            id={item.id}
-                            visited={i < REF_STEP.SLIK}
-                            active={item.id == REF_STEP.SLIK}
-                            icon={item.icon}
-                            label={item.label}
-                        />
-                    ))}
-                </div>
-            </div>
-
+            <ContainerStepper currentStep={REF_STEP.DATA_DEBITUR} />
             <Card>
                 <Card.Body className={'flex gap-4'}>
                     <div className="row-span-6 col-span-3">
