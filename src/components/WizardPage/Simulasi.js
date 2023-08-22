@@ -16,6 +16,8 @@ import { clearFormatRupiah } from "@/lib/utils";
 import usePost from "@/hooks/usePost";
 import LoadingSpinner from "../LoadingSpinner";
 import ModalInfoPlafon from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInfoPlafon";
+import ModalInquiryByName from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInquiryByName";
+import ModalInquiryDebitur from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInquiryDebitur";
 import useGet from "@/hooks/useGet";
 
 const formValidation = {
@@ -63,7 +65,7 @@ const useGetProducts = () => {
         products.map((item) => {
             return dataProduk.push({
                 value: item.id,
-                label: item.prodName + ' - (Bunga: ' + item.eqRate + '%)',
+                label: item.prodName,
                 eqRate: item.eqRate,
                 eqRateReal: item.eqRateReal
             })
@@ -105,7 +107,7 @@ const usePostSimulasi = (mySwal, setDataSimulasi, paramInput, hitBiayaLainnya) =
             let collectData = {
                 ...resData,
                 input: {
-                    totalPenghasilan: paramInput.totalPenghasilan, 
+                    totalPenghasilan: paramInput.totalPenghasilan,
                     jangkaWaktu: variables.jangkaWaktu,
                     rate: variables.rate
                 }
@@ -158,6 +160,33 @@ const usePostMaksimalPlafon = (mySwal, setShowModalPlafon) => {
     })
 }
 
+const usePostInquiryByName = (mySwal, setShowModalInquiryName) => {
+    return usePost(['inquiry-by-name'], '/cbs/inquiry/cif-criteria/cifnm?page=0&size=30', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            console.log(error);
+            mySwal.warning('Terjadi kesalahan !')
+        },
+        onSuccess: (data, variables, context) => {
+            setShowModalInquiryName(true);
+        }
+    })
+}
+
+const usePostInquiryByTanggalLahir = (mySwal) => {
+    return usePost(['inquiry-by-tanggallahir'], '/cbs/inquiry/cif-criteria/brtdt', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning('Terjadi kesalahan !')
+        },
+        onSuccess: (data, variables, context) => {
+            console.log(data);
+        }
+    })
+}
+
 
 const Simulasi = ({ onSubmit }) => {
 
@@ -170,8 +199,10 @@ const Simulasi = ({ onSubmit }) => {
 
     const [produk, setProduk] = useState({ value: -1, label: 'Pilih produk', disabled: true });
 
-    const [showModal, setShowModal] = useState(false)
-    const [showModalPlafon, setShowModalPlafon] = useState(false)
+    const [showModal, setShowModal] = useState(false);
+    const [showModalPlafon, setShowModalPlafon] = useState(false);
+    const [showModalInquiry, setShowModalInquiry] = useState(false);
+    const [showModalInquiryName, setShowModalInquiryName] = useState(false);
 
     const [dataAsuransi, setDataAsuransi] = useState([])
     const [asuransi, setAsuransi] = useState({ value: -1, label: 'Pilih asuransi', disabled: true })
@@ -191,6 +222,8 @@ const Simulasi = ({ onSubmit }) => {
 
     const [plafon, setPlafon] = useState(undefined)
 
+    const [namaDebiturInq, setNamaDebiturInq] = useState(null);
+
     const refGaji = useRef(0)
     const refULP = useRef(0)
     const suku_bunga = useRef(undefined)
@@ -200,12 +233,14 @@ const Simulasi = ({ onSubmit }) => {
 
     const hitBiayaLainnya = usePostBiayaLainnya(mySwal, setDataSimulasi, dataSimulasi, setShowModal)
     let paramSimulasi = {
-        totalPenghasilan: totalPenghasilan, 
+        totalPenghasilan: totalPenghasilan,
         asuransiId: getValues('asuransi'),
         rateAsuransi: Number(rateAsuransi)
     }
-    const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, paramSimulasi, hitBiayaLainnya)
-    const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon)
+    const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, paramSimulasi, hitBiayaLainnya);
+    const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon);
+    const hitInquiryByName = usePostInquiryByName(mySwal, setShowModalInquiryName);
+    const hitInquiryByTanggalLahir = usePostInquiryByTanggalLahir(mySwal);
 
     const handleChange = async (e, type, onChange) => {
         let value = e.value
@@ -233,6 +268,7 @@ const Simulasi = ({ onSubmit }) => {
                 setTanggalLahir(e)
                 onChange(e.startDate)
                 checkAndGetAsuransi()
+                handleInquiryByTanggalLahir(e.startDate);
                 break;
             case 'statusDebitur':
                 onChange(value)
@@ -274,7 +310,7 @@ const Simulasi = ({ onSubmit }) => {
         getDataPekerjaan.map((item) => {
             return arrPekerjaan.push({
                 value: item.idPekerjaan,
-                label: item.nmPekerjaan + ' - Max Tenor. ' + item.tenor + ' Bln',
+                label: item.nmPekerjaan,
                 tenor: item.tenor,
                 masaKerja: item.masaKerjaUmur
             })
@@ -349,6 +385,21 @@ const Simulasi = ({ onSubmit }) => {
         hitSimulasi.mutate(dataFormatted)
     }
 
+    const handleInquiryByName = (namaDebitur, tanggalLahir) => {
+        // let namaDebitur = getValues('nama_debitur_inq');
+        console.log({namaDebitur, tanggalLahir});
+        const data = {
+            name: namaDebitur
+        }
+
+        hitInquiryByName.mutate(data);
+    }
+
+    const handleInquiryByTanggalLahir = (tanggalLahir) => {
+        hitInquiryByTanggalLahir.mutate(tanggalLahir);
+        console.log(tanggalLahir);
+    }
+
     const calculateTotalPenghasilan = (value, name) => {
         if (name == 'gaji') refGaji.current = value || 0
         if (name == 'ulp') refULP.current = value || 0
@@ -377,6 +428,35 @@ const Simulasi = ({ onSubmit }) => {
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
+                    label={<label htmlFor="nama_debitur"> Nama Debitur </label>}
+                    input={<Input.Group
+                        append
+                        useButton
+                        inputElement={<Input.Text
+                            name="nama_debitur"
+                            id="nama_debitur"
+                            register={register}
+                            errors={errors.nama_debitur}
+                            maxLength={30}
+                            validation={formValidation.nama_debitur}
+                            hideError
+                        />}
+                        inputGroupText={
+                            <Button 
+                                className={'rounded-tl-none rounded-bl-none py-2'}
+                                onClick={setShowModalInquiry}> Inquiry </Button>
+                        }
+                    />}
+                />
+
+                <FormGroup
+                    className={'mb-2 flex-col gap-2 w-full'}
+                    label={<label htmlFor="cif"> CIF </label>}
+                    input={<Input.Number name="cif" id="cif" register={register} errors={errors.cif} validation={formValidation.cif} />}
+                />
+
+                {/* <FormGroup
+                    className={'mb-2 flex-col gap-2 w-full'}
                     label={<label htmlFor="cif"> CIF </label>}
                     input={<Input.Group
                         append
@@ -395,13 +475,7 @@ const Simulasi = ({ onSubmit }) => {
                         />}
                         inputGroupText={<Button className={'rounded-tl-none rounded-bl-none py-2'}> Inquiry </Button>}
                     />}
-                />
-
-                <FormGroup
-                    className={'mb-2 flex-col gap-2 w-full'}
-                    label={<label htmlFor="nama_debitur"> Nama Debitur </label>}
-                    input={<Input.Text name="nama_debitur" id="nama_debitur" register={register} errors={errors.nama_debitur} maxLength={30} validation={formValidation.nama_debitur} />}
-                />
+                /> */}
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
@@ -819,6 +893,8 @@ const Simulasi = ({ onSubmit }) => {
 
             {showModal && <ModalHasilSimulasi data={dataSimulasi} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)} />}
             {showModalPlafon && <ModalInfoPlafon data={hitMaksimalPlafon.data} setMaksimalPlafon={setMaksimalPlafon} setShowModal={setShowModalPlafon} closeModal={() => setShowModalPlafon((prev) => !prev)} />}
+            {showModalInquiry && <ModalInquiryDebitur handleInquiryByName={handleInquiryByName} register={register} getValues={getValues} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiry((prev) => !prev)} />}
+            {showModalInquiryName && <ModalInquiryByName data={hitInquiryByName.data} setShowModalInquiryName={setShowModalInquiryName} closeModal={() => setShowModalInquiryName((prev) => !prev)} />}
 
         </>
     )

@@ -2,10 +2,9 @@ import React from "react";
 import PageTitle from "@/components/PageTitle";
 import { REF_STEP, RefStepper, Stepper } from "../../Stepper";
 import Card from "@/components/Card";
-import { cookies } from 'next/headers'
+import { cookies } from 'next/headers';
 import DataNotFound from "@/components/DataNotFound";
 import FormSlik from "./FormSlik";
-import { useRouter } from "next/navigation";
 
 
 const getBICheckDebitur = async (id) => {

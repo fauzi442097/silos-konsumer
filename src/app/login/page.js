@@ -37,7 +37,7 @@ const Page = () => {
 
   const onSubmit = async (formData) => {
       setLoading(true)
-      const { data, status, statusText} = await API.POST_PUBLIC(`auth/login`, formData)
+      const { data, status, statusText} = await API.POST_PUBLIC(`/auth/login`, formData)
       setLoading(false)
       if ( status != 200 ) return setAlert({show: true, rc: status, message: statusText})
       let token = data.data.token

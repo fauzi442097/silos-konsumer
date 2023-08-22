@@ -74,7 +74,7 @@ const FormUploadDokumen = ({ dataDebitur }) => {
             </table>)}
             
             <div className='mt-8 flex flex-wrap justify-between'>
-                <Button variant={'secondary'}> Kembali </Button>
+                <Button variant={'secondary'} onClick={() => router.push('/pengajuan_kredit/data_debitur/4201')}> Kembali </Button>
                 <Button onClick={storeDocs}> Simpan & Lanjutkan </Button>
             </div>  
     </div>
