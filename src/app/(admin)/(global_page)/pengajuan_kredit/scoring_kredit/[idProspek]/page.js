@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import DataNotFound from '@/components/DataNotFound'
 import PageTitle from '@/components/PageTitle'
 import { REF_STEP } from '../../Stepper'
-import Card from '@/components/Card'
 import ContainerStepper from '../../ContainerStepper'
 import FormScoring from './FormScoring'
 import InfoScoring from './InfoScoring'
@@ -30,8 +29,8 @@ const ScoringKredit = async ({ params }) => {
       <ContainerStepper currentStep={REF_STEP.SCORING_KREDIT} />
 
       <div className='w-full flex gap-8'>
-        <FormScoring data={data}/>
         <InfoScoring data={data}/>
+        <FormScoring data={data}/>
       </div>
     </>
   )

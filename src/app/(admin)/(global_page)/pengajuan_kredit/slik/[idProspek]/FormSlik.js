@@ -76,13 +76,11 @@ const FormSlik = ({ dataSlikDebitur }) => {
     }
 
   return (
-    <div className='my-10 w-[70%] border-l px-10 shadow rounded-xl py-5 '> 
+    <div className='bg-white w-[75%] shadow rounded-2xl p-8 self-start dark:bg-dark-depth1'> 
 
-        <div className='mb-8'>
-            <p className='font-inter-medium text-xl text-gray-500 mb-1'> Update Hasil Slik Checking </p>
-        </div>
+        <p className='font-inter-medium text-xl text-gray-500 mb-1'> Update Hasil Slik Checking </p>
      
-        <div className='grid grid-cols-3 gap-4 '>
+        <div className='grid grid-cols-3 gap-4 my-8'>
                 <FormGroup
                     className={'mb-2 flex-col gap-2'}
                     label={<label className='dark:text-grey'> Status Slik </label>} 

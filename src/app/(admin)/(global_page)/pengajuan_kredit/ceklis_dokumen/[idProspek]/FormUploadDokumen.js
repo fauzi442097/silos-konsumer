@@ -37,6 +37,7 @@ const FormUploadDokumen = ({ dataDebitur }) => {
         if ( unCheckDocRequired.length > 0 ) {
             const docName = unCheckDocRequired.map((item) => (`- ${item.description} <br/>`))
             mySwal.warning(`Dokumen wajib berikut belum dipilih: <br/>${docName.join("")}`)
+            return 
         }
         router.push('/pengajuan_kredit/slik/4201')
     }
@@ -49,9 +50,9 @@ const FormUploadDokumen = ({ dataDebitur }) => {
 
 
     return (
-    <div className='my-10 w-[60%] border-l px-10 shadow rounded-xl py-5 '> 
+        <div className='bg-white w-[75%] shadow rounded-2xl p-8 self-start dark:bg-dark-depth1'> 
             <div className='mb-8'>
-                <p className='font-inter-medium text-xl text-gray-500 mb-1'> Ceklis dokumen debitur </p>
+            <p className='font-inter-medium text-xl text-gray-500 mb-1'> Update Hasil Slik Checking </p>
                 <span className='text-sm'> (<span className='text-red-500'>*</span>) Dokumen wajib </span>
             </div>
             { isLoading && <p> loading ... </p>}

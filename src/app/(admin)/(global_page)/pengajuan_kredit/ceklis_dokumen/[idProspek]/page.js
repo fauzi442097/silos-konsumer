@@ -1,6 +1,5 @@
 import React from 'react'
 import PageTitle from '@/components/PageTitle'
-import Card from '@/components/Card'
 import { cookies } from 'next/headers'
 import DataNotFound from '@/components/DataNotFound'
 import FormUploadDokumen from './FormUploadDokumen'
@@ -27,12 +26,10 @@ const CeklisDokumen = async ({ params }) => {
             <PageTitle title="Ceklis Dokumen" />
             <ContainerStepper currentStep={REF_STEP.CEKLIS_DOKUMEN} />
 
-            <Card>
-                <Card.Body className={'flex gap-4'}>
-                    <InfoDebitur data={data}/>
-                    <FormUploadDokumen dataDebitur={data}/>
-                </Card.Body>
-            </Card>
+            <div className='w-full flex gap-8'>
+                <InfoDebitur data={data}/>
+                <FormUploadDokumen dataDebitur={data}/>
+            </div>
         </>
     )
 }
