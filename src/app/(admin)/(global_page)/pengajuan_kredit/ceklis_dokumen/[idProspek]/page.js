@@ -1,11 +1,11 @@
 import React from 'react'
 import PageTitle from '@/components/PageTitle'
-import Card from '@/components/Card'
 import { cookies } from 'next/headers'
 import DataNotFound from '@/components/DataNotFound'
 import FormUploadDokumen from './FormUploadDokumen'
-import { REF_STEP, RefStepper, Stepper } from '../../Stepper'
+import { REF_STEP } from '../../Stepper'
 import InfoDebitur from './InfoDebitur'
+import ContainerStepper from '../../ContainerStepper'
 
 const getDataDebitur = async (id) => {
     const cookieStore = cookies()
@@ -24,27 +24,12 @@ const CeklisDokumen = async ({ params }) => {
     return (
         <>
             <PageTitle title="Ceklis Dokumen" />
-            <div className="my-6">
-                <div className="flex justify-between items-center gap-20 py-4 w-full m-auto">
-                    {RefStepper.map((item, i) => (
-                        <Stepper
-                            key={i}
-                            id={item.id}
-                            visited={i < REF_STEP.CEKLIS_DOKUMEN}
-                            active={item.id == REF_STEP.CEKLIS_DOKUMEN}
-                            icon={item.icon} 
-                            label={item.label}
-                        />
-                    ))}
-                </div>
-            </div>
+            <ContainerStepper currentStep={REF_STEP.CEKLIS_DOKUMEN} />
 
-            <Card>
-                <Card.Body className={'flex gap-4'}>
-                    <InfoDebitur data={data}/>
-                    <FormUploadDokumen dataDebitur={data}/>
-                </Card.Body>
-            </Card>
+            <div className='w-full flex gap-8'>
+                <InfoDebitur data={data}/>
+                <FormUploadDokumen dataDebitur={data}/>
+            </div>
         </>
     )
 }

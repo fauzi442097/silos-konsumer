@@ -6,7 +6,8 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*',
-                destination: 'http://localhost:4511//:path*',
+                destination: 'https://api-silos-konsumer.basys.co.id//:path*',
+                // destination: 'http://localhost:4511//:path*',
             },
         ]
     },
