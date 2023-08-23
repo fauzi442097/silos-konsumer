@@ -169,12 +169,12 @@ const usePostInquiryByName = (mySwal, setShowModalInquiryName) => {
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
-            setShowModalInquiryName(true);
+            // setShowModalInquiryName(true)
         }
     })
 }
 
-const usePostInquiryByTanggalLahir = (mySwal) => {
+const usePostInquiryByTanggalLahir = (mySwal, setShowModalInquiryName) => {
     return usePost(['inquiry-by-tanggallahir'], '/cbs/inquiry/cif-criteria/brtdt', [], {
         refetchOnWindowFocus: false,
         retry: false,
@@ -182,7 +182,7 @@ const usePostInquiryByTanggalLahir = (mySwal) => {
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
-            console.log(data);
+            // setShowModalInquiryName(true);
         }
     })
 }
@@ -222,8 +222,6 @@ const Simulasi = ({ onSubmit }) => {
 
     const [plafon, setPlafon] = useState(undefined)
 
-    const [namaDebiturInq, setNamaDebiturInq] = useState(null);
-
     const refGaji = useRef(0)
     const refULP = useRef(0)
     const suku_bunga = useRef(undefined)
@@ -240,7 +238,7 @@ const Simulasi = ({ onSubmit }) => {
     const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, paramSimulasi, hitBiayaLainnya);
     const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon);
     const hitInquiryByName = usePostInquiryByName(mySwal, setShowModalInquiryName);
-    const hitInquiryByTanggalLahir = usePostInquiryByTanggalLahir(mySwal);
+    const hitInquiryByTanggalLahir = usePostInquiryByTanggalLahir(mySwal, setShowModalInquiryName);
 
     const handleChange = async (e, type, onChange) => {
         let value = e.value
@@ -268,7 +266,6 @@ const Simulasi = ({ onSubmit }) => {
                 setTanggalLahir(e)
                 onChange(e.startDate)
                 checkAndGetAsuransi()
-                handleInquiryByTanggalLahir(e.startDate);
                 break;
             case 'statusDebitur':
                 onChange(value)
@@ -385,21 +382,6 @@ const Simulasi = ({ onSubmit }) => {
         hitSimulasi.mutate(dataFormatted)
     }
 
-    const handleInquiryByName = (namaDebitur, tanggalLahir) => {
-        // let namaDebitur = getValues('nama_debitur_inq');
-        console.log({namaDebitur, tanggalLahir});
-        const data = {
-            name: namaDebitur
-        }
-
-        hitInquiryByName.mutate(data);
-    }
-
-    const handleInquiryByTanggalLahir = (tanggalLahir) => {
-        hitInquiryByTanggalLahir.mutate(tanggalLahir);
-        console.log(tanggalLahir);
-    }
-
     const calculateTotalPenghasilan = (value, name) => {
         if (name == 'gaji') refGaji.current = value || 0
         if (name == 'ulp') refULP.current = value || 0
@@ -454,28 +436,6 @@ const Simulasi = ({ onSubmit }) => {
                     label={<label htmlFor="cif"> CIF </label>}
                     input={<Input.Number name="cif" id="cif" register={register} errors={errors.cif} validation={formValidation.cif} />}
                 />
-
-                {/* <FormGroup
-                    className={'mb-2 flex-col gap-2 w-full'}
-                    label={<label htmlFor="cif"> CIF </label>}
-                    input={<Input.Group
-                        append
-                        useButton
-                        inputElement={<Input.Currency
-                            disableGroupSeparators
-                            allowNegativeValue={false}
-                            allowDecimals={false}
-                            maxLength={15}
-                            register={register}
-                            name='cif'
-                            id='cif'
-                            errors={errors.cif}
-                            validation={formValidation.cif}
-                            hideError
-                        />}
-                        inputGroupText={<Button className={'rounded-tl-none rounded-bl-none py-2'}> Inquiry </Button>}
-                    />}
-                /> */}
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
@@ -893,7 +853,7 @@ const Simulasi = ({ onSubmit }) => {
 
             {showModal && <ModalHasilSimulasi data={dataSimulasi} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)} />}
             {showModalPlafon && <ModalInfoPlafon data={hitMaksimalPlafon.data} setMaksimalPlafon={setMaksimalPlafon} setShowModal={setShowModalPlafon} closeModal={() => setShowModalPlafon((prev) => !prev)} />}
-            {showModalInquiry && <ModalInquiryDebitur handleInquiryByName={handleInquiryByName} register={register} getValues={getValues} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiry((prev) => !prev)} />}
+            {showModalInquiry && <ModalInquiryDebitur hitInquiryByName={hitInquiryByName} hitInquiryByTanggalLahir={hitInquiryByTanggalLahir} register={register} getValues={getValues} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiry((prev) => !prev)} />}
             {showModalInquiryName && <ModalInquiryByName data={hitInquiryByName.data} setShowModalInquiryName={setShowModalInquiryName} closeModal={() => setShowModalInquiryName((prev) => !prev)} />}
 
         </>

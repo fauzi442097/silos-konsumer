@@ -6,10 +6,10 @@ import Simulasi from "@/components/WizardPage/Simulasi";
 const FormNewEntry = () => {
     return (
         <>
-            <PageTitle title="Simulasi" />
+            <PageTitle title="Simulasi Kredit" />
             <Card className={'overflow-x-auto'}>
                 <Card.Header className={'flex justify-between flex-wrap items-center'}>
-                    <h2> Simulasi </h2>
+                    <h2> Simulasi Kredit Debitur Baru </h2>
                 </Card.Header>
                 <Card.Body>
                     <Simulasi />
