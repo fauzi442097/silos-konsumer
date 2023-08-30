@@ -32,7 +32,12 @@ const DataDebitur = ({ params }) => {
         return { dataNasabah, getDataNasabah }
     }
 
-    const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: "all" });
+    const { register, control, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ 
+        mode: "all"
+    });
+
+
+
     const [produk, setProduk] = useState(null);
     const [idPekerjaan, setIdPekerjaan] = useState(null);
     const [statusMenikah, setStatusMenikah] = useState(null);
@@ -69,7 +74,7 @@ const DataDebitur = ({ params }) => {
                         <FormNasabah data={dataNasabah} stateNasabah={stateNasabah} register={register} errors={errors} control={control} setValue={setValue} getValues={getValues} />
                         {statusDebitur === 1 ? <FormPasangan /> : ''}
                         <FormPekerjaan data={dataNasabah}  statePekerjaan={statePekerjaan} register={register} errors={errors} control={control} />
-                        <FormPembiayaan data={dataNasabah} statePembiayaan={statePembiayaan} register={register} errors={errors} control={control} getValues={getValues} />
+                        <FormPembiayaan data={dataNasabah} statePembiayaan={statePembiayaan} register={register} errors={errors} control={control} setValue={setValue} getValues={getValues} />
                         <FormBiaya data={dataNasabah} register={register} errors={errors} control={control} setValue={setValue}/>
                     </div>
                 </Card.Body>

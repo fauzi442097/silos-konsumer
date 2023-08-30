@@ -16,7 +16,7 @@ const formValidation = {
     angsuran: { required: FormRules.Required() },
 }
 
-const FormPembiayaan = ({ data, statePembiayaan, register, errors, control }) => {
+const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setValue, reset }) => {
     let idProduct = statePembiayaan.produk ? statePembiayaan.produk.value : null;
     let tglLahir = statePembiayaan.tglLahir ? statePembiayaan.tglLahir.startDate : null;
     let idPekerjaan = statePembiayaan.idPekerjaan ? statePembiayaan.idPekerjaan.value : null;
@@ -80,6 +80,8 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control }) =>
     useEffect(() => {
         if (dataNasabah) {
             setPlafon(dataNasabah.plafon)
+            setValue('plafon', dataNasabah.plafon, {shouldDirty: true, shouldValidate: true, shouldTouched: true})
+
             setSukuBunga(dataNasabah.rate);
             setJangkaWaktu(dataNasabah.jangkaWaktu);
             setSukuBungaPromo(dataNasabah.promo ? dataNasabah.promo.ratePromo : 0);
@@ -89,6 +91,7 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control }) =>
             setAngsuranPromo(dataNasabah.promo ? dataNasabah.promo.angsuranPromo : 0);
         }
     }, [dataNasabah]);
+
 
     return (
         <>
@@ -120,19 +123,30 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control }) =>
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Plafon </label>
-                    <Input.Currency
-                        placeholder="Isikan plafon"
-                        id="plafon"
+
+            
+                    <Controller
+                        control={control}
                         name="plafon"
-                        value={plafon}
-                        allowDecimals={false}
-                        allowNegativeValue={false}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.plafon}
-                        validation={formValidation.plafon}
+                        id="plafon"
+                        render={({ field: { value } }) => (
+                            <Input.Currency
+                                placeholder="Isikan plafon"
+                                id="plafon"
+                                name="plafon"
+                                value={value}
+                                allowDecimals={false}
+                                allowNegativeValue={false}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
+                                register={register}
+                                errors={errors.plafon}
+                                onChange={(value) => setValue('plafon', value, {shouldDirty: true, shouldValidate: true, shouldTouched: true}) }
+                            />
+                        )}
                     />
+
+                    
                 </div>
             </div>
 
