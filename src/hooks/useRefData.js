@@ -79,10 +79,9 @@ export const useGetAsuransi = (idProduct = null, tglLahir = null, idPekerjaan = 
     return {arrAsuransi, getAsuransi}
 }
 
-export const useGetWilayah = (q = null) => {
+export const useGetWilayah = () => {
     const mySwal = useMySwal();
-    const getWilayah = useGet(['refWilayan', q], `/master/list/location?q=cimahi`, { retry: false, refetchOnWindowFocus: false, enabled: q != null });
-    console.log(getWilayah.data);
+    const getWilayah = useGet(['refWilayah'], `/master/list/location?q=cimahi`, { retry: false, refetchOnWindowFocus: false});
     let arrWilayah = [];
     if(getWilayah.isSuccess){
         let dataWilayah = getWilayah.data?.data.data;

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
 import MySelect from "@/components/Form/Select";
 import Input from "@/components/Form/Input";
 import { API } from "@/config/api";
@@ -16,13 +17,14 @@ import { clearFormatRupiah } from "@/lib/utils";
 import usePost from "@/hooks/usePost";
 import LoadingSpinner from "../LoadingSpinner";
 import ModalInfoPlafon from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInfoPlafon";
-import ModalInquiryByName from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInquiryByName";
+import ModalInquiryByRekening from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInquiryByRekening";
 import ModalInquiryDebitur from "@/app/(admin)/(global_page)/pengajuan_kredit/ModalInquiryDebitur";
 import useGet from "@/hooks/useGet";
 
 const formValidation = {
     nama_debitur: { required: FormRules.Required(), maxLength: FormRules.MaxLength(30), pattern: FormRules.OnlyLetter('Hanya boleh diisi huruf') },
     cif: { maxLength: FormRules.MaxLength(15, 'Maksimal diisi 15 digit Angka') },
+    no_ktp: { minLength: FormRules.MinLength(16, 'Minimal diisi 16 digit Angka') },
     produk: { required: FormRules.Required('Pilih produk') },
     pekerjaan: { required: FormRules.Required('Pilih pekerjaan') },
     jangka_waktu: { required: FormRules.Required(), valueAsNumber: true },
@@ -131,6 +133,19 @@ const usePostSimulasi = (mySwal, setDataSimulasi, paramInput, hitBiayaLainnya) =
     });
 }
 
+const usePostStoreSimulasi = (mySwal) => {
+    return usePost(['simulasi'], '/master/prospek', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning(error.rm)
+        },
+        onSuccess: (data, variables, context) => {
+            mySwal.success(data.data.rm);
+        },
+    });
+}
+
 const usePostBiayaLainnya = (mySwal, setDataSimulasi, dataSimulasi, setShowModal) => {
     return usePost(['biaya-lainnya'], 'v2/master/kalkulasi-biaya', [], {
         refetchOnWindowFocus: false,
@@ -160,21 +175,19 @@ const usePostMaksimalPlafon = (mySwal, setShowModalPlafon) => {
     })
 }
 
-const usePostInquiryByName = (mySwal, setShowModalInquiryName) => {
+const usePostInquiryByName = (mySwal) => {
     return usePost(['inquiry-by-name'], '/cbs/inquiry/cif-criteria/cifnm?page=0&size=30', [], {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
-            console.log(error);
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
-            // setShowModalInquiryName(true)
         }
     })
 }
 
-const usePostInquiryByTanggalLahir = (mySwal, setShowModalInquiryName) => {
+const usePostInquiryByTanggalLahir = (mySwal) => {
     return usePost(['inquiry-by-tanggallahir'], '/cbs/inquiry/cif-criteria/brtdt', [], {
         refetchOnWindowFocus: false,
         retry: false,
@@ -182,27 +195,51 @@ const usePostInquiryByTanggalLahir = (mySwal, setShowModalInquiryName) => {
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
-            // setShowModalInquiryName(true);
+        }
+    })
+}
+
+const usePostInquiryRekening = (mySwal, setShowModalInquiryRekening) => {
+    return usePost(['inquiry-by-tanggallahir'], '/cbs/account-inquiry-cif', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning('Terjadi kesalahan !')
+        },
+        onSuccess: (data, variables, context) => {
+            setShowModalInquiryRekening(true);
+        }
+    })
+}
+
+const usePostInquiryKtp = (mySwal, setValue) => {
+    return usePost(['inquiry-by-tanggallahir'], '/cbs/inquiry/cif-criteria/cifidnbr?page=0&size=30', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            mySwal.warning('Terjadi kesalahan !')
+        },
+        onSuccess: (data, variables, context) => {
+            setValue('nama_debitur', data.data.data[0].fullnm)
         }
     })
 }
 
 
 const Simulasi = ({ onSubmit }) => {
-
+    const router = useRouter();
     const mySwal = useMySwal()
     const { register, control, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm({ mode: "all" });
 
     const { dataProduk, queryProducts } = useGetProducts()
     const { dataMenikah, queryStatusDebitur } = useGetStatusDebitur()
 
-
     const [produk, setProduk] = useState({ value: -1, label: 'Pilih produk', disabled: true });
 
     const [showModal, setShowModal] = useState(false);
     const [showModalPlafon, setShowModalPlafon] = useState(false);
     const [showModalInquiry, setShowModalInquiry] = useState(false);
-    const [showModalInquiryName, setShowModalInquiryName] = useState(false);
+    const [showModalInquiryRekening, setShowModalInquiryRekening] = useState(false);
 
     const [dataAsuransi, setDataAsuransi] = useState([])
     const [asuransi, setAsuransi] = useState({ value: -1, label: 'Pilih asuransi', disabled: true })
@@ -219,6 +256,7 @@ const Simulasi = ({ onSubmit }) => {
 
     const [rateAsuransi, setRateAsuransi] = useState(undefined)
     const [dataSimulasi, setDataSimulasi] = useState({})
+    const [simpanDataSimulasi, setSimpanDataSimulasi] = useState({})
 
     const [plafon, setPlafon] = useState(undefined)
 
@@ -228,6 +266,21 @@ const Simulasi = ({ onSubmit }) => {
     const refPenghasilanLain = useRef(0)
     const refUsia = useRef('')
 
+    const usePostAjukanPinjaman = (mySwal) => {
+        return usePost(['ajukanPinjaman'], '/master/prospek', [], {
+            refetchOnWindowFocus: false,
+            retry: false,
+            onError: (error, variables, context) => {
+                mySwal.warning(error.rm)
+            },
+            onSuccess: (data, variables, context) => {
+                console.log(data);
+                let id = data.data.data.id;
+                mySwal.success(data.data.rm);
+                router.push(`/pengajuan_kredit/data_debitur/${id}`)
+            },
+        });
+    }
 
     const hitBiayaLainnya = usePostBiayaLainnya(mySwal, setDataSimulasi, dataSimulasi, setShowModal)
     let paramSimulasi = {
@@ -235,10 +288,15 @@ const Simulasi = ({ onSubmit }) => {
         asuransiId: getValues('asuransi'),
         rateAsuransi: Number(rateAsuransi)
     }
+
     const hitSimulasi = usePostSimulasi(mySwal, setDataSimulasi, paramSimulasi, hitBiayaLainnya);
     const hitMaksimalPlafon = usePostMaksimalPlafon(mySwal, setShowModalPlafon);
-    const hitInquiryByName = usePostInquiryByName(mySwal, setShowModalInquiryName);
-    const hitInquiryByTanggalLahir = usePostInquiryByTanggalLahir(mySwal, setShowModalInquiryName);
+    const hitInquiryByName = usePostInquiryByName(mySwal);
+    const hitInquiryByTanggalLahir = usePostInquiryByTanggalLahir(mySwal);
+    const hitInquiryRekening = usePostInquiryRekening(mySwal, setShowModalInquiryRekening);
+    const hitStoreSimulasi = usePostStoreSimulasi(mySwal);
+    const hitAjukanPinjaman = usePostAjukanPinjaman(mySwal);
+    const hitInqKtp = usePostInquiryKtp(mySwal, setValue);
 
     const handleChange = async (e, type, onChange) => {
         let value = e.value
@@ -315,7 +373,6 @@ const Simulasi = ({ onSubmit }) => {
         setDataPekerjaan(arrPekerjaan);
     }
 
-
     const getAsuransi = async (asuransiId = null, jangkaWaktu, idProduct, tglLahir, idPekerjaan, type = 'list-asuransi') => {
         if (type == 'list-asuransi') setLoadingAsuransi(true)
         const response = await API.POST(`v2/master/calc-asuransi-list/${asuransiId}?jangkaWaktu=${jangkaWaktu}&idProduct=${idProduct}&${tglLahir}&idPekerjaan=${idPekerjaan}`);
@@ -356,7 +413,6 @@ const Simulasi = ({ onSubmit }) => {
         hitMaksimalPlafon.mutate(payloadMaksimalPlafon)
     }
 
-
     const storeDataSimulasi = (data) => {
         if ((data.jangka_waktu_promo && !data.bunga_promo) || (!data.jangka_waktu_promo && data.bunga_promo)) {
             return mySwal.warning('Suku bunga promo dan janga waktu promo wajib diisi')
@@ -379,7 +435,29 @@ const Simulasi = ({ onSubmit }) => {
             bulanPromo: Number(data.jangka_waktu_promo),
         }
 
-        hitSimulasi.mutate(dataFormatted)
+        const bodySimulasi = {
+            noKtp: data.no_ktp,
+            namaDebitur: data.nama_debitur,
+            cif: data.cif,
+            nomorRekening: data.nomor_rekening,
+            productId: data.produk,
+            idPekerjaan: data.pekerjaan,
+            rate: Number(suku_bunga.current),
+            jangkaWaktu: data.jangka_waktu,
+            isMenikah: data.status_debitur,
+            tglLahir: data.tanggal_lahir,
+            ratePromo: data.bunga_promo ? data.bunga_promo : 0,
+            bulanPromo: Number(data.jangka_waktu_promo),
+            pendapatanBulan: clearFormatRupiah(data.gaji),
+            pendapatanLainnya: clearFormatRupiah(data.penghasilan_lain), // Penghasilan lain
+            pendapatanLainnya2: clearFormatRupiah(data.ulp), // ULP            
+            plafon: plafon ? clearFormatRupiah(plafon.toString()) : null,
+            pengeluaran: 0,
+            totalAngsuranLain: 0,
+        }
+
+        setSimpanDataSimulasi(bodySimulasi);
+        hitSimulasi.mutate(dataFormatted);
     }
 
     const calculateTotalPenghasilan = (value, name) => {
@@ -397,6 +475,25 @@ const Simulasi = ({ onSubmit }) => {
         setPlafon(plafon)
     }
 
+    const setHasilInquiry = (cif, rekening) => {
+        setShowModalInquiryRekening(false);
+        setValue('cif', cif);
+        setValue('nomor_rekening', rekening);
+    }
+
+    const handleStoreSimulasi = () => {
+        let dataSimulasi = setDataSimulasi();
+        console.log(dataSimulasi);
+    }
+
+    const handleInqKtp = () => {
+        const bodyInq = {
+            ktp: getValues('asuransi')
+        }
+
+        hitInqKtp.mutate(bodyInq);
+    }
+
     return (
         <>
             <div className='grid sm:grid-cols-2 xl:grid-cols-3 gap-8 my-8'>
@@ -404,9 +501,29 @@ const Simulasi = ({ onSubmit }) => {
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
-                    label={<label className='dark:text-grey' htmlFor="jenis_debitur"> Jenis Debitur </label>}
-                    input={<Input.Text name='jenis_debitur' id="jenis_debitur" value='Debitur Baru' readOnly />}
+                    label={<label htmlFor="no_ktp"> Nomor KTP </label>}
+                    input={<Input.Group
+                        append
+                        useButton
+                        inputElement={
+                            <Input.Number
+                                name="no_ktp"
+                                id="no_ktp"
+                                register={register}
+                                errors={errors.no_ktp}
+                                validation={formValidation.no_ktp}
+                                hideError />}
+                        inputGroupText={
+                            <Button
+                                className={'rounded-tl-none rounded-bl-none py-2'}
+                                onClick={handleInqKtp}>
+                                {(hitInqKtp.isLoading) && <LoadingSpinner />}
+                                {(hitInqKtp.isLoading) ? 'Processing' : 'Inquiry'}</Button>
+                        }
+                    />}
                 />
+
+                {/* {errors.no_ktp && <ErrorMessageForm>{errors.no_ktp.message}</ErrorMessageForm>} */}
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
@@ -424,7 +541,7 @@ const Simulasi = ({ onSubmit }) => {
                             hideError
                         />}
                         inputGroupText={
-                            <Button 
+                            <Button
                                 className={'rounded-tl-none rounded-bl-none py-2'}
                                 onClick={setShowModalInquiry}> Inquiry </Button>
                         }
@@ -435,6 +552,12 @@ const Simulasi = ({ onSubmit }) => {
                     className={'mb-2 flex-col gap-2 w-full'}
                     label={<label htmlFor="cif"> CIF </label>}
                     input={<Input.Number name="cif" id="cif" register={register} errors={errors.cif} validation={formValidation.cif} />}
+                />
+
+                <FormGroup
+                    className={'mb-2 flex-col gap-2 w-full'}
+                    label={<label htmlFor="nomor_rekening"> Nomor Rekening </label>}
+                    input={<Input.Number name="nomor_rekening" id="nomor_rekening" register={register} />}
                 />
 
                 <FormGroup
@@ -486,51 +609,6 @@ const Simulasi = ({ onSubmit }) => {
                         )}
                     />}
                 />
-
-                <div className="flex gap-8 flex-wrap sm:flex-nowrap">
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="suku_bunga"> Suku Bunga </label>}
-                        input={
-                            <>
-                                <Input.Group
-                                    append
-                                    inputGroupText={'%'}
-                                    inputElement={<Input.Text name='suku_bunga' id="suku_bunga" ref={suku_bunga} value={suku_bunga.current} readOnly />}
-                                />
-                            </>
-                        }
-                    />
-
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="jangka_waktu"> Jangka Waktu </label>}
-                        input={
-                            <>
-                                <Input.Group
-                                    append
-                                    inputGroupText={'Bulan'}
-                                    inputElement={<Input.Currency
-                                        disableGroupSeparators
-                                        allowNegativeValue={false}
-                                        allowDecimals={false}
-                                        id="jangka_waktu"
-                                        maxLength={3}
-                                        onBlur={() => checkAndGetAsuransi()}
-                                        hideError
-                                        onChange={(value, name) => register('jangka_waktu_promo', { max: { value: value, message: `Tidak boleh lebih dari jangka waktu normal` }, valueAsNumber: true })}
-                                        register={register}
-                                        value={watch('jangka_waktu') || ''}
-                                        name='jangka_waktu'
-                                        errors={errors.jangka_waktu}
-                                        validation={formValidation.jangka_waktu}
-                                    />}
-                                />
-                                {errors.jangka_waktu && <ErrorMessageForm>{errors.jangka_waktu.message}</ErrorMessageForm>}
-                            </>
-                        }
-                    />
-                </div>
 
                 <FormGroup
                     className={'mb-2 flex-col gap-2 w-full'}
@@ -589,6 +667,172 @@ const Simulasi = ({ onSubmit }) => {
                     />
                 </div>
 
+
+                <div className="flex gap-8 flex-wrap sm:flex-nowrap">
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="suku_bunga"> Suku Bunga </label>}
+                        input={
+                            <>
+                                <Input.Group
+                                    append
+                                    inputGroupText={'%'}
+                                    inputElement={<Input.Text name='suku_bunga' id="suku_bunga" ref={suku_bunga} value={suku_bunga.current} readOnly />}
+                                />
+                            </>
+                        }
+                    />
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="jangka_waktu"> Jangka Waktu </label>}
+                        input={
+                            <>
+                                <Input.Group
+                                    append
+                                    inputGroupText={'Bulan'}
+                                    inputElement={<Input.Currency
+                                        disableGroupSeparators
+                                        allowNegativeValue={false}
+                                        allowDecimals={false}
+                                        id="jangka_waktu"
+                                        maxLength={3}
+                                        onBlur={() => checkAndGetAsuransi()}
+                                        hideError
+                                        onChange={(value, name) => register('jangka_waktu_promo', { max: { value: value, message: `Tidak boleh lebih dari jangka waktu normal` }, valueAsNumber: true })}
+                                        register={register}
+                                        value={watch('jangka_waktu') || ''}
+                                        name='jangka_waktu'
+                                        errors={errors.jangka_waktu}
+                                        validation={formValidation.jangka_waktu}
+                                    />}
+                                />
+                                {errors.jangka_waktu && <ErrorMessageForm>{errors.jangka_waktu.message}</ErrorMessageForm>}
+                            </>
+                        }
+                    />
+                </div>
+
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="asuransi"> Asuransi </label>}
+                        input={<Controller
+                            control={control}
+                            name="asuransi"
+                            id="asuransi"
+                            render={({ field: { onChange } }) => (
+                                <MySelect
+                                    withSearch
+                                    loading={loadingAsuransi}
+                                    isDisabled={loadingAsuransi}
+                                    name={'asuransi'}
+                                    id="asuransi"
+                                    register={register}
+                                    errors={errors.asuransi}
+                                    options={dataAsuransi}
+                                    value={asuransi}
+                                    validation={formValidation.asuransi}
+                                    onChange={(e) => handleChange(e, 'asuransi', onChange)}
+                                />
+                            )}
+                        />}
+                    />
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="gaji"> Gaji </label>}
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="gaji"
+                                        id="gaji"
+                                        ref={refGaji}
+                                        allowDecimals={true}
+                                        register={register}
+                                        errors={errors.gaji}
+                                        maxLength={9}
+                                        hideError
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        validation={formValidation.gaji}
+                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
+                                    />}
+                                />
+                                {errors.gaji && <ErrorMessageForm>{errors.gaji.message}</ErrorMessageForm>}
+                            </>
+                        }
+                    />
+                </div>
+
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="rate_asuransi"> Rate Asuransi </label>}
+                        input={<>
+                            <Input.Group
+                                append
+                                inputGroupText={'%'}
+                                inputElement={
+                                    <Controller
+                                        control={control}
+                                        name="rate_asuransi"
+                                        id="rate_asuransi"
+                                        render={({ field: { onChange } }) => (
+                                            <Input.Currency
+                                                disableGroupSeparators
+                                                allowNegativeValue={false}
+                                                allowDecimals={true}
+                                                maxLength={6}
+                                                decimalsLimit={4}
+                                                hideError
+                                                value={rateAsuransi}
+                                                validation={formValidation.rate_asuransi}
+                                                register={register}
+                                                id="rate_asuransi"
+                                                name='rate_asuransi'
+                                                errors={errors.rate_asuransi}
+                                                onChange={(e) => setRateAsuransi(e)}
+                                            />
+                                        )}
+                                    />}
+                            />
+                            {errors.rate_asuransi && <ErrorMessageForm>{errors.rate_asuransi.message}</ErrorMessageForm>}
+                        </>}
+                    />
+
+                    <FormGroup
+                        className={'mb-2 flex-col gap-2 w-full'}
+                        label={<label className='dark:text-grey' htmlFor="penghasilan_lain"> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>}
+                        input={
+                            <>
+                                <Input.Group
+                                    inputGroupText={'Rp'}
+                                    inputElement={<Input.Currency
+                                        name="penghasilan_lain"
+                                        allowDecimals={true}
+                                        register={register}
+                                        errors={errors.penghasilan_lain}
+                                        maxLength={9}
+                                        hideError
+                                        id="penghasilan_lain"
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        validation={formValidation.penghasilan_lain}
+                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
+                                    />}
+                                />
+                                {errors.penghasilan_lain && <ErrorMessageForm>{errors.penghasilan_lain.message}</ErrorMessageForm>}
+                            </>
+                        }
+                    />
+                </div>
+
+
                 <div className="flex gap-8 flex-wrap xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
@@ -640,128 +884,7 @@ const Simulasi = ({ onSubmit }) => {
                         }
                     />
                 </div>
-
-                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="asuransi"> Asuransi </label>}
-                        input={<Controller
-                            control={control}
-                            name="asuransi"
-                            id="asuransi"
-                            render={({ field: { onChange } }) => (
-                                <MySelect
-                                    withSearch
-                                    loading={loadingAsuransi}
-                                    isDisabled={loadingAsuransi}
-                                    name={'asuransi'}
-                                    id="asuransi"
-                                    register={register}
-                                    errors={errors.asuransi}
-                                    options={dataAsuransi}
-                                    value={asuransi}
-                                    validation={formValidation.asuransi}
-                                    onChange={(e) => handleChange(e, 'asuransi', onChange)}
-                                />
-                            )}
-                        />}
-                    />
-
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="rate_asuransi"> Rate Asuransi </label>}
-                        input={<>
-                            <Input.Group
-                                append
-                                inputGroupText={'%'}
-                                inputElement={
-                                    <Controller
-                                        control={control}
-                                        name="rate_asuransi"
-                                        id="rate_asuransi"
-                                        render={({ field: { onChange } }) => (
-                                            <Input.Currency
-                                                disableGroupSeparators
-                                                allowNegativeValue={false}
-                                                allowDecimals={true}
-                                                maxLength={6}
-                                                decimalsLimit={4}
-                                                hideError
-                                                value={rateAsuransi}
-                                                validation={formValidation.rate_asuransi}
-                                                register={register}
-                                                id="rate_asuransi"
-                                                name='rate_asuransi'
-                                                errors={errors.rate_asuransi}
-                                                onChange={(e) => setRateAsuransi(e)}
-                                            />
-                                        )}
-                                    />}
-                            />
-                            {errors.rate_asuransi && <ErrorMessageForm>{errors.rate_asuransi.message}</ErrorMessageForm>}
-                        </>}
-                    />
-                </div>
-
-                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="gaji"> Gaji </label>}
-                        input={
-                            <>
-                                <Input.Group
-                                    inputGroupText={'Rp'}
-                                    inputElement={<Input.Currency
-                                        name="gaji"
-                                        id="gaji"
-                                        ref={refGaji}
-                                        allowDecimals={true}
-                                        register={register}
-                                        errors={errors.gaji}
-                                        maxLength={9}
-                                        hideError
-                                        allowNegativeValue={false}
-                                        decimalSeparator={','}
-                                        groupSeparator={'.'}
-                                        validation={formValidation.gaji}
-                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
-                                    />}
-                                />
-                                {errors.gaji && <ErrorMessageForm>{errors.gaji.message}</ErrorMessageForm>}
-                            </>
-                        }
-                    />
-
-                    <FormGroup
-                        className={'mb-2 flex-col gap-2 w-full'}
-                        label={<label className='dark:text-grey' htmlFor="penghasilan_lain"> Penghasilan Lain <span className="text-gray-400 text-sm"> (Opsional) </span> </label>}
-                        input={
-                            <>
-                                <Input.Group
-                                    inputGroupText={'Rp'}
-                                    inputElement={<Input.Currency
-                                        name="penghasilan_lain"
-                                        allowDecimals={true}
-                                        register={register}
-                                        errors={errors.penghasilan_lain}
-                                        maxLength={9}
-                                        hideError
-                                        id="penghasilan_lain"
-                                        allowNegativeValue={false}
-                                        decimalSeparator={','}
-                                        groupSeparator={'.'}
-                                        validation={formValidation.penghasilan_lain}
-                                        onChange={(value, name) => calculateTotalPenghasilan(value, name)}
-                                    />}
-                                />
-                                {errors.penghasilan_lain && <ErrorMessageForm>{errors.penghasilan_lain.message}</ErrorMessageForm>}
-                            </>
-                        }
-                    />
-                </div>
-
-
-                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
+                <div className="flex gap-8 flex-wrap xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="ulp"> ULP <span className="text-gray-400 text-sm"> (Opsional) </span>  </label>}
@@ -788,7 +911,10 @@ const Simulasi = ({ onSubmit }) => {
                             </>
                         }
                     />
+                </div>
 
+
+                <div className="flex gap-8 flex-wrap 2xl:flex-nowrap">
                     <FormGroup
                         className={'mb-2 flex-col gap-2 w-full'}
                         label={<label className='dark:text-grey' htmlFor="total_penghasilan"> Total Penghasilan </label>}
@@ -847,14 +973,14 @@ const Simulasi = ({ onSubmit }) => {
                     onClick={handleSubmit(storeDataSimulasi)}
                     className={`${(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) && 'cursor-not-allowed'}`}>
                     {(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) && <LoadingSpinner />}
-                    {(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) ? 'Processing ...' : 'Simulasi'}
+                    {(hitBiayaLainnya.isLoading || hitSimulasi.isLoading) ? 'Processing' : 'Simulasi'}
                 </Button>
             </div>
 
-            {showModal && <ModalHasilSimulasi data={dataSimulasi} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)} />}
+            {showModal && <ModalHasilSimulasi data={dataSimulasi} dataSimulasi={simpanDataSimulasi} hitStoreSimulasi={hitStoreSimulasi} handleStoreSimulasi={handleStoreSimulasi} hitAjukanPinjaman={hitAjukanPinjaman} setShowModal={setShowModal} closeModal={() => setShowModal((prev) => !prev)} />}
             {showModalPlafon && <ModalInfoPlafon data={hitMaksimalPlafon.data} setMaksimalPlafon={setMaksimalPlafon} setShowModal={setShowModalPlafon} closeModal={() => setShowModalPlafon((prev) => !prev)} />}
-            {showModalInquiry && <ModalInquiryDebitur hitInquiryByName={hitInquiryByName} hitInquiryByTanggalLahir={hitInquiryByTanggalLahir} register={register} getValues={getValues} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiry((prev) => !prev)} />}
-            {showModalInquiryName && <ModalInquiryByName data={hitInquiryByName.data} setShowModalInquiryName={setShowModalInquiryName} closeModal={() => setShowModalInquiryName((prev) => !prev)} />}
+            {showModalInquiry && <ModalInquiryDebitur hitInquiryByName={hitInquiryByName} hitInquiryByTanggalLahir={hitInquiryByTanggalLahir} hitInquiryRekening={hitInquiryRekening} register={register} getValues={getValues} control={control} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiry((prev) => !prev)} />}
+            {showModalInquiryRekening && <ModalInquiryByRekening hitInquiryRekening={hitInquiryRekening} setHasilInquiry={setHasilInquiry} setShowModalInquiryRekening={setShowModalInquiryRekening} setShowModalInquiry={setShowModalInquiry} closeModal={() => setShowModalInquiryRekening((prev) => !prev)} />}
 
         </>
     )

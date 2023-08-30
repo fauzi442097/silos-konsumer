@@ -21,7 +21,7 @@ const formValidation = {
     pendapatan_bulanan: { required: FormRules.Required(), maxLength: FormRules.MaxLength(12) }
 }
 
-const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
+const FormPekerjaan = ({ data, statePekerjaan, register, errors, control}) => {
 
     const useGetPekerjaan = () => { 
         let idProduk = statePekerjaan.produk ? statePekerjaan.produk.value : 0;
@@ -66,6 +66,11 @@ const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
     const {arrPekerjaan, getPekerjaan} = useGetPekerjaan();
     const [pendapatan, setPendapatan] = useState(null);
     const [pekerjaan, setPekerjaan] = useState(null);
+    const [gaji, setGaji] = useState(null);
+    const [pendapatanLainnya, setPendapatanLainnya] = useState(null);
+    const [ulp, setUlp] = useState(null);
+
+    let dataNasabah = data ? data.data.data : data;
     
     const handleChange = async (e, type, onChange) => {
         let value = e.value;
@@ -87,6 +92,15 @@ const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
                 break;
         }
     }
+
+    useEffect(() => {
+        if (dataNasabah) {
+            setPekerjaan({ value:dataNasabah.pekerjaan.idPekerjaan, label:dataNasabah.pekerjaan.nmPekerjaan + ' - Max.Umur (' + dataNasabah.pekerjaan.masaKerjaUmur + ' Tahun)' })
+            setGaji(dataNasabah.pendapatanBulan);
+            setPendapatanLainnya(dataNasabah.pendapatanLainnya);
+            setUlp(dataNasabah.pendapatanLainnya2);
+        }
+    }, [dataNasabah]);
 
     return (
         <>
@@ -223,10 +237,14 @@ const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
                         placeholder="Isikan pendapatan bulanan pokok"
                         id="pendapatan_bulanan" 
                         name="pendapatan_bulanan" 
-                        allowDecimals={false}
+                        value={gaji}
                         register={register}
                         errors={errors.pendapatan_bulanan}
-                        validation={formValidation.pendapatan_bulanan} 
+                        validation={formValidation.pendapatan_bulanan}
+                        allowDecimals={false}
+                        allowNegativeValue={false}
+                        decimalSeparator={','}
+                        groupSeparator={'.'}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
                 <div style={{ width: "325px" }}>
@@ -235,7 +253,11 @@ const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
                         placeholder="Isikan penghasilan lain" 
                         id="penghasilan_lain" 
                         name="penghasilan_lain"
+                        value={pendapatanLainnya}
                         allowDecimals={false}
+                        allowNegativeValue={false}
+                        decimalSeparator={','}
+                        groupSeparator={'.'}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
                 <div style={{ width: "325px" }}>
@@ -244,7 +266,11 @@ const FormPekerjaan = ({statePekerjaan, register, errors, control}) => {
                         placeholder="Isikan ULP" 
                         id="ulp" 
                         name="ulp" 
+                        value={ulp}
                         allowDecimals={false}
+                        allowNegativeValue={false}
+                        decimalSeparator={','}
+                        groupSeparator={'.'}
                         onChange={(value, name) => console.log(value, name)}/>
                 </div>
             </div>

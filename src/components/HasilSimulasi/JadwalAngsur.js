@@ -60,9 +60,6 @@ const JadwalAngsur = ({ dataSimulasi }) => {
                             Angsuran Ke
                         </td>
                         <td scope="col" className="px-6 py-4 font-inter-medium">
-                            Sisa Pokok 
-                        </td>
-                        <td scope="col" className="px-6 py-4 font-inter-medium">
                             Angsuran Pokok
                         </td>
                         <td scope="col" className="px-6 py-4 font-inter-medium">
@@ -70,6 +67,9 @@ const JadwalAngsur = ({ dataSimulasi }) => {
                         </td>
                         <td scope="col" className="px-6 py-4 font-inter-medium rounded-tr-lg rounded-br-lg">
                             Angsuran
+                        </td>
+                        <td scope="col" className="px-6 py-4 font-inter-medium">
+                            Sisa Pokok 
                         </td>
                     </tr>
                 </thead>
@@ -84,10 +84,10 @@ const JadwalAngsur = ({ dataSimulasi }) => {
                         jadwalAngsur.map((item, i) => (
                             <tr className="bg-white dark:bg-dark-depth1 border-b border-dashed  dark:border-[#2f3237]" key={i}>
                                 <td className="px-6 py-4" align='center'>{item.angsuranKe}</td>
-                                <td className="px-6 py-4">{formatRupiah(item.sisaPokok)}</td>
                                 <td className="px-6 py-4">{formatRupiah(item.angsuranPokok)}</td>
                                 <td className="px-6 py-4">{formatRupiah(item.angsuranBunga)}</td>
                                 <td className="px-6 py-4">{formatRupiah(item.angsuran)}</td>
+                                <td className="px-6 py-4">{formatRupiah(item.sisaPokok)}</td>
                             </tr>
                         ))
                     )}

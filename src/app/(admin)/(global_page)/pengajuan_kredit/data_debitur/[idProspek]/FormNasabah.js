@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { FormRules } from "@/lib/formRules";
 import { useMySwal } from "@/hooks/useMySwal";
+import { useGetWilayah } from "@/hooks/useRefData";
 import useGet from '@/hooks/useGet';
+import usePost from "@/hooks/usePost";
 import moment from "moment";
 
 import MySelect from "@/components/Form/Select";
@@ -14,8 +16,7 @@ import Radio from "@/components/Form/Radio";
 import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
 import ErrorMessageForm from "@/components/Form/ErrorMessageForm";
-import { useGetWilayah } from "@/hooks/useRefData";
-import { set } from "lodash";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const formValidation = {
     produk: { required: FormRules.Required('Pilih produk') },
@@ -28,6 +29,7 @@ const formValidation = {
     status_debitur: { required: FormRules.Required() },
     no_handphone: { required: FormRules.Required(), minLength: FormRules.MinLength(11), maxLength: FormRules.MaxLength(13) },
     no_telepon: { minLength: FormRules.MinLength(10), maxLength: FormRules.MaxLength(13) },
+    kode_pos: { minLength: FormRules.MinLength(5) },
     alamat_ktp: { required: FormRules.Required() },
     alamat_domisili: { required: FormRules.Required() },
     wilayah_debitur: { required: FormRules.Required() },
@@ -60,7 +62,7 @@ const useGetMenikah = () => {
     const mySwal = useMySwal();
     const getMenikah = useGet(['refStatusMenikah'], '/master/list/status-kawin', { retry: false, refetchOnWindowFokus: false });
     let arrMenikah = [];
-    if(getMenikah.isSuccess){
+    if (getMenikah.isSuccess) {
         let dataMenikah = getMenikah.data?.data.data;
         dataMenikah.map((item) => {
             return arrMenikah.push({ value: item.idStatusKawin, label: item.nmStatusKawin })
@@ -74,22 +76,60 @@ const useGetMenikah = () => {
     return { arrMenikah, getMenikah }
 }
 
-const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
-    // const mySwal = useMySwal();
+const usePostInquiryKtp = (mySwal, setValue) => {
+    return usePost(['inquiry-by-tanggallahir'], '/cbs/inquiry/cif-criteria/cifidnbr?page=0&size=30', [], {
+        refetchOnWindowFocus: false,
+        retry: false,
+        onError: (error, variables, context) => {
+            console.log(error);
+            mySwal.warning('Terjadi kesalahan !')
+        },
+        onSuccess: (data, variables, context) => {
+            console.log(data);
+            setValue('nama_debitur', data.data.data[0].fullnm);
+            setValue('tempat_lahir', data.data.data[0].brtplace);
+            setValue('tanggal_lahir', moment(data.data.data[0].brtdt).format('L'));
+            setValue('status_ktp', data.data.data[0].marriageid === 1 ? true : false);
+            setValue('ibu_kandung', data.data.data[0].mothrnm);
+            setValue('alamat_ktp', data.data.data[0].addr + ' RT. ' + data.data.data[0].rt + ' RW. ' + data.data.data[0].rw);
+            setValue('alamat_domisili', data.data.data[0].addr + ' RT. ' + data.data.data[0].rt + ' RW. ' + data.data.data[0].rw);
+            setValue('npwp', data.data.data[0].npwp);
+            setValue('kode_pos', data.data.data[0].postalcode);
+        }
+    })
+}
+
+const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, getValues }) => {
+
+    const mySwal = useMySwal();
     const minAge = moment().subtract(21, 'years');
     const { arrProduk, getProduk } = useGetProduk();
     const { arrMenikah, getMenikah } = useGetMenikah();
-    const { arrWilayah, getWilayah} = useGetWilayah();
-
-    console.log(arrWilayah);
+    const { arrWilayah, getWilayah } = useGetWilayah();
 
     const [statKtp, setStatKtp] = useState(false);
     const [alamatDomisili, setAlamatDomisili] = useState(null);
+    const [namaDebitur, setNamaDebitur] = useState();
+    const [noIdentitas, setNoIdentitas] = useState()
 
     const [tglExpKtp, setTglExpKtp] = useState(undefined);
     const [tanggalLahir, setTanggalLahir] = useState(undefined);
 
-    const [wilayah, setWilayah] = useState([]);
+    const [dataWilayah, setDataWilayah] = useState([]);
+    const [wilayah, setWilayah] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+
+    const hitInquiryKtp = usePostInquiryKtp(mySwal, setValue);
+
+    let dataNasabah = data ? data.data.data : data;
+
+    const handleInquiryKtp = () => {
+        const bodyInqKtp = {
+            ktp: getValues('no_ktp')
+        };
+
+        hitInquiryKtp.mutate(bodyInqKtp);
+    }
 
     const handleChange = async (e, type, onChange) => {
         let value = e.value;
@@ -105,7 +145,7 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
                 onChange(e.startDate);
                 setTanggalLahir(e);
                 stateNasabah.setTglLahir(e);
-                
+
                 break;
             case 'ktp':
                 onChange(e.startDate);
@@ -129,14 +169,41 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
         }
     }
 
+    const handleWilayah = (text) => {
+        let matches = [];
+
+        if (text.length > 0) {
+            matches = dataWilayah.filter(dataWilayah => {
+                const regex = new RegExp(`${text}`, "gi")
+                return dataWilayah.label.match(regex);
+            })
+        }
+
+        setSuggestions(matches);
+        setWilayah(text);
+    }
+
+    const onSuggestHandler = (text) => {
+        setWilayah(text);
+        setSuggestions([]);
+    }
+
     const setDomisili = (alamatKtp) => {
-        setValue.setValue('alamat_domisili', alamatKtp);
+        setValue('alamat_domisili', alamatKtp);
         setAlamatDomisili(alamatKtp);
     }
 
     useEffect(() => {
-        setWilayah(arrWilayah);
-    }, []);
+        setDataWilayah(arrWilayah);
+        if (dataNasabah) {
+            stateNasabah.setProduk({ value: dataNasabah.product.id, label: dataNasabah.product.prodName });
+            setValue('nama_debitur', dataNasabah.nmProspek);
+            setValue('no_ktp', dataNasabah.noIdentitas);
+            setValue('tanggal_lahir', moment(dataNasabah.tglLahir).format('L'));
+            stateNasabah.setTglLahir(moment(dataNasabah.tglLahir).format('L'));
+            stateNasabah.setStatusMenikah({ value: dataNasabah.statusKawin.idStatusKawin, label: dataNasabah.statusKawin.nmStatusKawin });
+        }
+    }, [dataNasabah]);
 
     return (
         <>
@@ -172,6 +239,7 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
                         placeholder="Isikan nama nasabah"
                         id="nama_debitur"
                         name="nama_debitur"
+                        // value={namaDebitur}
                         register={register}
                         errors={errors.nama_debitur}
                         validation={formValidation.nama_debitur} />
@@ -181,50 +249,6 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
                         <Radio label="Laki - laki" name="jenisKelamin" value="laki" />
                         <Radio label="Perempuan" name="jenisKelamin" value="perempuan" className="mr-3" />
                     </div>
-                </div>
-            </div>
-
-            <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
-                <div style={{ width: "325px" }}>
-                    <label className="block mb-3">Tempat Lahir</label>
-                    <Input.Text
-                        placeholder="Isikan tempat lahir"
-                        id="tempat_lahir"
-                        name="tempat_lahir"
-                        register={register}
-                        errors={errors.tempat_lahir}
-                        validation={formValidation.tempat_lahir} />
-                </div>
-                <div style={{ width: "325px" }}>
-                    <label className="block mb-3">Tanggal Lahir</label>
-                    <Controller
-                        control={control}
-                        name="tanggal_lahir"
-                        id="tanggal_lahir"
-                        render={({ field: { onChange } }) => (
-                            <Input.Date
-                                placeholder="Isikan tanggal lahir"
-                                id="tanggal_lahir"
-                                name="tanggal_lahir"
-                                maxDate={minAge}
-                                startFrom={minAge}
-                                register={register}
-                                errors={errors.tanggal_lahir}
-                                value={tanggalLahir}
-                                validation={formValidation.tanggal_lahir}
-                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} />
-                        )}
-                    />
-                </div>
-                <div style={{ width: "325px" }}>
-                    <label className="block mb-3">Nama Ibu Kandung</label>
-                    <Input.Text
-                        placeholder="Isikan nama ibu kandung"
-                        id="ibu_kandung"
-                        name="ibu_kandung"
-                        register={register}
-                        errors={errors.ibu_kandung}
-                        validation={formValidation.ibu_kandung} />
                 </div>
             </div>
 
@@ -240,9 +264,15 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
                             name='no_ktp'
                             id="no_ktp"
                             placeholder='Isikan nomor KTP'
+                            // value={noIdentitas}
                             register={register}
                             validation={formValidation.no_ktp} />}
-                        inputGroupText={<Button className={'rounded-tl-none rounded-bl-none'}> Inquiry </Button>}
+                        inputGroupText={<Button
+                            className={'rounded-tl-none rounded-bl-none'}
+                            onClick={handleInquiryKtp} >
+                            {(hitInquiryKtp.isLoading) && <LoadingSpinner />}
+                            {(hitInquiryKtp.isLoading) ? 'Processing' : 'Inquiry'}
+                        </Button>}
                     />
                     {errors.no_ktp && <ErrorMessageForm>{errors.no_ktp.message}</ErrorMessageForm>}
                 </div>
@@ -292,8 +322,77 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
 
                         </div>
                 }
+            </div>
 
+            <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
+                <div style={{ width: "325px" }}>
+                    <label className='block mb-3'> Nomor Kartu Keluarga </label>
+                    <Input.Number
+                        minLength={16}
+                        maxLength={16}
+                        name='no_kk'
+                        id="no_kk"
+                        placeholder='Isikan nomor Kartu Keluarga'
+                        register={register}
+                        errors={errors.no_kk}
+                        validation={formValidation.no_kk}
+                    />
+                </div>
+                <div style={{ width: "325px" }}>
+                    <label className='block mb-3'> NPWP </label>
+                    <Input.Number
+                        name='npwp'
+                        id="npwp"
+                        placeholder='Isikan nomor Kartu Keluarga'
+                        register={register}
+                    // errors={errors.noKk}
+                    // validation={formValidation.noKk}
+                    />
+                </div>
+            </div>
 
+            <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
+                <div style={{ width: "325px" }}>
+                    <label className="block mb-3">Tempat Lahir</label>
+                    <Input.Text
+                        placeholder="Isikan tempat lahir"
+                        id="tempat_lahir"
+                        name="tempat_lahir"
+                        register={register}
+                        errors={errors.tempat_lahir}
+                        validation={formValidation.tempat_lahir} />
+                </div>
+                <div style={{ width: "325px" }}>
+                    <label className="block mb-3">Tanggal Lahir</label>
+                    <Controller
+                        control={control}
+                        name="tanggal_lahir"
+                        id="tanggal_lahir"
+                        render={({ field: { onChange } }) => (
+                            <Input.Date
+                                placeholder="Isikan tanggal lahir"
+                                id="tanggal_lahir"
+                                name="tanggal_lahir"
+                                maxDate={minAge}
+                                startFrom={minAge}
+                                register={register}
+                                errors={errors.tanggal_lahir}
+                                value={tanggalLahir}
+                                validation={formValidation.tanggal_lahir}
+                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} />
+                        )}
+                    />
+                </div>
+                <div style={{ width: "325px" }}>
+                    <label className="block mb-3">Nama Ibu Kandung</label>
+                    <Input.Text
+                        placeholder="Isikan nama ibu kandung"
+                        id="ibu_kandung"
+                        name="ibu_kandung"
+                        register={register}
+                        errors={errors.ibu_kandung}
+                        validation={formValidation.ibu_kandung} />
+                </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
@@ -371,19 +470,39 @@ const FormNasabah = ({ stateNasabah, register, errors, control, setValue }) => {
                         id="domisili"
                         onChange={() => setDomisili(alamat_ktp.value)} />
                 </div>
+                <div style={{ width: "325px" }}>
+                    <label className="block mb-3">Kode POS</label>
+                    <Input.Number
+                        minLength={5}
+                        placeholder="Isikan nomor telepon"
+                        id="kode_pos"
+                        name="kode_pos"
+                        register={register}
+                        errors={errors.kode_pos}
+                        validation={formValidation.kode_pos} />
+                </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "685px" }}>
                     <label className="block mb-3">Cari Kelurahan Debitur</label>
-                    <Textarea
+                    <Input.Text
                         placeholder="Isikan cari kelurahan debitur"
                         id="wilayah_debitur"
                         name="wilayah_debitur"
                         value={wilayah}
                         register={register}
                         errors={errors.wilayah_debitur}
-                        validation={formValidation.wilayah_debitur} />
+                        validation={formValidation.wilayah_debitur}
+                        onChange={e => handleWilayah(e.target.value)} />
+
+                    {suggestions && suggestions.map((item, i) =>
+                        <div key={i}
+                            className="block mb-3 text-primary-200 form-control"
+                            onClick={() => onSuggestHandler(item.label)}>
+                            {item.label}
+                        </div>
+                    )}
                 </div>
             </div>
         </>
