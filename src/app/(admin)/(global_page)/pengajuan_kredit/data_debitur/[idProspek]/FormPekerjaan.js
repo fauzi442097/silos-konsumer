@@ -245,7 +245,7 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control}) => {
                         allowNegativeValue={false}
                         decimalSeparator={','}
                         groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)}/>
+                        onChange={(value, name) => setGaji(value)}/>
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Penghasilan Lain </label>
@@ -253,12 +253,13 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control}) => {
                         placeholder="Isikan penghasilan lain" 
                         id="penghasilan_lain" 
                         name="penghasilan_lain"
-                        value={pendapatanLainnya}
+                        // value={pendapatanLainnya}
+                        defaultValue={dataNasabah?.pendapatanLainnya}
+                        register={register}
                         allowDecimals={false}
                         allowNegativeValue={false}
                         decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)}/>
+                        groupSeparator={'.'}/>
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> ULP </label>
