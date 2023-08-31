@@ -199,7 +199,13 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
             stateNasabah.setProduk({ value: dataNasabah.product.id, label: dataNasabah.product.prodName });
             setValue('nama_debitur', dataNasabah.nmProspek);
             setValue('no_ktp', dataNasabah.noIdentitas);
-            setValue('tanggal_lahir', moment(dataNasabah.tglLahir).format('L'));
+
+            let valueTglLahir = {startDate: moment(dataNasabah.tglLahir).format('L'), endDate: moment(dataNasabah.tglLahir).format('L')}
+            setValue('tanggal_lahir', valueTglLahir);
+            // setValue('tanggal_lahir', '07/08/2022');
+
+            // setTanggalLahir({startDate: '07/08/2022', endDate: '07/08/2022'})
+
             stateNasabah.setTglLahir(moment(dataNasabah.tglLahir).format('L'));
             stateNasabah.setStatusMenikah({ value: dataNasabah.statusKawin.idStatusKawin, label: dataNasabah.statusKawin.nmStatusKawin });
         }
@@ -368,7 +374,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         control={control}
                         name="tanggal_lahir"
                         id="tanggal_lahir"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <Input.Date
                                 placeholder="Isikan tanggal lahir"
                                 id="tanggal_lahir"
@@ -377,9 +383,9 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                                 startFrom={minAge}
                                 register={register}
                                 errors={errors.tanggal_lahir}
-                                value={tanggalLahir}
+                                value={value}
                                 validation={formValidation.tanggal_lahir}
-                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} />
+                                onChange={(e) => setValue('tanggal_lahir', e)} />
                         )}
                     />
                 </div>
