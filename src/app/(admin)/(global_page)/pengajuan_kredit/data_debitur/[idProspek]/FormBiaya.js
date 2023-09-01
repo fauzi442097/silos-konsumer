@@ -7,27 +7,22 @@ import { Controller } from "react-hook-form";
 import Input from "@/components/Form/Input"
 
 const formValidation = {
-    biayaProvisi: { required: FormRules.Required() },
-    biayaNotaris: { required: FormRules.Required() },
-    biayaAsuransi: { required: FormRules.Required() },
-    biayaAdmKredit: { required: FormRules.Required() },
+    biaya_provisi: { required: FormRules.Required() },
+    biaya_notaris: { required: FormRules.Required() },
+    biaya_asuransi: { required: FormRules.Required() },
+    biaya_adm_kredit: { required: FormRules.Required() },
 }
 
 const FormBiaya = ({ data, register, errors, control, setValue }) => {
     let dataNasabah = data ? data.data.data : data;
-    console.log(dataNasabah);
-
-    const [biayaNotaris, setBiayaNotaris] = useState(0);
-    const [biayaProvisi, setBiayaProvisi] = useState(0);
-    const [biayaAsuransi, setBiayaAsuransi] = useState(0);
-    const [biayaAdmKredit, setBiayaAdmKredit] = useState(0);
 
     useEffect(() => {
+        console.log(dataNasabah);
         if (dataNasabah) {
-            // setBiayaNotaris(dataNasabah.)
-            setValue('biaya_provisi', dataNasabah.byProvisi);
-            setValue('biaya_asuransi', dataNasabah.byAsuransi);
-            setValue('biaya_admnistrasi_kredit', dataNasabah.byAdministrasi);
+            setValue('biaya_notaris', 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_provisi', dataNasabah.byProvisi ? dataNasabah.byProvisi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_asuransi', dataNasabah.byAsuransi ? dataNasabah.byAsuransi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_administrasi_kredit', dataNasabah.byAdministrasi !== "0" ? dataNasabah.byAdministrasi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
         }
     }, [dataNasabah]);
 
@@ -40,65 +35,120 @@ const FormBiaya = ({ data, register, errors, control, setValue }) => {
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Biaya Notaris </label>
-                    <Input.Currency
-                        placeholder="Isikan suku bunga promo"
-                        id="biaya_notaris"
+                    <Controller
+                        control={control}
                         name="biaya_notaris"
-                        // value={biayaNotaris}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.biayaNotaris}
-                        validation={formValidation.biayaNotaris}
-                        onChange={(value, name) => console.log(value, name)} />
+                        id="biaya_notaris"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan suku bunga promo"
+                                        id="biaya_notaris"
+                                        name="biaya_notaris"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.biaya_notaris}
+                                        validation={formValidation.biaya_notaris}
+                                        onChange={(value) => setValue('biaya_notaris', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+
+                        )}
+                    />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Biaya Provisi </label>
-                    <Input.Currency
-                        placeholder="Isikan biaya provisi"
-                        id="biaya_provisi"
+                    <Controller
+                        control={control}
                         name="biaya_provisi"
-                        // value={biayaProvisi}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.biayaProvisi}
-                        validation={formValidation.biayaProvisi}
-                        onChange={(value, name) => console.log(value, name)} />
+                        id="biaya_provisi"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan biaya provisi"
+                                        id="biaya_provisi"
+                                        name="biaya_provisi"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.biaya_provisi}
+                                        validation={formValidation.biaya_provisi}
+                                        onChange={(value) => setValue('biaya_provisi', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
+                    />
+
                 </div>
             </div>
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Biaya Asuransi </label>
-                    <Input.Currency
-                        placeholder="Isikan biaya asuransi"
-                        id="biaya_asuransi"
+                    <Controller
+                        control={control}
                         name="biaya_asuransi"
-                        // value={biayaAsuransi}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.biayaAsuransi}
-                        validation={formValidation.biayaAsuransi}
-                        onChange={(value, name) => console.log(value, name)} />
+                        id="biaya_asuransi"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan biaya asuransi"
+                                        id="biaya_asuransi"
+                                        name="biaya_asuransi"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.biaya_asuransi}
+                                        validation={formValidation.biaya_asuransi}
+                                        onChange={(value) => setValue('biaya_asuransi', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
+                    />
+
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Biaya Administrasi Kredit </label>
-                    <Input.Currency
-                        placeholder="Isikan jangka waktu promo"
-                        id="biaya_administrasi_kredit"
+                    <Controller
+                        control={control}
                         name="biaya_administrasi_kredit"
-                        // value={biayaAdmKredit}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.biayaAdmKredit}
-                        validation={formValidation.biayaAdmKredit}
-                        onChange={(value, name) => console.log(value, name)} />
+                        id="biaya_administrasi_kredit"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan biaya administrasi kredit"
+                                        id="biaya_administrasi_kredit"
+                                        name="biaya_administrasi_kredit"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.biaya_adm_kredit}
+                                        validation={formValidation.biaya_adm_kredit}
+                                        onChange={(value) => setValue('biaya_administrasi_kredit', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
+                    />
                 </div>
             </div>
         </>

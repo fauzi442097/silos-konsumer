@@ -30,6 +30,7 @@ const formValidation = {
     no_handphone: { required: FormRules.Required(), minLength: FormRules.MinLength(11), maxLength: FormRules.MaxLength(13) },
     no_telepon: { minLength: FormRules.MinLength(10), maxLength: FormRules.MaxLength(13) },
     kode_pos: { minLength: FormRules.MinLength(5) },
+    no_kk: { required: FormRules.Required(), minLength: FormRules.MinLength(16), maxLength: FormRules.MaxLength(16) },
     alamat_ktp: { required: FormRules.Required() },
     alamat_domisili: { required: FormRules.Required() },
     wilayah_debitur: { required: FormRules.Required() },
@@ -81,11 +82,9 @@ const usePostInquiryKtp = (mySwal, setValue) => {
         refetchOnWindowFocus: false,
         retry: false,
         onError: (error, variables, context) => {
-            console.log(error);
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
-            console.log(data);
             setValue('nama_debitur', data.data.data[0].fullnm);
             setValue('tempat_lahir', data.data.data[0].brtplace);
             setValue('tanggal_lahir', moment(data.data.data[0].brtdt).format('L'));
@@ -118,6 +117,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
     const [dataWilayah, setDataWilayah] = useState([]);
     const [wilayah, setWilayah] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+
+    const [selectedOption, setSelectedOption] = useState("Laki");
 
     const hitInquiryKtp = usePostInquiryKtp(mySwal, setValue);
 
@@ -169,6 +170,10 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
         }
     }
 
+    function onValueChange(event) {
+        setSelectedOption(event.target.value)
+    }
+
     const handleWilayah = (text) => {
         let matches = [];
 
@@ -199,7 +204,9 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
             stateNasabah.setProduk({ value: dataNasabah.product.id, label: dataNasabah.product.prodName });
             setValue('nama_debitur', dataNasabah.nmProspek);
             setValue('no_ktp', dataNasabah.noIdentitas);
-            setValue('tanggal_lahir', moment(dataNasabah.tglLahir).format('L'));
+            // setValue('tanggal_lahir', moment(dataNasabah.tglLahir).format('L'));
+            console.log(moment(dataNasabah.tglLahir).format('L'))
+            setTanggalLahir(moment(dataNasabah.tglLahir).format('L'));
             stateNasabah.setTglLahir(moment(dataNasabah.tglLahir).format('L'));
             stateNasabah.setStatusMenikah({ value: dataNasabah.statusKawin.idStatusKawin, label: dataNasabah.statusKawin.nmStatusKawin });
         }
@@ -246,8 +253,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                 </div>
                 <div className="mt-10" style={{ width: "325px" }}>
                     <div className='flex gap-2'>
-                        <Radio label="Laki - laki" name="jenisKelamin" value="laki" />
-                        <Radio label="Perempuan" name="jenisKelamin" value="perempuan" className="mr-3" />
+                        <Radio label="Laki - laki" name="jenis_kelamin" value="laki-laki" className="mr-3" onChange={onValueChange} checked={selectedOption === "Laki"} />
+                        <Radio label="Perempuan" name="jenis_kelamin" value="perempuan" className="mr-3" onChange={onValueChange} checked={selectedOption === "Perempuan"} />
                     </div>
                 </div>
             </div>
@@ -345,8 +352,6 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         id="npwp"
                         placeholder='Isikan nomor Kartu Keluarga'
                         register={register}
-                    // errors={errors.noKk}
-                    // validation={formValidation.noKk}
                     />
                 </div>
             </div>
@@ -368,7 +373,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         control={control}
                         name="tanggal_lahir"
                         id="tanggal_lahir"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { onChange, value } }) => (
                             <Input.Date
                                 placeholder="Isikan tanggal lahir"
                                 id="tanggal_lahir"
@@ -379,7 +384,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                                 errors={errors.tanggal_lahir}
                                 value={tanggalLahir}
                                 validation={formValidation.tanggal_lahir}
-                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} />
+                                onChange={(e) => handleChange(e, 'tglLahir', onChange)} 
+                            />
                         )}
                     />
                 </div>
@@ -498,7 +504,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
 
                     {suggestions && suggestions.map((item, i) =>
                         <div key={i}
-                            className="block mb-3 text-primary-200 form-control"
+                            className="form-control-auto bg-slate-50 block transition duration-200 px-2 py-2 cursor-pointer my-2 truncate rounded-lg"
                             onClick={() => onSuggestHandler(item.label)}>
                             {item.label}
                         </div>

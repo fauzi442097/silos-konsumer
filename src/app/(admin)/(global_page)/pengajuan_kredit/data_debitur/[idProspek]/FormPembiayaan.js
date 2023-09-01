@@ -10,10 +10,12 @@ import MySelect from "@/components/Form/Select"
 
 const formValidation = {
     plafon: { required: FormRules.Required(), maxLength: FormRules.MaxLength(12) },
-    penggunaanDana: { required: FormRules.Required() },
-    sukuBunga: { required: FormRules.Required() },
-    jangkaWaktu: { required: FormRules.Required() },
+    penggunaan_dana: { required: FormRules.Required() },
+    suku_bunga: { required: FormRules.Required() },
+    jangka_waktu: { required: FormRules.Required() },
     angsuran: { required: FormRules.Required() },
+    asuransi: { required: FormRules.Required() },
+    rate_asuransi: { required: FormRules.Required() },
 }
 
 const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setValue, reset }) => {
@@ -79,16 +81,15 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
 
     useEffect(() => {
         if (dataNasabah) {
-            setPlafon(dataNasabah.plafon)
-            setValue('plafon', dataNasabah.plafon, {shouldDirty: true, shouldValidate: true, shouldTouched: true})
-
-            setSukuBunga(dataNasabah.rate);
-            setJangkaWaktu(dataNasabah.jangkaWaktu);
-            setSukuBungaPromo(dataNasabah.promo ? dataNasabah.promo.ratePromo : 0);
-            setjangkaWaktuPromo(dataNasabah.promo ? dataNasabah.promo.bulanPromo : 0);
-            // setAsuransi({ value:dataNasabah. })
-            setAngsuran(dataNasabah.promo ? dataNasabah.promo.angsuranNormal : dataNasabah.totalAngsuran);
-            setAngsuranPromo(dataNasabah.promo ? dataNasabah.promo.angsuranPromo : 0);
+            setValue('plafon', dataNasabah.plafon, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('suku_bunga', dataNasabah.rate, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('jangka_waktu', dataNasabah.jangkaWaktu, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('suku_bunga_promo', dataNasabah.promo ? dataNasabah.promo.ratePromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('jangka_waktu_promo', dataNasabah.promo ? dataNasabah.promo.bulanPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setAsuransi({ value: dataNasabah.asuransi.asuransiId, label: dataNasabah.asuransi.definition });
+            setValue('rate_asuransi', dataNasabah.rateAsuransi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('angsuran', dataNasabah.promo ? dataNasabah.promo.angsuranNormal : dataNasabah.totalAngsuran, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('angsuran_setalah_promo', dataNasabah.promo ? dataNasabah.promo.angsuranPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
         }
     }, [dataNasabah]);
 
@@ -114,8 +115,8 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                                 options={arrPenggunaanDana}
                                 value={penggunaanDana}
                                 register={register}
-                                errors={errors.penggunaanDana}
-                                validation={formValidation.penggunaanDana}
+                                errors={errors.penggunaan_dana}
+                                validation={formValidation.penggunaan_dana}
                                 onChange={(e) => handleChange(e, 'penggunaanDana', onChange)}
                             />
                         )}
@@ -123,69 +124,79 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Plafon </label>
-
-            
                     <Controller
                         control={control}
                         name="plafon"
                         id="plafon"
                         render={({ field: { value } }) => (
-                            <Input.Currency
-                                placeholder="Isikan plafon"
-                                id="plafon"
-                                name="plafon"
-                                value={value}
-                                allowDecimals={false}
-                                allowNegativeValue={false}
-                                decimalSeparator={','}
-                                groupSeparator={'.'}
-                                register={register}
-                                errors={errors.plafon}
-                                onChange={(value) => setValue('plafon', value, {shouldDirty: true, shouldValidate: true, shouldTouched: true}) }
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan plafon"
+                                        id="plafon"
+                                        name="plafon"
+                                        value={value}
+                                        allowDecimals={false}
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.plafon}
+                                        onChange={(value) => setValue('plafon', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
                             />
                         )}
                     />
-
-                    
                 </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Suku Bunga (%) </label>
-                    <Input.Currency
-                        placeholder="Isikan suku bunga"
-                        id="sukuBunga"
-                        name="sukuBunga"
-                        value={sukuBunga}
-                        allowNegativeValue={false}
-                        allowDecimals={true}
-                        maxLength={4}
-                        decimalsLimit={1}
-                        register={register}
-                        errors={errors.sukuBunga}
-                        validation={formValidation.sukuBunga}
-                        onChange={(value, name) => console.log(value, name)} />
+                    <Controller
+                        control={control}
+                        name="suku_bunga"
+                        id="suku_bunga"
+                        render={({ field: { value } }) => (
+                            <Input.Currency
+                                placeholder="Isikan suku bunga"
+                                id="suku_bunga"
+                                name="suku_bunga"
+                                value={value}
+                                allowNegativeValue={false}
+                                allowDecimals={true}
+                                maxLength={4}
+                                decimalsLimit={1}
+                                register={register}
+                                errors={errors.suku_bunga}
+                                validation={formValidation.suku_bunga}
+                                onChange={(value) => setValue('suku_bunga', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                            />
+                        )}
+                    />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Jangka Waktu (Bulan) </label>
                     <Controller
                         control={control}
-                        name="produk"
-                        id="produk"
-                        render={({ field: { onChange } }) => (
+                        name="jangka_waktu"
+                        id="jangka_waktu"
+                        render={({ field: { value } }) => (
                             <Input.Currency
                                 placeholder="Isikan jangka waktu"
                                 id="jangka_waktu"
                                 name="jangka_waktu"
-                                value={jangkaWaktu}
+                                value={value}
                                 allowDecimals={true}
                                 decimalSeparator={','}
                                 groupSeparator={'.'}
                                 register={register}
-                                errors={errors.jangkaWaktu}
-                                validation={formValidation.jangkaWaktu}
-                                onChange={(value) => setValueJangkaWaktu(value)} />
+                                errors={errors.jangka_waktu}
+                                validation={formValidation.jangka_waktu}
+                                onChange={(value) => setValue('jangka_waktu', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                            />
                         )}
                     />
                 </div>
@@ -193,27 +204,45 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Suku Bunga Promo (%) </label>
-                    <Input.Currency
-                        placeholder="Isikan suku bunga promo"
-                        id="sukuBungaPromo"
-                        name="sukuBungaPromo"
-                        value={sukuBungaPromo}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)} />
+                    <Controller
+                        control={control}
+                        name="suku_bunga_promo"
+                        id="suku_bunga_promo"
+                        render={({ field: { value } }) => (
+                            <Input.Currency
+                                placeholder="Isikan suku bunga promo"
+                                id="suku_bunga_promo"
+                                name="suku_bunga_promo"
+                                value={value}
+                                allowDecimals={true}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
+                                onChange={(value) => setValue('suku_bunga_promo', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                            />
+                        )}
+                    />
+
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Jangka Waktu Promo (Bulan) </label>
-                    <Input.Currency
-                        placeholder="Isikan jangka waktu promo"
-                        id="jangkaWaktuPromo"
-                        name="jangkaWaktuPromo"
-                        value={jangkaWaktuPromo}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)} />
+                    <Controller
+                        control={control}
+                        name="jangka_waktu_promo"
+                        id="jangka_waktu_promo"
+                        render={({ field: { value } }) => (
+                            <Input.Currency
+                                placeholder="Isikan jangka waktu promo"
+                                id="jangka_waktu_promo"
+                                name="jangka_waktu_promo"
+                                value={value}
+                                allowDecimals={true}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
+                                onChange={(value) => setValue('jangka_waktu_promo', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                            />
+                        )}
+                    />
+
                 </div>
             </div>
 
@@ -222,8 +251,8 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                     <label className='block mb-3'> Asuransi </label>
                     <Controller
                         control={control}
-                        name="status_debitur"
-                        id="status_debitur"
+                        name="asuransi"
+                        id="asuransi"
                         render={({ field: { onChange } }) => (
                             <MySelect
                                 withSearch
@@ -232,6 +261,9 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                                 id="asuransi"
                                 options={arrAsuransi}
                                 value={asuransi}
+                                register={register}
+                                errors={errors.asuransi}
+                                validation={formValidation.asuransi}
                                 onChange={(e) => handleChange(e, 'asuransi', onChange)}
                             />
                         )}
@@ -240,44 +272,84 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Rate Asuransi </label>
-                    <Input.Currency
-                        placeholder="Isikan rate asuransi"
-                        id="rateAsuransi"
-                        name="rateAsuransi"
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)} />
+                    <Controller
+                        control={control}
+                        name="rate_asuransi"
+                        id="rate_asuransi"
+                        render={({ field: { value } }) => (
+                            <Input.Currency
+                                placeholder="Isikan rate asuransi"
+                                id="rate_asuransi"
+                                name="rate_asuransi"
+                                value={value}
+                                allowDecimals={true}
+                                decimalSeparator={','}
+                                groupSeparator={'.'}
+                                register={register}
+                                errors={errors.rate_asuransi}
+                                validation={formValidation.rate_asuransi}
+                                onChange={(value) => setValue('rate_asuransi', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                            />
+                        )}
+                    />
                 </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Angsuran Promo / Bulan </label>
-                    <Input.Currency
-                        placeholder="Isikan angsuran"
-                        id="angsuran"
+                    <Controller
+                        control={control}
                         name="angsuran"
-                        value={angsuran}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        register={register}
-                        errors={errors.angsuran}
-                        validation={formValidation.angsuran}
-                        onChange={(value, name) => console.log(value, name)} />
+                        id="angsuran"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan angsuran"
+                                        id="angsuran"
+                                        name="angsuran"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        register={register}
+                                        errors={errors.angsuran}
+                                        validation={formValidation.angsuran}
+                                        onChange={(value) => setValue('angsuran', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
+                    />
+
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Angsuran Normal Setelah Promo / Bulan </label>
-                    <Input.Currency
-                        placeholder="Isikan angsuran setelah promo"
-                        id="angsuranSetelahPromo"
-                        name="angsuranSetelahPromo"
-                        value={angsuranPromo}
-                        allowDecimals={true}
-                        decimalSeparator={','}
-                        groupSeparator={'.'}
-                        onChange={(value, name) => console.log(value, name)} />
+                    <Controller
+                        control={control}
+                        name="angsuran_setalah_promo"
+                        id="angsuran_setalah_promo"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan angsuran setelah promo"
+                                        id="angsuran_setalah_promo"
+                                        name="angsuran_setalah_promo"
+                                        value={value}
+                                        allowDecimals={true}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value) => setValue('angsuran_setalah_promo', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
+                    />
+
                 </div>
 
             </div>

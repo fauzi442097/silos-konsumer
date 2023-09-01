@@ -73,7 +73,7 @@ const DataDebitur = ({ params }) => {
                     <div className="row-span-6 col-span-3">
                         <FormNasabah data={dataNasabah} stateNasabah={stateNasabah} register={register} errors={errors} control={control} setValue={setValue} getValues={getValues} />
                         {statusDebitur === 1 ? <FormPasangan /> : ''}
-                        <FormPekerjaan data={dataNasabah}  statePekerjaan={statePekerjaan} register={register} errors={errors} control={control} />
+                        <FormPekerjaan data={dataNasabah}  statePekerjaan={statePekerjaan} register={register} errors={errors} control={control} setValue={setValue} getValues={getValues} />
                         <FormPembiayaan data={dataNasabah} statePembiayaan={statePembiayaan} register={register} errors={errors} control={control} setValue={setValue} getValues={getValues} />
                         <FormBiaya data={dataNasabah} register={register} errors={errors} control={control} setValue={setValue}/>
                     </div>
