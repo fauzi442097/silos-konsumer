@@ -26,7 +26,6 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
     let dataNasabah = data ? data.data.data : data;
 
     const [penggunaanDana, setPenggunaanDana] = useState(null);
-    const [dataAsuransi, setDataAsuransi] = useState([]);
     const [asuransi, setAsuransi] = useState(null);
     const [jangkaWaktu, setJangkaWaktu] = useState(null);
     const [loadingAsuransi, setLoadingAsuransi] = useState(false);
@@ -74,18 +73,18 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
 
     useEffect(() => {
         if (dataNasabah) {
-            setJangkaWaktu(dataNasabah.jangkaWaktu);
-            setValue('plafon', dataNasabah.plafon, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('suku_bunga', dataNasabah.rate, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('jangka_waktu', dataNasabah.jangkaWaktu, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('suku_bunga_promo', dataNasabah.promo ? dataNasabah.promo.ratePromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('jangka_waktu_promo', dataNasabah.promo ? dataNasabah.promo.bulanPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setAsuransi({ value: dataNasabah.asuransi.asuransiId, label: dataNasabah.asuransi.definition });
-            setValue('rate_asuransi', dataNasabah.rateAsuransi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('angsuran', dataNasabah.promo ? dataNasabah.promo.angsuranNormal : dataNasabah.totalAngsuran, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('angsuran_setalah_promo', dataNasabah.promo ? dataNasabah.promo.angsuranPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('cif', dataNasabah.cifCore, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('no_rek_afiliasi', dataNasabah.noRekAfiliasi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('penggunaan_dana', { value: dataNasabah[0].nasabah.penggunaan_dana }, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
+            setValue('plafon', dataNasabah[0].plafon, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('suku_bunga', dataNasabah[0].rate, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('jangka_waktu', dataNasabah[0].jangka_waktu, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('suku_bunga_promo', dataNasabah[0].promo ? dataNasabah[0].promo.rate_promo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('jangka_waktu_promo', dataNasabah[0].promo ? dataNasabah[0].promo.bulan_promo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('asuransi', { value: dataNasabah[0].asuransi.asuransi_id, label: dataNasabah[0].asuransi.definition }, { shouldDirty: true, shouldValidate: true, shouldTouched: true } )
+            setValue('rate_asuransi', dataNasabah[0].rate_asuransi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('angsuran', dataNasabah[0].promo ? dataNasabah[0].promo.angsuran_normal : dataNasabah[0].total_angsuran, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('angsuran_setalah_promo', dataNasabah[0].promo ? dataNasabah[0].promo.angsuran_promo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('cif', dataNasabah[0].nasabah.cif, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('no_rek_afiliasi', dataNasabah[0].no_rek_afiliasi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
         }
     }, [dataNasabah]);
 
@@ -205,18 +204,19 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                         control={control}
                         name="asuransi"
                         id="asuransi"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
                                 placeholder="Isikan asuransi"
                                 name="asuransi"
                                 id="asuransi"
                                 options={arrAsuransi}
-                                value={asuransi}
+                                value={value}
                                 register={register}
                                 errors={errors.asuransi}
                                 validation={formValidation.asuransi}
-                                onChange={(e) => handleChange(e, 'asuransi', onChange)}
+                                // onChange={(e) => handleChange(e, 'asuransi', onChange)}
+                                onChange={(value) => setValue('asuransi', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
                             />
                         )}
                     />

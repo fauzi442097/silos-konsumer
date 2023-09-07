@@ -1,13 +1,71 @@
-import Dropdown, { DropdownItem } from "@/components/Dropdown";
 import { formatRupiah } from "@/lib/utils";
-import Badge from "@/components/Badge";
+import Badge from '@/components/Badge'
+import Dropdown, { DropdownItem } from "@/components/Dropdown";
 
-const DropdownAction = () => {
+const DropdownAction = (data) => {
+    console.log(data);
+    let id = data.data.id;
+
     return (
         <Dropdown>
             <DropdownItem href="#">Data Simulasi</DropdownItem>
-            <DropdownItem href="/prospek_baru/debitur_baru/pengajuan">Proses Pengajuan</DropdownItem>
+            <DropdownItem href={`/pengajuan_kredit/data_debitur_pembiayaan/${id}`}>Proses Pengajuan</DropdownItem>
         </Dropdown>
+    )
+}
+
+const JenisDebitur = (data) => {
+    let jenis = '';
+
+    if(data.idChannel == 2) {
+        jenis = <Badge variant={'primary'}> SIP </Badge>
+    } else {
+        jenis = <Badge variant={'success'}> Calon Debitur </Badge>
+    }
+
+    return (
+        jenis
+    )
+}
+
+const StatusDebitur = (data) => {
+    let status = '';
+
+    if (data.bicheck) {
+        if (data.bicheck.biCheckStatusId) {
+            status = <Badge variant={'success'}> Completed </Badge>
+        } else {
+            if (data.bicheck.document.length > 0) {
+                status = <Badge variant={'warning'}> Uploaded </Badge>
+            } else {
+                status = <Badge variant={'warning'}> Progress Slik </Badge>
+            }
+        }
+    } else {
+        status = <Badge variant={'danger'}> Slik Checking </Badge>
+    }
+    
+    return (
+        status
+    )
+}
+
+const HasilScoring = (data) => {
+    let hasil = '';
+
+    if (data.scoringRange) {
+        let hasilScoring = data.scoringRange.isLayak;
+        if (hasilScoring) {
+            hasil = <Badge variant={'success'}> Layak </Badge>;
+        } else {
+            hasil = <Badge variant={'danger'}> Tidak Layak </Badge>;
+        }
+    } else {
+        hasil = '';
+    }
+
+    return (
+        hasil
     )
 }
 
@@ -22,28 +80,25 @@ export const columns = [
     },
     {
         name: 'Aksi',
-        cell: (row, index, column, id) => <DropdownAction/>,
+        cell: (row, index, column, id) => <DropdownAction data={row}/>,
         ignoreRowClick: false,
         allowOverflow: true,
         button: true,
     },
     {
-        name: 'Nama Nasabah',
-        selector: (row) => row.nmProspek,
-        cellExport: row => row.nmProspek,
+        name: 'Nama Debitur',
+        selector: (row) => row.nasabah.namaNasabah,
+        cellExport: row => row.nasabah.namaNasabah,
         sortable: true,
-        center: false,
-        wrap: true,
-        grow: 3
+        center: true,
+        wrap: false,
     },
     {
-        name: 'NIK',
-        selector: (row) => row.noIdentitas,
-        cellExport: row => row.noIdentitas,
-        sortable: true,
-        center: false,
-        wrap: true,
-        grow: 3
+        name: 'Jenis Debitur',
+        cell: (row, index, column, id) => <JenisDebitur data={row}/>,
+        ignoreRowClick: false,
+        allowOverflow: true,
+        button: true,
     },
     {
         name: 'Produk',
@@ -52,39 +107,52 @@ export const columns = [
         sortable: true,
         center: false,
         wrap: true,
-        grow: 3
+        grow: 2
     },
     {
         name: 'Plafon',
         selector: (row) => formatRupiah(row.plafon),
         cellExport: row => formatRupiah(row.plafon),
         sortable: true,
-        center: false,
+        right: true,
         wrap: true,
-        grow: 1
     },
     {
-        name: 'Jangka Waktu',
+        name: 'Jangka Waktu (Bulan)',
         selector: (row) => row.jangkaWaktu,
         cellExport: row => row.jangkaWaktu,
         sortable: true,
-        center: false,
+        right: false,
         wrap: true,
     },
     {
-        name: 'Angsuran Normal',
+        name: 'Angsuran',
         selector: (row) => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
         cellExport: row => row.promo ? formatRupiah(row.promo.angsuranNormal) : formatRupiah(row.totalAngsuran),
         sortable: true,
-        center: false,
-        wrap: true,
+        right: true,
+        wrap: false,
     },
     {
         name: 'Angsuran Promo',
-        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranPromo) : formatRupiah(0),
-        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranPromo) : formatRupiah(0),
+        selector: (row) => row.promo ? formatRupiah(row.promo.angsuranPromo) : 0,
+        cellExport: row => row.promo ? formatRupiah(row.promo.angsuranPromo) : 0,
         sortable: true,
-        center: false,
+        right: true,
         wrap: true,
     },
+    {
+        name: 'Status',
+        cell: (row, index, column, id) => <StatusDebitur data={row}/>,
+        ignoreRowClick: false,
+        allowOverflow: true,
+        button: true,
+    },
+    {
+        name: 'Hasil Analisa',
+        cell: (row, index, column, id) => <HasilScoring data={row}/>,
+        ignoreRowClick: false,
+        allowOverflow: true,
+        button: true,
+    }
 ]

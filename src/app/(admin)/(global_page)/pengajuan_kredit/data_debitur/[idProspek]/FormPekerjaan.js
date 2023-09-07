@@ -52,7 +52,7 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
         if (getSumberPendapatan.isSuccess) {
             let dataSumberPendapatan = getSumberPendapatan.data?.data.data;
             dataSumberPendapatan.map((item) => {
-                return arrSumberPendapatan.push({ label: item.idSumber, label: item.keterangan })
+                return arrSumberPendapatan.push({ value: item.idSumber, label: item.keterangan })
             })
         }
 
@@ -93,8 +93,9 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
         setWilayahKantor(text);
     }
 
-    const onSuggestHandlerKantor = (text) => {
-        setWilayahKantor(text);
+    const onSuggestHandlerKantor = (item) => {
+        setWilayahKantor(item.label);
+        statePekerjaan.setIdWilayahKantor(item.value);
         setSuggestionsKantor([]);
     }
 
@@ -122,6 +123,7 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
     useEffect(() => {
         setDataWilayahKantor(arrWilayah);
         if (dataNasabah) {
+            statePekerjaan.setIdPekerjaan({ value: dataNasabah.pekerjaan.idPekerjaan, label: dataNasabah.pekerjaan.nmPekerjaan });
             setPekerjaan({ value: dataNasabah.pekerjaan.idPekerjaan, label: dataNasabah.pekerjaan.nmPekerjaan + ' - Max.Umur (' + dataNasabah.pekerjaan.masaKerjaUmur + ' Tahun)' })
             setGaji(dataNasabah.pendapatanBulan);
             setPendapatanLainnya(dataNasabah.pendapatanLainnya);
@@ -174,7 +176,8 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                     <Input.Number
                         placeholder="Isikan nomor telepon kantor"
                         id="no_telp_kantor"
-                        name="no_telp_kantor" />
+                        name="no_telp_kantor"
+                        register={register} />
                 </div>
             </div>
 
@@ -195,14 +198,16 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                     <Input.Text
                         placeholder="Isikan nama pimpinan"
                         id="nama_pimpinan"
-                        name="nama_pimpinan" />
+                        name="nama_pimpinan"
+                        register={register} />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className="block mb-3"> TUK/NRP/NIP/NPP/NOTAS </label>
                     <Input.Text
                         placeholder="Isikan TUK/NRP/NIP/NPP/NOTAS"
                         id="tuk"
-                        name="tuk" />
+                        name="tuk"
+                        register={register} />
                 </div>
             </div>
 
@@ -233,7 +238,7 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                     {suggestionsKantor && suggestionsKantor.map((item, i) =>
                         <div key={i}
                             className="form-control-auto bg-slate-50 block transition duration-200 px-2 py-2 cursor-pointer my-2 truncate rounded-lg"
-                            onClick={() => onSuggestHandlerKantor(item.label)}>
+                            onClick={() => onSuggestHandlerKantor(item)}>
                             {item.label}
                         </div>
                     )}
@@ -281,7 +286,6 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                                 errors={errors.pendapatan_bulanan}
                                 validation={formValidation.pendapatan_bulanan}
                                 allowDecimals={false}
-                                allowNegativeValue={false}
                                 decimalSeparator={','}
                                 groupSeparator={'.'}
                                 onChange={(value, name) => setGaji(value)}
@@ -320,6 +324,8 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                                 placeholder="Isikan ULP"
                                 id="ulp"
                                 name="ulp"
+                                register={register}
+                                defaultValue={dataNasabah?.pendapatanLainnya2}
                                 value={ulp}
                                 allowDecimals={false}
                                 allowNegativeValue={false}
@@ -328,7 +334,6 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                                 onChange={(value, name) => setUlp(value)} />
                         }
                     />
-
                 </div>
             </div>
 

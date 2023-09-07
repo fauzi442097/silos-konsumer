@@ -19,9 +19,9 @@ const FormBiaya = ({ data, register, errors, control, setValue }) => {
     useEffect(() => {
         if (dataNasabah) {
             setValue('biaya_notaris', 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('biaya_provisi', dataNasabah.byProvisi ? dataNasabah.byProvisi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('biaya_asuransi', dataNasabah.byAsuransi ? dataNasabah.byAsuransi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setValue('biaya_administrasi_kredit', dataNasabah.byAdministrasi !== "0" ? dataNasabah.byAdministrasi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_provisi', dataNasabah[0].by_provisi ? dataNasabah[0].by_provisi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_asuransi', dataNasabah[0].by_asuransi ? dataNasabah[0].by_asuransi : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setValue('biaya_administrasi_kredit', dataNasabah[0].by_adm_kredit ? dataNasabah[0].by_adm_kredit : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
         }
     }, [dataNasabah]);
 
@@ -87,7 +87,6 @@ const FormBiaya = ({ data, register, errors, control, setValue }) => {
                             />
                         )}
                     />
-
                 </div>
             </div>
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
@@ -118,7 +117,6 @@ const FormBiaya = ({ data, register, errors, control, setValue }) => {
                             />
                         )}
                     />
-
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Biaya Administrasi Kredit </label>
