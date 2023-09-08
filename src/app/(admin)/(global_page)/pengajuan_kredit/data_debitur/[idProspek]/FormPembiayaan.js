@@ -80,7 +80,8 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
             setValue('jangka_waktu', dataNasabah.jangkaWaktu, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('suku_bunga_promo', dataNasabah.promo ? dataNasabah.promo.ratePromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('jangka_waktu_promo', dataNasabah.promo ? dataNasabah.promo.bulanPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            setAsuransi({ value: dataNasabah.asuransi.asuransiId, label: dataNasabah.asuransi.definition });
+            // setAsuransi({ value: dataNasabah.asuransi.asuransiId, label: dataNasabah.asuransi.definition });
+            setValue('asuransi', { value: dataNasabah.asuransi.asuransiId, label: dataNasabah.asuransi.definition }, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('rate_asuransi', dataNasabah.rateAsuransi, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('angsuran', dataNasabah.promo ? dataNasabah.promo.angsuranNormal : dataNasabah.totalAngsuran, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('angsuran_setalah_promo', dataNasabah.promo ? dataNasabah.promo.angsuranPromo : 0, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
@@ -205,18 +206,18 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                         control={control}
                         name="asuransi"
                         id="asuransi"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
                                 placeholder="Isikan asuransi"
                                 name="asuransi"
                                 id="asuransi"
                                 options={arrAsuransi}
-                                value={asuransi}
+                                value={value}
                                 register={register}
                                 errors={errors.asuransi}
                                 validation={formValidation.asuransi}
-                                onChange={(e) => handleChange(e, 'asuransi', onChange)}
+                                onChange={(value) => setValue('asuransi', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
                             />
                         )}
                     />

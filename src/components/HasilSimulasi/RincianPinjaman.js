@@ -129,13 +129,13 @@ const RincianPinjaman = ({ hitStoreSimulasi, hitAjukanPinjaman, setShowModal, cl
                     <Button 
                         onClick={handleSimpanSimulasi}
                         variant={'light'}
-                        className={`${(hitStoreSimulasi.isLoading) && 'mr-3 cursor-not-allowed md:mr-3'}`}> 
+                        className={`mr-3 ${(hitStoreSimulasi.isLoading) && 'cursor-not-allowed'}`}> 
                         {(hitStoreSimulasi.isLoading) && <LoadingSpinner />}
                         {(hitStoreSimulasi.isLoading) ? 'Processing' : 'Simpan Simulasi'}
                     </Button>
                     <Button 
                         onClick={handleAjukanPinjaman}
-                        className={`${(hitAjukanPinjaman.isLoading) && 'mr-3 cursor-not-allowed md:mr-3'}`}
+                        className={`mr-3 ${(hitAjukanPinjaman.isLoading) && 'cursor-not-allowed'}`}
                     >
                     {(hitAjukanPinjaman.isLoading) && <LoadingSpinner />}
                     {(hitAjukanPinjaman.isLoading) ? 'Processing' : 'Ajukan Pinjaman'}

@@ -124,10 +124,11 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
         setDataWilayahKantor(arrWilayah);
         if (dataNasabah) {
             statePekerjaan.setIdPekerjaan({ value: dataNasabah.pekerjaan.idPekerjaan, label: dataNasabah.pekerjaan.nmPekerjaan });
-            setPekerjaan({ value: dataNasabah.pekerjaan.idPekerjaan, label: dataNasabah.pekerjaan.nmPekerjaan + ' - Max.Umur (' + dataNasabah.pekerjaan.masaKerjaUmur + ' Tahun)' })
-            setGaji(dataNasabah.pendapatanBulan);
-            setPendapatanLainnya(dataNasabah.pendapatanLainnya);
-            setUlp(dataNasabah.pendapatanLainnya2);
+
+            setValue('pekerjaan', { value: dataNasabah.pekerjaan.idPekerjaan, label: dataNasabah.pekerjaan.nmPekerjaan + ' - Max.Umur (' + dataNasabah.pekerjaan.masaKerjaUmur + ' Tahun)' }, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
+            setValue('pendapatan_bulanan', dataNasabah.pendapatanBulan, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
+            setValue('penghasilan_lain', dataNasabah.pendapatanLainnya, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
+            setValue('ulp', dataNasabah.pendapatanLainnya2, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
         }
     }, [dataNasabah]);
 
@@ -143,84 +144,137 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                         control={control}
                         name="pekerjaan"
                         id="pekerjaan"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
                                 placeholder="Isikan pekerjaan"
                                 name="pekerjaan"
                                 id="pekerjaan"
                                 options={arrPekerjaan}
-                                value={pekerjaan}
+                                value={value}
                                 register={register}
                                 errors={errors.pekerjaan}
                                 isLoading={getPekerjaan.isLoading}
                                 disabled={getPekerjaan.isLoading}
                                 validation={formValidation.pekerjaan}
-                                onChange={(e) => handleChange(e, 'changePekerjaan', onChange)}
+                                // onChange={(e) => handleChange(e, 'changePekerjaan', onChange)}
+                                onChange={(value) => setValue('pekerjaan', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
                             />
-                        )} />
+                        )}
+                    />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Nama Kantor </label>
-                    <Input.Text
-                        placeholder="Isikan nama kantor"
-                        id="nama_kantor"
+                    <Controller
+                        control={control}
                         name="nama_kantor"
-                        register={register}
-                        errors={errors.nama_kantor}
-                        validation={formValidation.nama_kantor}
+                        id="nama_kantor"
+                        render={({ field: { value } }) => (
+                            <Input.Text
+                                placeholder="Isikan nama kantor"
+                                id="nama_kantor"
+                                name="nama_kantor"
+                                value={value}
+                                register={register}
+                                errors={errors.nama_kantor}
+                                validation={formValidation.nama_kantor}
+                            />
+                        )}
                     />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Nomor Telepon Kantor </label>
-                    <Input.Number
-                        placeholder="Isikan nomor telepon kantor"
-                        id="no_telp_kantor"
+                    <Controller
+                        control={control}
                         name="no_telp_kantor"
-                        register={register} />
+                        id="no_telp_kantor"
+                        render={({ field: { value } }) => (
+                            <Input.Number
+                                placeholder="Isikan nomor telepon kantor"
+                                id="no_telp_kantor"
+                                name="no_telp_kantor"
+                                register={register}
+                                value={value}
+                            />
+                        )}
+                    />
                 </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Jabatan </label>
-                    <Input.Text
-                        placeholder="Isikan jabatan"
-                        id="jabatan"
+                    <Controller
+                        control={control}
                         name="jabatan"
-                        register={register}
-                        errors={errors.jabatan}
-                        validation={formValidation.jabatan}
+                        id="jabatan"
+                        render={({ field: { value } }) => (
+                            <Input.Text
+                                placeholder="Isikan jabatan"
+                                id="jabatan"
+                                name="jabatan"
+                                value={value}
+                                register={register}
+                                errors={errors.jabatan}
+                                validation={formValidation.jabatan}
+                            />
+                        )}
                     />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Nama Pimpinan </label>
-                    <Input.Text
-                        placeholder="Isikan nama pimpinan"
-                        id="nama_pimpinan"
+                    <Controller
+                        control={control}
                         name="nama_pimpinan"
-                        register={register} />
+                        id="nama_pimpinan"
+                        render={({ field: { value } }) => (
+                            <Input.Text
+                                placeholder="Isikan nama pimpinan"
+                                id="nama_pimpinan"
+                                name="nama_pimpinan"
+                                value={value}
+                                register={register}
+                            />
+                        )}
+                    />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className="block mb-3"> TUK/NRP/NIP/NPP/NOTAS </label>
-                    <Input.Text
-                        placeholder="Isikan TUK/NRP/NIP/NPP/NOTAS"
-                        id="tuk"
+                    <Controller
+                        control={control}
                         name="tuk"
-                        register={register} />
+                        id="tuk"
+                        render={({ field: { value } }) => (
+                            <Input.Text
+                                placeholder="Isikan TUK/NRP/NIP/NPP/NOTAS"
+                                id="tuk"
+                                name="tuk"
+                                value={value}
+                                register={register}
+                            />
+                        )}
+                    />
                 </div>
             </div>
 
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className="block mb-3">Alamat Kantor</label>
-                    <Textarea
-                        placeholder="Isikan alamat kantor"
-                        id="alamat_kantor"
+                    <Controller
+                        control={control}
                         name="alamat_kantor"
-                        register={register}
-                        errors={errors.alamat_kantor}
-                        validation={formValidation.alamat_kantor}
+                        id="alamat_kantor"
+                        render={({ field: { value } }) => (
+                            <Textarea
+                                placeholder="Isikan alamat kantor"
+                                id="alamat_kantor"
+                                name="alamat_kantor"
+                                value={value}
+                                register={register}
+                                errors={errors.alamat_kantor}
+                                validation={formValidation.alamat_kantor}
+                            />
+                        )}
                     />
                 </div>
                 <div style={{ width: "680px" }}>
@@ -233,8 +287,8 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                         register={register}
                         errors={errors.wilayah_kantor}
                         validation={formValidation.wilayah_kantor}
-                        onChange={e => handleWilayahKantor(e.target.value)} />
-
+                        onChange={e => handleWilayahKantor(e.target.value)}
+                    />
                     {suggestionsKantor && suggestionsKantor.map((item, i) =>
                         <div key={i}
                             className="form-control-auto bg-slate-50 block transition duration-200 px-2 py-2 cursor-pointer my-2 truncate rounded-lg"
@@ -274,65 +328,86 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
             <div className="flex flex-row justify-start gap-4 w-full md:flex-nowrap flex-wrap my-4 mb-7" style={{ gap: "30px" }}>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Pendapatan Bulanan Pokok </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={
-                            <Input.Currency
-                                placeholder="Isikan pendapatan bulanan pokok"
-                                id="pendapatan_bulanan"
-                                name="pendapatan_bulanan"
-                                value={gaji}
-                                register={register}
-                                errors={errors.pendapatan_bulanan}
-                                validation={formValidation.pendapatan_bulanan}
-                                allowDecimals={false}
-                                decimalSeparator={','}
-                                groupSeparator={'.'}
-                                onChange={(value, name) => setGaji(value)}
+                    <Controller
+                        control={control}
+                        name="pendapatan_bulanan"
+                        id="pendapatan_bulanan"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan pendapatan bulanan pokok"
+                                        id="pendapatan_bulanan"
+                                        name="pendapatan_bulanan"
+                                        value={value}
+                                        register={register}
+                                        errors={errors.pendapatan_bulanan}
+                                        validation={formValidation.pendapatan_bulanan}
+                                        allowDecimals={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value) => setValue('pendapatan_bulanan', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
                             />
-                        } 
+                        )}
                     />
-                    
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> Penghasilan Lain </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={
-                            <Input.Currency
-                                placeholder="Isikan penghasilan lain"
-                                id="penghasilan_lain"
-                                name="penghasilan_lain"
-                                value={pendapatanLainnya}
-                                defaultValue={dataNasabah?.pendapatanLainnya}
-                                register={register}
-                                allowDecimals={false}
-                                allowNegativeValue={false}
-                                decimalSeparator={','}
-                                groupSeparator={'.'}
-                                onChange={(value, name) => setPendapatanLainnya(value)} 
+                    <Controller
+                        control={control}
+                        name="penghasilan_lain"
+                        id="penghasilan_lain"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan penghasilan lain"
+                                        id="penghasilan_lain"
+                                        name="penghasilan_lain"
+                                        value={value}
+                                        defaultValue={dataNasabah?.pendapatanLainnya}
+                                        register={register}
+                                        allowDecimals={false}
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value) => setValue('penghasilan_lain', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
                             />
-                        }
+                        )}
                     />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className='block mb-3'> ULP </label>
-                    <Input.Group
-                        inputGroupText={'Rp'}
-                        inputElement={
-                            <Input.Currency
-                                placeholder="Isikan ULP"
-                                id="ulp"
-                                name="ulp"
-                                register={register}
-                                defaultValue={dataNasabah?.pendapatanLainnya2}
-                                value={ulp}
-                                allowDecimals={false}
-                                allowNegativeValue={false}
-                                decimalSeparator={','}
-                                groupSeparator={'.'}
-                                onChange={(value, name) => setUlp(value)} />
-                        }
+                    <Controller
+                        control={control}
+                        name="ulp"
+                        id="ulp"
+                        render={({ field: { value } }) => (
+                            <Input.Group
+                                inputGroupText={'Rp'}
+                                inputElement={
+                                    <Input.Currency
+                                        placeholder="Isikan ULP"
+                                        id="ulp"
+                                        name="ulp"
+                                        register={register}
+                                        defaultValue={dataNasabah?.pendapatanLainnya2}
+                                        value={value}
+                                        allowDecimals={false}
+                                        allowNegativeValue={false}
+                                        decimalSeparator={','}
+                                        groupSeparator={'.'}
+                                        onChange={(value) => setValue('ulp', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                    />
+                                }
+                            />
+                        )}
                     />
                 </div>
             </div>

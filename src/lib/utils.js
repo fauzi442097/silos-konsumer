@@ -31,3 +31,10 @@ export const getKeyOfObject = (obj, value) => {
 export const clearFormatRupiah = (value) => {
    return Number(value.replaceAll('.', ''))
 }
+
+export const formatTanggal = (value) => {
+   value = moment(value, "YYYY-MM-DD");
+   let tanggal = moment(value).format("YYYY-MM-DD");
+
+   return  tanggal;
+}

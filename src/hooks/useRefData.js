@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useMySwal } from './useMySwal';
 import useGet from './useGet';
+import moment from 'moment';
+import { formatTanggal } from '@/lib/utils';
 
 export const useGetBiCheckStatus = () => {
    const mySwal = useMySwal()
@@ -63,7 +65,7 @@ export const useGetPenggunaanDana = () => {
 };
 
 export const useGetAsuransi = (idProduct = null, tglLahir = null, idPekerjaan = null, jangkaWaktu = null) => {
-    const getAsuransi = useGet(['refAsuransi', idProduct], `/master/list/asuransi/${idProduct}?tglLahir=${tglLahir}&idPekerjaan=${idPekerjaan}&jangkaWaktu=${jangkaWaktu}`, { retry: false, refetchOnWindowFocus: false, enabled: idProduct != null });
+    const getAsuransi = useGet(['refAsuransi', idProduct], `/master/list/asuransi/${idProduct}?tglLahir=${formatTanggal(tglLahir)}&idPekerjaan=${idPekerjaan}&jangkaWaktu=${jangkaWaktu}`, { retry: false, refetchOnWindowFocus: false, enabled: idProduct != null });
     let arrAsuransi = [];
     if(getAsuransi.isSuccess){
         let dataAsuransi = getAsuransi.data?.data.data;
@@ -81,7 +83,7 @@ export const useGetAsuransi = (idProduct = null, tglLahir = null, idPekerjaan = 
 
 export const useGetWilayah = () => {
     const mySwal = useMySwal();
-    const getWilayah = useGet(['refWilayah'], `/master/list/location?q=cimahi`, { retry: false, refetchOnWindowFocus: false});
+    const getWilayah = useGet(['refWilayah'], `/master/list/location?q=bandung`, { retry: false, refetchOnWindowFocus: false});
     let arrWilayah = [];
     if(getWilayah.isSuccess){
         let dataWilayah = getWilayah.data?.data.data;
