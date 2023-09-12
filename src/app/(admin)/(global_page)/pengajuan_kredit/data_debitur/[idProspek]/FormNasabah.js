@@ -86,9 +86,12 @@ const usePostInquiryKtp = (mySwal, setValue) => {
             mySwal.warning('Terjadi kesalahan !')
         },
         onSuccess: (data, variables, context) => {
+            console.log(data);
+            let valueTanggalLahir = { startDate: moment(data.data.data[0].brtdt).format('L'), endDate: moment(data.data.data[0].brtdt).format('L') }
+
             setValue('nama_debitur', data.data.data[0].fullnm);
             setValue('tempat_lahir', data.data.data[0].brtplace);
-            setValue('tanggal_lahir', moment(data.data.data[0].brtdt).format('L'));
+            setValue('tanggal_lahir', valueTanggalLahir);
             setValue('status_ktp', data.data.data[0].marriageid === 1 ? true : false);
             setValue('ibu_kandung', data.data.data[0].mothrnm);
             setValue('alamat_ktp', data.data.data[0].addr + ' RT. ' + data.data.data[0].rt + ' RW. ' + data.data.data[0].rw);
@@ -175,6 +178,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
     
     function onValueChange(event) {
         setSelectedOption(event.target.value)
+        stateNasabah.setJenisKelamin(event.target.value);
     }
 
     const handleWilayah = (text) => {
@@ -210,10 +214,10 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
             setValue('nama_debitur', dataNasabah.nmProspek, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('no_ktp', dataNasabah.noIdentitas, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
 
-            let valueTglLahir = { startDate: moment(dataNasabah.tglLahir).format('L'), endDate: moment(dataNasabah.tglLahir).format('L') }
-            setValue('tanggal_lahir', valueTglLahir);
+            let setTglLhr = { startDate: moment(dataNasabah.tglLahir).format('L'), endDate: moment(dataNasabah.tglLahir).format('L') }
+            setValue('tanggal_lahir', setTglLhr);
             
-            stateNasabah.setTglLahir(valueTglLahir);
+            stateNasabah.setTglLahir(setTglLhr);
             stateNasabah.setStatusMenikah({ value: dataNasabah.statusKawin.idStatusKawin, label: dataNasabah.statusKawin.nmStatusKawin });
         }
     }, [dataNasabah]);
@@ -269,44 +273,6 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                 </div>
                 <div className="mt-10" style={{ width: "325px" }}>
                     <div className='flex gap-2'>
-                        {/* <Controller
-                            control={control}
-                            name="jenis_kelamin"
-                            id="jenis_kelamin"
-                            render={({ field: { value } }) => (
-                                <Radio 
-                                    className="mr-3" 
-                                    label="Laki - laki" 
-                                    name="jenis_kelamin" 
-                                    id="jenis_kelamin" 
-                                    value="0"
-                                    register={register}
-                                    errors={errors.jenis_kelamin}
-                                    validation={formValidation.jenis_kelamin}
-                                    onChange={onValueChange} 
-                                    checked={selectedOption === "0"} 
-                                />
-                            )} 
-                        />
-                        <Controller
-                            control={control}
-                            name="jenis_kelamin"
-                            id="jenis_kelamin"
-                            render={({ field: { value } }) => (
-                                <Radio 
-                                    className="mr-3" 
-                                    label="Perempuan"
-                                    name="jenis_kelamin"
-                                    id="jenis_kelamin"
-                                    value="1"
-                                    register={register}
-                                    errors={errors.jenis_kelamin}
-                                    validation={formValidation.jenis_kelamin}
-                                    onChange={onValueChange} 
-                                    checked={selectedOption === "1"}
-                                />
-                            )}
-                        /> */}
                         <Radio label="Laki - laki" name="jenis_kelamin" id="jenis_kelamin" value="0" className="mr-3" onChange={onValueChange} checked={selectedOption === "0"} />
                         <Radio label="Perempuan" name="jenis_kelamin" id="jenis_kelamin" value="1" className="mr-3" onChange={onValueChange} checked={selectedOption === "1"} />
                     </div>
@@ -473,8 +439,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                                 register={register}
                                 errors={errors.tanggal_lahir}
                                 validation={formValidation.tanggal_lahir}
-                                onChange={(e) => setValue('tanggal_lahir', e)}
-                                // onChange={(value) => setValue('tanggal_lahir', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                onChange={(e) => setValue('tanggal_lahir', e)} 
                             />
                         )}
                     />
@@ -550,8 +515,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                     <label className="block mb-3">Nomor Telepon</label>
                     <Controller
                         control={control}
-                        name="no_handphone"
-                        id="no_handphone"
+                        name="no_telepon"
+                        id="no_telepon"
                         render={({ field: { value } }) => (
                             <Input.Number
                                 minLength={11}
@@ -611,7 +576,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         label={'Klik jika alamat sama dengan KTP'}
                         name={'domisili'}
                         id="domisili"
-                        onChange={() => setDomisili(alamat_ktp.value)} />
+                        onChange={() => setDomisili(alamat_ktp.value)} 
+                    />
                 </div>
                 <div style={{ width: "325px" }}>
                     <label className="block mb-3">Kode POS</label>
@@ -646,8 +612,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         register={register}
                         errors={errors.wilayah_debitur}
                         validation={formValidation.wilayah_debitur}
-                        onChange={e => handleWilayah(e.target.value)} />
-
+                        onChange={e => handleWilayah(e.target.value)} 
+                    />
                     {suggestions && suggestions.map((item, i) =>
                         <div key={i}
                             className="form-control-auto bg-slate-50 block transition duration-200 px-2 py-2 cursor-pointer my-2 truncate rounded-lg"

@@ -17,6 +17,8 @@ import Textarea from "@/components/Form/Textarea";
 import Checkbox from "@/components/Form/Checkbox";
 import ErrorMessageForm from "@/components/Form/ErrorMessageForm";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { set } from "lodash";
+import { formatTanggalDB } from "@/lib/utils";
 
 const formValidation = {
     produk: { required: FormRules.Required('Pilih produk') },
@@ -87,7 +89,7 @@ const usePostInquiryKtp = (mySwal, setValue) => {
         onSuccess: (data, variables, context) => {
             setValue('nama_debitur', data.data.data[0].fullnm);
             setValue('tempat_lahir', data.data.data[0].brtplace);
-            setValue('tanggal_lahir', moment(data.data.data[0].brtdt).format('L'));
+            setValue('tanggal_lahir', data.data.data[0].brtdt);
             setValue('status_ktp', data.data.data[0].marriageid === 1 ? true : false);
             setValue('ibu_kandung', data.data.data[0].mothrnm);
             setValue('alamat_ktp', data.data.data[0].addr + ' RT. ' + data.data.data[0].rt + ' RW. ' + data.data.data[0].rw);
@@ -148,7 +150,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                 break;
             case 'status_ktp':
                 onChange(value);
-                let ktpSelected = statusKTP.find((item, i) => item.value === value)
+                let ktpSelected = statusKTP.find((item, i) => item.value === value);
                 setStatKtp(ktpSelected);
 
                 break;
@@ -169,13 +171,13 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
     }
 
     function onValueChange(event) {
-        setSelectedOption(event.target.value)
+        setSelectedOption(event.target.value);
+        stateNasabah.setJenisKelamin(event.target.value);
     }
 
     const handleWilayah = (text) => {
-        // let text = getValues('wilayah_debitur');
         let matches = [];
-
+        
         if (text.length > 0) {
             matches = dataWilayah.filter(dataWilayah => {
                 const regex = new RegExp(`${text}`, 'gi')
@@ -200,6 +202,7 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
     
     useEffect(() => {
         setDataWilayah(arrWilayah);
+
         if (dataNasabah) {
             let labelStatusKtp = '';
             if (dataNasabah[0].nasabah.is_lifetime === true) {
@@ -210,12 +213,15 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
 
             setValue('produk', { value: dataNasabah[0].product.id, label: dataNasabah[0].product.prod_name }, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('nama_debitur', dataNasabah[0].nasabah.nama_nasabah, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            setSelectedOption(dataNasabah[0].nasabah.jns_kelamin);
+            stateNasabah.setJenisKelamin(dataNasabah[0].nasabah.jns_kelamin);
             setValue('no_ktp', dataNasabah[0].nasabah.no_identitas, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('no_kk', dataNasabah[0].nasabah.no_kk, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('npwp', dataNasabah[0].nasabah.npwp, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('status_ktp', { value: dataNasabah[0].nasabah.is_lifetime, label: labelStatusKtp }, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            
-            let valueTglLahir = { startDate: moment(dataNasabah[0].nasabah.tgl_lahir).format('L'), endDate: moment(dataNasabah[0].tglLahir).format('L') }
+            setValue('status_debitur', { value: dataNasabah[0].nasabah.status_kawin.id_status_kawin, label: dataNasabah[0].nasabah.status_kawin.nm_status_kawin }, { shouldDirty: true, shouldValidate: true, shouldTouched: true } )
+
+            let valueTglLahir = { startDate: dataNasabah[0].nasabah.tgl_lahir, endDate: dataNasabah[0].nasabah.tgl_lahir };
             setValue('tempat_lahir', dataNasabah[0].nasabah.tpt_lahir, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('tanggal_lahir', valueTglLahir, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('ibu_kandung', dataNasabah[0].nasabah.sid_ngik, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
@@ -224,8 +230,9 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
             setValue('alamat_ktp', dataNasabah[0].nasabah.alamat, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('alamat_domisili', dataNasabah[0].nasabah.alamat_domisili, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('kode_pos', dataNasabah[0].nasabah.kode_pos, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            
             setValue('wilayah_debitur', dataNasabah[0].nasabah.wilayah_nasabah.wilayah, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
-            // setWilayah(dataNasabah[0].nasabah.wilayah_nasabah.wilayah);
+            stateNasabah.setIdWilayah(dataNasabah[0].nasabah.wilayah_nasabah.id);
 
             stateNasabah.setTglLahir(valueTglLahir);
             stateNasabah.setStatusMenikah({ value: dataNasabah[0].nasabah.status_kawin.id_status_kawin, label: dataNasabah[0].nasabah.status_kawin.nm_status_kawin });
@@ -284,8 +291,8 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                 </div>
                 <div className="mt-10" style={{ width: "325px" }}>
                     <div className='flex gap-2'>
-                        <Radio label="Laki - laki" name="jenis_kelamin" id="jenis_kelamin" value="0" className="mr-3" onChange={onValueChange} checked={selectedOption === "0"} />
-                        <Radio label="Perempuan" name="jenis_kelamin" id="jenis_kelamin" value="1" className="mr-3" onChange={onValueChange} checked={selectedOption === "1"} />
+                        <Radio label="Laki - laki" name="jenis_kelamin" id="jenis_kelamin" value={0} className="mr-3" onChange={onValueChange} checked={selectedOption === 0} />
+                        <Radio label="Perempuan" name="jenis_kelamin" id="jenis_kelamin" value={1} className="mr-3" onChange={onValueChange} checked={selectedOption === 1} />
                     </div>
                 </div>
             </div>
@@ -483,20 +490,21 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                         control={control}
                         name="status_debitur"
                         id="status_debitur"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
                                 placeholder="Isikan status debitur"
                                 id="status_debitur"
                                 name="status_debitur"
-                                value={stateNasabah.statusMenikah}
+                                value={value}
                                 options={arrMenikah}
                                 register={register}
                                 errors={errors.status_debitur}
                                 isLoading={getMenikah.isLoading}
                                 disabled={getMenikah.isLoading}
                                 validation={formValidation.status_debitur}
-                                onChange={(e) => handleChange(e, 'statusDebitur', onChange)} 
+                                // onChange={(e) => handleChange(e, 'statusDebitur', onChange)} 
+                                onChange={(value) => setValue('status_debitur', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
                             />
                         )}
                     />
@@ -624,14 +632,14 @@ const FormNasabah = ({ data, stateNasabah, register, errors, control, setValue, 
                                 placeholder="Isikan cari kelurahan debitur"
                                 id="wilayah_debitur"
                                 name="wilayah_debitur"
-                                value={value}
+                                value={wilayah ? wilayah : value}
                                 register={register}
                                 errors={errors.wilayah_debitur}
                                 validation={formValidation.wilayah_debitur}
-                                onChange={(e) => handleWilayah(e.target.value)}
-                                // onChange={(e) => setValue('wilayah_debitur', e.target.value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                onChange={e => {handleWilayah(e.target.value), setValue('wilayah_debitur', e.target.value)}} 
+                                // onChange={e => setValue('wilayah_debitur', e.target.value)} 
                             />
-                        )}
+                        )} 
                     />
                     {suggestions && suggestions.map((item, i) =>
                         <div key={i}

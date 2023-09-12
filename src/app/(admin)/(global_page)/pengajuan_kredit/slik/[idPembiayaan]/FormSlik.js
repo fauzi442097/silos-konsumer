@@ -20,11 +20,11 @@ const formValidation = {
 }
 
  
-const FormSlik = ({ dataSlikDebitur }) => {
+const FormSlik = ({ dataSlikDebitur, id }) => {
 
     const router = useRouter()
     const {dataBiCheck, query: queryBiCheck} = useGetBiCheckStatus()
-    const {dataListPinjaman, query: queryListPinjaman} = useGetListPinjamanByProductId(dataSlikDebitur.idProduct)
+    const {dataListPinjaman, query: queryListPinjaman} = useGetListPinjamanByProductId(dataSlikDebitur[0].product.id)
 
 
     const { register, control, handleSubmit, formState: { errors }  } = useForm({
@@ -76,7 +76,7 @@ const FormSlik = ({ dataSlikDebitur }) => {
     }
 
   return (
-    <div className='bg-white w-[75%] shadow rounded-2xl p-8 self-start dark:bg-dark-depth1'> 
+    <div className='bg-white w-[75%] shadow rounded-2xl p-8 self-start dark:bg-dark-depth1 md:w-full'> 
 
         <p className='font-inter-medium text-xl text-gray-500 mb-1'> Update Hasil Slik Checking </p>
      
@@ -147,7 +147,7 @@ const FormSlik = ({ dataSlikDebitur }) => {
         />}
 
         <div className='mt-8 flex flex-wrap justify-between'>
-            <Button variant={'secondary'} onClick={() => router.push('/pengajuan_kredit/ceklis_dokumen/4201')}> Kembali </Button>
+            <Button variant={'secondary'} onClick={() => router.push(`/pengajuan_kredit/ceklis_dokumen/${id}`)}> Kembali </Button>
             <Button onClick={handleSubmit(onSubmit)}> Simpan & Lanjutkan </Button>
         </div> 
     </div>

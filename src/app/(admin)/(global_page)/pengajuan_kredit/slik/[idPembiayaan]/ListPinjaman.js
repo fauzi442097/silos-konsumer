@@ -76,14 +76,14 @@ const TableRows = ({ fields, remove, register, errors, control, handleChange, ko
                />
             </td>
             <td className='px-6 py-3'> 
-               <div className='flex flex-wrap gap-4'>
+               <div className='flex flex-wrap'>
                   <Radio label="Aktif" name={`loan.${index}.status`} register={register} value="active"/>
                   <Radio label="Non Aktif" name={`loan.${index}.status`} register={register} value="inactive"/>
                </div>
                {errors.loan?.[index]?.status && <span className='mt-1 block text-sm form-invalid-message'>{errors.loan?.[index]?.status.message}</span>}
             </td>
             <td className='px-6 py-3' align='center'>
-               <Button variant={'danger'} size={'sm'} onClick={() => remove(index)}>  Hapus </Button>
+               <Button variant={'danger'} size={'sm'} onClick={() => remove(index)}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12Z"/></svg></Button>
             </td>
          </tr>)
       })
@@ -153,7 +153,7 @@ const ListPinjaman = ({
                      <td className='px-6 py-3 font-inter-medium'> Baki Debet </td>
                      <td className='px-6 py-3 font-inter-medium' width={300}> Kolektibilitas </td>
                      <td className='px-6 py-3 font-inter-medium'> Keterangan (Opsional)</td>
-                     <td className='px-6 py-3 font-inter-medium'> Status </td>
+                     <td className='px-6 py-3 font-inter-medium' width={150}> Status </td>
                      <td className='px-6 py-3 font-inter-medium rounded-tr-xl rounded-br-xl'> </td>
                   </tr>
                </thead>

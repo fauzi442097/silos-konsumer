@@ -207,8 +207,8 @@ const FormPasangan = ({ register, errors, control, setValue, getValue }) => {
                     <label className='block mb-3'> Tempat Kerja Pasangan </label>
                     <Controller
                         control={control}
-                        name="pendapatan_pasangan"
-                        id="pendapatan_pasangan"
+                        name="tempat_kerja_pasangan"
+                        id="tempat_kerja_pasangan"
                         render={({ field: { value } }) => (
                             <Input.Text
                                 placeholder="Isikan tempat kerja pasangan"
@@ -226,8 +226,8 @@ const FormPasangan = ({ register, errors, control, setValue, getValue }) => {
                     <label className='block mb-3'> Nomor Akta Nikah </label>
                     <Controller
                         control={control}
-                        name="pendapatan_pasangan"
-                        id="pendapatan_pasangan"
+                        name="nomor_akta_nikah"
+                        id="nomor_akta_nikah"
                         render={({ field: { value } }) => (
                             <Input.Text
                                 placeholder="Isikan nomor akta nikah"

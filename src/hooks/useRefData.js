@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useMySwal } from './useMySwal';
 import useGet from './useGet';
 import moment from 'moment';
-import { formatTanggal } from '@/lib/utils';
+import { formatTanggalDB } from '@/lib/utils';
 
 export const useGetBiCheckStatus = () => {
    const mySwal = useMySwal()
@@ -65,7 +65,7 @@ export const useGetPenggunaanDana = () => {
 };
 
 export const useGetAsuransi = (idProduct = null, tglLahir = null, idPekerjaan = null, jangkaWaktu = null) => {
-    const getAsuransi = useGet(['refAsuransi', idProduct], `/master/list/asuransi/${idProduct}?tglLahir=${formatTanggal(tglLahir)}&idPekerjaan=${idPekerjaan}&jangkaWaktu=${jangkaWaktu}`, { retry: false, refetchOnWindowFocus: false, enabled: idProduct != null });
+    const getAsuransi = useGet(['refAsuransi', idProduct], `/master/list/asuransi/${idProduct}?tglLahir=${formatTanggalDB(tglLahir)}&idPekerjaan=${idPekerjaan}&jangkaWaktu=${jangkaWaktu}`, { retry: false, refetchOnWindowFocus: false, enabled: idProduct != null });
     let arrAsuransi = [];
     if(getAsuransi.isSuccess){
         let dataAsuransi = getAsuransi.data?.data.data;

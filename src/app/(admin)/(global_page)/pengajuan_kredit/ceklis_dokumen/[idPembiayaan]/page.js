@@ -11,14 +11,15 @@ const getDataDebitur = async (id) => {
     const cookieStore = cookies()
     const {token} = JSON.parse(cookieStore.get('auth').value)
     const headers = {Authorization: "Bearer " + token}
-    const res = await fetch(`${process.env.API_BASE_URL}master/prospek/${id}/show`, {headers: headers})
-    return res.json()
+    const res = await fetch(`${process.env.API_BASE_URL}master/nasabah/by-pembiayaan/${id}`, {headers: headers})
+    return res.json();
 }
 
 const CeklisDokumen = async ({ params }) => {
 
-    const { idProspek } = params
-    const { rc, rm, data} = await getDataDebitur(idProspek)
+    const { idPembiayaan } = params
+    const { rc, rm, data} = await getDataDebitur(idPembiayaan)
+    console.log(data);
     if ( rc != 200 ) return <DataNotFound message={rm} />
 
     return (

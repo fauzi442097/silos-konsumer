@@ -23,7 +23,7 @@ const formValidation = {
 }
 
 const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setValue, getValue }) => {
-
+    let dataNasabah = data ? data.data.data : data;
     const useGetPekerjaan = () => {
         let idProduk = statePekerjaan.produk ? statePekerjaan.produk.value : 0;
         const mySwal = useMySwal();
@@ -45,7 +45,7 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
     }
 
     const useGetSumberPendapatan = () => {
-        let idProduk = statePekerjaan.produk ? statePekerjaan.produk.value : 0;
+        let idProduk = dataNasabah ? dataNasabah[0].product.id : 0;
         const mySwal = useMySwal();
         const getSumberPendapatan = useGet(['refSumberPendapatan', idProduk], `/master/list/pendapatan?idProduct=${idProduk}`, { retry: false, refetchOnWindowFokus: false, enable: idProduk !== null })
         let arrSumberPendapatan = [];
@@ -77,8 +77,6 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
     const [wilayahKantor, setWilayahKantor] = useState('');
     const [suggestionsKantor, setSuggestionsKantor] = useState([]);
 
-    let dataNasabah = data ? data.data.data : data;
-
     const handleWilayahKantor = (text) => {
         let matches = [];
 
@@ -99,31 +97,10 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
         setSuggestionsKantor([]);
     }
 
-    const handleChange = async (e, type, onChange) => {
-        let value = e.value;
-        switch (type) {
-            case 'changePekerjaan':
-                onChange(value);
-                let pekerjaan = arrPekerjaan.find((item, i) => item.value === value);
-                setPekerjaan(pekerjaan);
-                statePekerjaan.setIdPekerjaan(pekerjaan);
-
-                break;
-            case 'changeSumberPendapatan':
-                onChange(value);
-                let sumberPendapatanSelected = arrSumberPendapatan.find((item, i) => item.value === value);
-                setPendapatan(sumberPendapatanSelected);
-
-                break;
-            default:
-                break;
-        }
-    }
-
     useEffect(() => {
         setDataWilayahKantor(arrWilayah);
-        console.log(dataNasabah);
         if (dataNasabah) {
+            console.log(dataNasabah);
             statePekerjaan.setIdPekerjaan({ value: dataNasabah[0].jabatan.id_pekerjaan, label: dataNasabah[0].jabatan.nm_pekerjaan });
 
             setValue('pekerjaan', { value: dataNasabah[0].jabatan.id_pekerjaan, label: dataNasabah[0].jabatan.nm_pekerjaan + ' - Max.Umur (' + dataNasabah[0].jabatan.masa_kerja_umur + ' Tahun)' }, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
@@ -133,10 +110,14 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
             setValue('nama_pimpinan', dataNasabah[0].nasabah.pimpinan, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
             setValue('tuk', dataNasabah[0].nasabah.nip, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
             setValue('alamat_kantor', dataNasabah[0].nasabah.alamat_kerja, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
-            setValue('sumber_pendapatan', { value: dataNasabah[0].nasabah.sumber_pendapatan }, { shouldDirty: true, shouldValidate: true, shouldTouched: true } ); 
+            setValue('sumber_pendapatan', { value: dataNasabah[0].nasabah.pendapatan.id_sumber, label: dataNasabah[0].nasabah.pendapatan.keterangan }, { shouldDirty: true, shouldValidate: true, shouldTouched: true } ); 
             setValue('pendapatan_bulanan', dataNasabah[0].nasabah.pendapatan_bulan, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
             setValue('penghasilan_lain', dataNasabah[0].nasabah.pendapatan_lainnya, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
             setValue('ulp', dataNasabah[0].nasabah.pendapatan_lainnya2, { shouldDirty: true, shouldValidate: true, shouldTouched: true } );
+
+            // setWilayahKantor(dataNasabah[0].nasabah.wilayah_kantor.wilayah);
+            setValue('wilayah_kantor', dataNasabah[0].nasabah.wilayah_kantor.wilayah, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
+            statePekerjaan.setIdWilayahKantor(dataNasabah[0].nasabah.wilayah_kantor.id);
         }
     }, [dataNasabah]);
 
@@ -295,11 +276,11 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                                 placeholder="Isikan cari kelurahan debitur"
                                 id="wilayah_kantor"
                                 name="wilayah_kantor"
-                                value={value}
+                                value={wilayahKantor ? wilayahKantor : value}
                                 register={register}
                                 errors={errors.wilayah_kantor}
                                 validation={formValidation.wilayah_kantor}
-                                onChange={e => handleWilayahKantor(e.target.value)}
+                                onChange={e => {handleWilayahKantor(e.target.value), setValue('wilayah_kantor', e.target.value)}}
                             />
                         )}
                     />
@@ -320,19 +301,21 @@ const FormPekerjaan = ({ data, statePekerjaan, register, errors, control, setVal
                         control={control}
                         name="sumber_pendapatan"
                         id="sumber_pendapatan"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
+                                placeholder="Pilih sumber pendapatan"
                                 name="sumber_pendapatan"
                                 id="sumber_pendapatan"
+                                value={value}
                                 options={arrSumberPendapatan}
-                                value={pendapatan}
                                 register={register}
                                 errors={errors.sumber_pendapatan}
                                 validation={formValidation.sumber_pendapatan}
                                 isLoading={getSumberPendapatan.isLoading}
                                 disabled={getSumberPendapatan.isLoading}
-                                onChange={(e) => handleChange(e, 'changeSumberPendapatan', onChange)}
+                                onChange={(value) => setValue('sumber_pendapatan', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                // onChange={(e) => handleChange(e, 'changeSumberPendapatan', onChange)}
                             />
                         )}
                     />

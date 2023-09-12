@@ -73,7 +73,7 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
 
     useEffect(() => {
         if (dataNasabah) {
-            setValue('penggunaan_dana', { value: dataNasabah[0].nasabah.penggunaan_dana }, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
+            setValue('penggunaan_dana', { value: dataNasabah[0].nasabah.tujuan_dana.parmid, label: dataNasabah[0].nasabah.tujuan_dana.parmnm }, { shouldDirty: true, shouldValidate: true, shouldTouched: true })
             setValue('plafon', dataNasabah[0].plafon, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('suku_bunga', dataNasabah[0].rate, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
             setValue('jangka_waktu', dataNasabah[0].jangka_waktu, { shouldDirty: true, shouldValidate: true, shouldTouched: true });
@@ -101,18 +101,19 @@ const FormPembiayaan = ({ data, statePembiayaan, register, errors, control, setV
                         control={control}
                         name="penggunaan_dana"
                         id="penggunaan_dana"
-                        render={({ field: { onChange } }) => (
+                        render={({ field: { value } }) => (
                             <MySelect
                                 withSearch
                                 placeholder="Isikan tujuan penggunaan dana"
                                 name="penggunaan_dana"
                                 id="penggunaan_dana"
                                 options={arrPenggunaanDana}
-                                value={penggunaanDana}
+                                value={value}
                                 register={register}
                                 errors={errors.penggunaan_dana}
                                 validation={formValidation.penggunaan_dana}
-                                onChange={(e) => handleChange(e, 'penggunaanDana', onChange)}
+                                onChange={(value) => setValue('penggunaan_dana', value, { shouldDirty: true, shouldValidate: true, shouldTouched: true })}
+                                // onChange={(e) => handleChange(e, 'penggunaanDana', onChange)}
                             />
                         )}
                     />
